@@ -1,0 +1,176 @@
+/* About Page Styles */
+.about-page {
+    min-height: 100vh;
+    width: 100vw;
+    background: white;
+    position: relative;
+}
+
+/* About Content Container */
+.about-content-container {
+    display: flex;
+    width: 100%;
+    padding: 2rem;
+    margin-top: 180px;
+    gap: 3rem;
+}
+
+/* Left Image Section */
+.left-image-section {
+    flex: 0 0 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-left: 5rem;
+    gap: 2rem;
+}
+
+.dot-image-container {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    top: 13%;
+    left: 32%;
+}
+
+.dot-image-container img {
+    max-width: 50%;
+    height: 30px;
+    display: block;
+}
+
+.dot2-image-container {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    top: 17%;
+    left: 5%;
+}
+
+.dot2-image-container img {
+    max-width: 50%;
+    height: 70px;
+    display: block;
+}
+
+.dot3-image-container {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    top: 22%;
+    left: 30%;
+}
+
+.dot3-image-container img {
+    max-width: 50%;
+    height: 160px;
+    display: block;
+}
+
+.dot4-image-container {
+    position: absolute;
+    top: 45%;
+    left: 28%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.dot4-image-container img {
+    max-width: 50%;
+    height: 220px;
+    display: block;
+    object-fit: contain;
+}
+
+.main-image-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.main-image-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 2rem;
+}
+
+/* Right Text Section */
+.right-text-section {
+    flex: 0 0 55%;
+    padding: 2rem;
+    padding-right: 3rem;
+}
+
+.main-title {
+    color: #1B1B3F;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.text-content {
+    width: 80%;
+}
+
+.text-content p {
+    color: rgba(16, 42, 97, 0.53);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+/* Carousel Section */
+.carousel-section {
+    width: 100%;
+    margin-top: 4rem;
+    padding: 0;
+}
+
+.carousel-container {
+    display: flex;
+    width: 120%;
+    /* Changed from 400% to 500% to show 5 images per screen */
+    gap: 0;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    user-select: none;
+    cursor: grab;
+    white-space: nowrap;
+    position: relative;
+}
+
+.carousel-container::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.carousel-item {
+    flex: 0 0 20%;
+    /* Fixed width, no growing */
+    position: relative;
+    overflow: hidden;
+    /* Ensure minimum width */
+    flex-shrink: 0;
+    /* Prevent shrinking */
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 249px;
+    /* Restored to original height */
+    object-fit: cover;
+    display: block;
+}
