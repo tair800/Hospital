@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import './About.css'
 import { carouselData } from '../data/about-data.js'
 import aboutMainImage from '../assets/about-main.png'
@@ -6,19 +6,54 @@ import aboutTop1Image from '../assets/about-dot1.png'
 import aboutTop2Image from '../assets/about-dot2.png'
 import aboutTop3Image from '../assets/about-dot3.png'
 import aboutTop4Image from '../assets/about-dot4.png'
+import LogoCarousel from './LogoCarousel.jsx'
 
 function About() {
+    const [counter, setCounter] = useState(1);
+    const [counter2, setCounter2] = useState(1);
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
     const carouselRef = useRef(null);
 
+    // Counter animation for dot4 (Events)
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCounter(prevCounter => {
+                if (prevCounter < 70) {
+                    return prevCounter + 1;
+                } else {
+                    clearInterval(timer);
+                    return 70;
+                }
+            });
+        }, 1);
+
+        return () => clearInterval(timer);
+    }, []);
+
+    // Counter animation for dot3 (doctors)
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCounter2(prevCounter => {
+                if (prevCounter < 100) {
+                    return prevCounter + 1;
+                } else {
+                    clearInterval(timer);
+                    return 100;
+                }
+            });
+        }, 1);
+
+        return () => clearInterval(timer);
+    }, []);
+
+    // Carousel drag handlers
     const handleMouseDown = (e) => {
         e.preventDefault();
         setIsDragging(true);
         setStartX(e.pageX);
         setScrollLeft(carouselRef.current.scrollLeft);
-        console.log('Mouse down, dragging started');
     };
 
     const handleMouseMove = (e) => {
@@ -28,15 +63,12 @@ function About() {
         const walk = (x - startX);
         const newScrollLeft = scrollLeft - walk;
         carouselRef.current.scrollLeft = newScrollLeft;
-        console.log('Dragging, scrollLeft:', newScrollLeft);
     };
 
     const handleMouseUp = () => {
         setIsDragging(false);
-        console.log('Mouse up, dragging stopped');
     };
 
-    // Create infinite scroll effect by duplicating items
     const extendedData = [...carouselData, ...carouselData, ...carouselData];
 
     return (
@@ -51,9 +83,17 @@ function About() {
                     </div>
                     <div className="dot3-image-container">
                         <img src={aboutTop3Image} alt="About Dot 3 Image" />
+                        <div className="dot3-text-overlay">
+                            <span className="dot3-number">+{counter2}</span>
+                            <span className="dot3-label">doctors</span>
+                        </div>
                     </div>
                     <div className="dot4-image-container">
                         <img src={aboutTop4Image} alt="About Dot 4 Image" />
+                        <div className="dot4-text-overlay">
+                            <span className="dot4-number">+{counter}</span>
+                            <span className="dot4-label">Events</span>
+                        </div>
                     </div>
                     <div className="main-image-container">
                         <img src={aboutMainImage} alt="About Main Image" />
@@ -99,6 +139,8 @@ function About() {
                     ))}
                 </div>
             </div>
+
+            <LogoCarousel />
         </div>
     )
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import About from './components/About'
+import Contact from './components/Contact'
 import './App.css'
 
 function App() {
@@ -12,6 +13,8 @@ function App() {
     const path = window.location.pathname;
     if (path === '/about') {
       setCurrentPage('about');
+    } else if (path === '/contact') {
+      setCurrentPage('contact');
     } else {
       setCurrentPage('home');
     }
@@ -31,6 +34,8 @@ function App() {
     switch (currentPage) {
       case 'about':
         return <About />;
+      case 'contact':
+        return <Contact />;
       default:
         return (
           <main>
@@ -53,7 +58,7 @@ function App() {
 
   return (
     <>
-      <Header onPageChange={handlePageChange} showTopImage={currentPage === 'about'} />
+      <Header onPageChange={handlePageChange} showTopImage={currentPage === 'about' || currentPage === 'contact'} />
       {renderPage()}
       <Footer />
     </>

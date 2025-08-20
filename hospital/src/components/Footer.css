@@ -69,15 +69,16 @@ footer {
     margin-top: 0.8rem;
 }
 
-.footer-navigation span {
+.footer-navigation .footer-link {
     color: #ffffff;
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
     transition: color 0.2s ease;
+    text-decoration: none;
 }
 
-.footer-navigation span:hover {
+.footer-navigation .footer-link:hover {
     color: #87CEEB;
 }
 

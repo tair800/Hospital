@@ -1,0 +1,112 @@
+.logo-carousel-section {
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    margin-top:20px;
+    padding: 0px 0px 30px 0px !important;
+}
+
+.logo-carousel-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+.logo-carousel-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    user-select: none;
+    white-space: nowrap;
+    position: relative;
+}
+
+.logo-row {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+
+.logo-row:first-child {
+    margin-left: 0;
+}
+
+.logo-row:last-child {
+    margin-left: 7.142%;
+    /* Half of 14.285% to center the second row between first row logos */
+}
+
+
+
+.logo-carousel-item {
+    flex: 0 0 14.285%;
+    /* 100% / 7 = 14.285% for 7 logos per page */
+    min-width: 14.285%;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.logo-carousel-item img {
+    width: 100%;
+    height: 68px;
+    object-fit: contain;
+}
+
+/* Hide scrollbar but keep functionality */
+.logo-carousel-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.logo-carousel-wrapper {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .logo-carousel-section {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .logo-carousel-wrapper {
+        width: 100%;
+    }
+
+    .logo-carousel-item {
+        flex: 0 0 14.285%;
+        min-width: 14.285%;
+    }
+
+    .logo-carousel-item img {
+        height: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-carousel-section {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .logo-carousel-wrapper {
+        width: 100%;
+    }
+
+    .logo-carousel-item {
+        flex: 0 0 14.285%;
+        min-width: 14.285%;
+    }
+
+    .logo-carousel-item img {
+        height: 50px;
+    }
+}

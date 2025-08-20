@@ -21,12 +21,13 @@ function Footer() {
                         <img src={logoFooter} alt="Footer Logo" />
                     </div>
                     <div className="footer-navigation">
-                        <span>Ana səhifə</span>
-                        <span>Tədbirlər</span>
-                        <span>Üzv</span>
-                        <span>Qalereya</span>
-                        <span>Blog</span>
-                        <span>Contact</span>
+                        <a href="/" className="footer-link">Ana səhifə</a>
+                        <a href="/about" className="footer-link">Haqqımızda</a>
+                        <a href="/events" className="footer-link">Tədbirlər</a>
+                        <a href="/members" className="footer-link">Üzv</a>
+                        <a href="/gallery" className="footer-link">Qalereya</a>
+                        <a href="/blog" className="footer-link">Blog</a>
+                        <a href="/contact" className="footer-link">Contact</a>
                     </div>
                     <div className="social-media-icons">
                         <div className="social-icon">

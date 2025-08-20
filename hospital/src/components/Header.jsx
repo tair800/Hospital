@@ -28,6 +28,8 @@ function Header({ onPageChange, showTopImage = false }) {
         const path = window.location.pathname;
         if (path === '/about') {
             setActivePage('about');
+        } else if (path === '/contact') {
+            setActivePage('contact'); // Set contact as active page
         } else if (path === '/') {
             setActivePage('home');
         }
@@ -76,9 +78,10 @@ function Header({ onPageChange, showTopImage = false }) {
             </div>
 
             <div className="page-name-display">
-                {activePage !== 'home' && (
+                {activePage !== 'home' && activePage !== 'none' && (
                     <>
                         {activePage === 'about' && 'Haqqımızda'}
+                        {activePage === 'contact' && 'Əlaqə'}
                         {activePage === 'events' && 'Tədbirlər'}
                         {activePage === 'members' && 'Üzv'}
                         {activePage === 'gallery' && 'Qalereya'}
