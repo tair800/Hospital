@@ -30,19 +30,25 @@
 .contact-bg-container {
     width: 90%;
     height: 75%;
-    background-image: url(/src/assets/contact-bg.png);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     border-radius: 12px;
     position: relative;
     margin-left: 13%;
     margin-top: 10%;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+.spline-canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
 }
 
 /* Contact Information Overlay */
 .contact-info-overlay {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     display: flex;
@@ -51,6 +57,10 @@
     padding: 2rem;
     color: white;
     box-sizing: border-box;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    pointer-events: none;
 }
 
 .contact-heading h2 {

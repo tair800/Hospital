@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { Application } from '@splinetool/runtime';
 import './Contact.css';
 import { contactData, contactDataHelpers } from '../data/contact-data.js';
 import phoneIcon from '../assets/phone-icon.png';
@@ -13,6 +14,15 @@ import telegram from '../assets/telegram.png';
 import LogoCarousel from './LogoCarousel';
 
 const Contact = () => {
+    const canvasRef = useRef(null);
+
+    useEffect(() => {
+        if (canvasRef.current) {
+            const app = new Application(canvasRef.current);
+            app.load('https://prod.spline.design/kCfMTbwclFSOycz6/scene.splinecode');
+        }
+    }, []);
+
     // Helper function to get icon based on icon name
     const getIcon = (iconName) => {
         switch (iconName) {
@@ -52,6 +62,7 @@ const Contact = () => {
             <div className="contact-content-container">
                 <div className="left-image-section">
                     <div className="contact-bg-container">
+                        <canvas ref={canvasRef} className="spline-canvas" />
                         {/* Contact Information Overlay */}
                         <div className="contact-info-overlay">
                             <div className="contact-heading">

@@ -3,6 +3,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import About from './components/About'
 import Contact from './components/Contact'
+import TestPage from './pages/TestPage'
 import './App.css'
 
 function App() {
@@ -15,6 +16,8 @@ function App() {
       setCurrentPage('about');
     } else if (path === '/contact') {
       setCurrentPage('contact');
+    } else if (path === '/test') {
+      setCurrentPage('test');
     } else {
       setCurrentPage('home');
     }
@@ -36,6 +39,8 @@ function App() {
         return <About />;
       case 'contact':
         return <Contact />;
+      case 'test':
+        return <TestPage />;
       default:
         return (
           <main>
@@ -58,9 +63,15 @@ function App() {
 
   return (
     <>
-      <Header onPageChange={handlePageChange} showTopImage={currentPage === 'about' || currentPage === 'contact'} />
-      {renderPage()}
-      <Footer />
+      {currentPage === 'test' ? (
+        <TestPage />
+      ) : (
+        <>
+          <Header onPageChange={handlePageChange} showTopImage={currentPage === 'about' || currentPage === 'contact'} />
+          {renderPage()}
+          <Footer />
+        </>
+      )}
     </>
   )
 }
