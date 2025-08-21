@@ -10,7 +10,7 @@ function Header({ onPageChange, showTopImage = false }) {
         { label: 'Ana səhifə', href: '/', id: 'home' },
         { label: 'Haqqımızda', href: '/about', id: 'about' },
         { label: 'Tedbirlər', href: '/events', id: 'events' },
-        { label: 'Üzv', href: '/members', id: 'members' },
+        { label: 'Üzv', href: '/uzv', id: 'uzv' },
         { label: 'Qalereya', href: '/gallery', id: 'gallery' },
         { label: 'Blog', href: '/blog', id: 'blog' },
     ];
@@ -30,6 +30,14 @@ function Header({ onPageChange, showTopImage = false }) {
             setActivePage('about');
         } else if (path === '/contact') {
             setActivePage('contact'); // Set contact as active page
+        } else if (path === '/uzv') {
+            setActivePage('uzv'); // Set uzv as active page
+        } else if (path === '/events') {
+            setActivePage('events'); // Set events as active page
+        } else if (path === '/gallery') {
+            setActivePage('gallery'); // Set gallery as active page
+        } else if (path === '/blog') {
+            setActivePage('blog'); // Set blog as active page
         } else if (path === '/') {
             setActivePage('home');
         }
@@ -83,7 +91,7 @@ function Header({ onPageChange, showTopImage = false }) {
                         {activePage === 'about' && 'Haqqımızda'}
                         {activePage === 'contact' && 'Əlaqə'}
                         {activePage === 'events' && 'Tədbirlər'}
-                        {activePage === 'members' && 'Üzv'}
+                        {activePage === 'uzv' && 'Üzv'}
                         {activePage === 'gallery' && 'Qalereya'}
                         {activePage === 'blog' && 'Blog'}
                     </>

@@ -4,6 +4,10 @@ import Footer from './components/Footer'
 import About from './components/About'
 import Contact from './components/Contact'
 import TestPage from './pages/TestPage'
+import Uzv from './components/Uzv'
+import Events from './components/Events'
+import Gallery from './components/Gallery'
+import Blog from './components/Blog'
 import './App.css'
 
 function App() {
@@ -18,6 +22,14 @@ function App() {
       setCurrentPage('contact');
     } else if (path === '/test') {
       setCurrentPage('test');
+    } else if (path === '/uzv') {
+      setCurrentPage('uzv');
+    } else if (path === '/events') {
+      setCurrentPage('events');
+    } else if (path === '/gallery') {
+      setCurrentPage('gallery');
+    } else if (path === '/blog') {
+      setCurrentPage('blog');
     } else {
       setCurrentPage('home');
     }
@@ -28,6 +40,12 @@ function App() {
     // Update URL for better UX
     if (pageId === 'home') {
       window.history.pushState({}, '', '/');
+    } else if (pageId === 'events') {
+      window.history.pushState({}, '', '/events');
+    } else if (pageId === 'gallery') {
+      window.history.pushState({}, '', '/gallery');
+    } else if (pageId === 'blog') {
+      window.history.pushState({}, '', '/blog');
     } else {
       window.history.pushState({}, '', `/${pageId}`);
     }
@@ -39,6 +57,14 @@ function App() {
         return <About />;
       case 'contact':
         return <Contact />;
+      case 'uzv':
+        return <Uzv />;
+      case 'events':
+        return <Events />;
+      case 'gallery':
+        return <Gallery />;
+      case 'blog':
+        return <Blog />;
       case 'test':
         return <TestPage />;
       default:
@@ -67,7 +93,7 @@ function App() {
         <TestPage />
       ) : (
         <>
-          <Header onPageChange={handlePageChange} showTopImage={currentPage === 'about' || currentPage === 'contact'} />
+          <Header onPageChange={handlePageChange} showTopImage={currentPage === 'about' || currentPage === 'contact' || currentPage === 'uzv' || currentPage === 'events' || currentPage === 'gallery' || currentPage === 'blog'} />
           {renderPage()}
           <Footer />
         </>

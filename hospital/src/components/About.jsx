@@ -6,6 +6,7 @@ import aboutTop1Image from '../assets/about-dot1.png'
 import aboutTop2Image from '../assets/about-dot2.png'
 import aboutTop3Image from '../assets/about-dot3.png'
 import aboutTop4Image from '../assets/about-dot4.png'
+import circleImage from '../assets/circle.png'
 import LogoCarousel from './LogoCarousel.jsx'
 
 function About() {
@@ -73,6 +74,16 @@ function About() {
 
     return (
         <div className="about-page">
+            <img
+                src={circleImage}
+                alt="Circle"
+                className="about-circle-first"
+            />
+            <img
+                src={circleImage}
+                alt="Circle"
+                className="about-circle-second"
+            />
             <div className="about-content-container">
                 <div className="left-image-section">
                     <div className="dot-image-container">
@@ -100,8 +111,8 @@ function About() {
                     </div>
                 </div>
 
-                <div className="right-text-section">
-                    <h1 className="main-title">
+                <div className="right-text-section" style={{ color: 'black' }}>
+                    <h1 className="main-title" style={{ color: 'inherit', filter: 'contrast(0)' }}>
                         Azərbaycan Hepato-<br />
                         Pankreato-Biliar Cərrahlar<br />
                         İctimai Birliyi

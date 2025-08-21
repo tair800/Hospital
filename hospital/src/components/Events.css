@@ -1,0 +1,420 @@
+/* Events Page Styles */
+.events-page {
+    width: 100vw;
+    background: white;
+    position: relative;
+}
+
+/* Events Header Text - Using margins for positioning */
+.events-header-text {
+    margin-top: 188px;
+    margin-left: 4rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    padding-top: 10rem;
+}
+
+.events-header-first {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.events-header-second {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    padding: 0rem 2rem;
+    border-radius: 8px;
+    background: linear-gradient( #1243AC 97.59%);
+    position: relative;
+    overflow: hidden;
+    transform: skewX(-15deg);
+    transform-origin: center;
+}
+
+.events-header-second span {
+    display: inline-block;
+    transform: skewX(15deg);
+    transform-origin: center;
+}
+
+.events-header-second::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        rgba(255, 255, 255, 0.25) 0%, 
+        rgba(255, 255, 255, 0.15) 20%, 
+        rgba(255, 255, 255, 0.05) 50%, 
+        transparent 80%);
+    pointer-events: none;
+    border-radius: 4px;
+}
+
+.events-header-second::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(225deg, 
+        transparent 0%, 
+        rgba(0, 0, 0, 0.1) 50%, 
+        rgba(0, 0, 0, 0.2) 100%);
+    pointer-events: none;
+    border-radius: 4px;
+}
+
+/* Events Content Container - No margin-top needed now */
+.events-content-container {
+    display: flex;
+    width: 100%;
+    padding: 2rem;
+    margin-top: 2rem;
+    gap: 3rem;
+}
+
+/* Events Left Section */
+.events-left-section {
+    flex: 0 0 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 2rem;
+    margin-left: 4rem;
+    gap: 2rem;
+}
+
+/* Search Container */
+.search-container {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 40px 12px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    transition: border-bottom-color 0.3s ease;
+}
+
+.search-input:focus {
+    border-bottom-color: #1243AC;
+}
+
+.search-input::placeholder {
+    color: #999;
+}
+
+.search-icon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    user-select: none;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.search-icon:hover {
+    opacity: 1;
+}
+
+/* Calendar Container */
+.calendar-container {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 300px;
+    box-sizing: border-box;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.calendar-month-year {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.calendar-navigation {
+    display: flex;
+    gap: 12px;
+}
+
+.nav-arrow {
+    color: #999;
+    font-size: 16px;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s ease;
+}
+
+.nav-arrow:hover {
+    color: #1243AC;
+}
+
+.calendar-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.calendar-days-header span {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    padding: 6px 0;
+}
+
+.calendar-days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-day {
+    text-align: center;
+    padding: 6px 2px;
+    font-size: 12px;
+    color: #333;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+    user-select: none;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    min-height: 28px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.calendar-day:hover:not(.empty) {
+    background-color: #f0f0f0;
+}
+
+.calendar-day.today {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: 600;
+}
+
+.calendar-day.empty {
+    cursor: default;
+}
+
+/* Events Right Section */
+.events-right-section {
+    flex: 0 0 65%;
+    display: flex;
+    flex-direction: column;
+    min-height: 500px;
+}
+
+/* Events Header Content - Positioned like About page content */
+.events-header-content {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    z-index: 10;
+    margin-bottom: 2rem;
+}
+
+.events-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.events-subtitle {
+    font-size: 1.2rem;
+    margin: 0;
+    opacity: 0.9;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    line-height: 1.6;
+}
+
+/* Events Main Content */
+.events-main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem;
+    min-height: 300px;
+}
+
+/* Events Grid */
+.events-grid {
+    display: grid;
+    grid-template-columns: 350px 350px;
+    gap: 1rem;
+    justify-content: start;
+    max-width: 900px;
+    width: 100%;
+    margin-left: -16rem;
+}
+
+/* Events Card */
+.events-card {
+    background: #1B1B3F;
+    border-radius: 12px;
+    padding: 2rem 3rem;
+    box-shadow: 0 8px 25px rgba(27, 27, 63, 0.3);
+    width: 350px;
+    height: 420px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.event-date {
+    position: absolute;
+    top: 10.5rem;
+    left: 18%;
+    transform: translateX(-50%);
+    display: inline-block;
+}
+
+.event-title {
+    position: absolute;
+    top: 1.6rem;
+    left: 9%;
+    right: 0;
+    color: white;
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: left;
+}
+
+.trainer-name {
+    position: absolute;
+    top: 7rem;
+    left: 9%;
+    right: 0;
+    color: #87CEEB;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    text-align: left;
+}
+
+.event-day {
+    color: white;
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 0.3;
+}
+
+.event-month {
+    position: absolute;
+    top: -0.5rem;
+    right: -2.5rem;
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.event-venue {
+    position: absolute;
+    top: 51%;
+    left: 170%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 0.5rem;
+    font-weight: 400;
+    line-height: 1;
+    white-space: nowrap;
+    border: 0.1px solid gray;
+    padding: 2px 5px;
+}
+
+.event-image {
+    width: 320px;
+    height: 165px;
+    margin-top: 11.5rem;
+    object-fit: cover;
+    border-radius: 8px 8px 0px 0px;
+}
+
+.card-icon {
+    width: 25px;
+    height: 25px;
+    margin-top: 5px;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.card-icon:hover {
+    opacity: 1;
+}
+
+/* Responsive Design - Same as About page */
+@media (max-width: 768px) {
+    .events-content-container {
+        margin-top: 150px;
+        padding: 1rem;
+        gap: 2rem;
+    }
+    
+    .events-title {
+        font-size: 2.5rem;
+    }
+    
+    .events-subtitle {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .events-content-container {
+        margin-top: 120px;
+        padding: 0.5rem;
+    }
+    
+    .events-title {
+        font-size: 2rem;
+    }
+    
+    .events-subtitle {
+        font-size: 0.9rem;
+    }
+}

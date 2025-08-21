@@ -3,9 +3,12 @@ header {
     background: transparent;
     color: white;
     padding: 0;
+    margin: 0;
     width: 100%;
     position: relative;
     z-index: 1000;
+    top: 0;
+    left: 0;
 }
 
 /* Header Top Image */
@@ -39,12 +42,12 @@ header {
     align-items: center;
     gap: 1rem;
     margin-left: 5rem;
-    margin-top: 20px;
 }
 
 .logo-section img {
     height: 70px;
     width: auto;
+    margin-bottom: -40px;
 }
 
 .logo-section h1 {
@@ -126,7 +129,7 @@ header {
     align-items: center;
     gap: 1.5rem;
     margin-right: 1rem;
-    margin-top: 20px;
+    margin-bottom: -40px;
 }
 
 .login-btn {
