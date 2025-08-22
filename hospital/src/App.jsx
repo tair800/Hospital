@@ -6,12 +6,14 @@ import Contact from './components/Contact'
 import TestPage from './pages/TestPage'
 import Uzv from './components/Uzv'
 import Events from './components/Events'
+import EventsDetail from './components/EventsDetail'
 import Gallery from './components/Gallery'
 import Blog from './components/Blog'
 import './App.css'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
+  const [eventDetailId, setEventDetailId] = useState(null);
 
   // Simple page routing based on URL
   useEffect(() => {
@@ -30,13 +32,20 @@ function App() {
       setCurrentPage('gallery');
     } else if (path === '/blog') {
       setCurrentPage('blog');
+    } else if (path.startsWith('/event/')) {
+      const eventId = path.split('/')[2];
+      setEventDetailId(parseInt(eventId));
+      setCurrentPage('event-detail');
     } else {
       setCurrentPage('home');
     }
   }, []);
 
-  const handlePageChange = (pageId) => {
+  const handlePageChange = (pageId, eventId = null) => {
     setCurrentPage(pageId);
+    if (eventId) {
+      setEventDetailId(eventId);
+    }
     // Update URL for better UX
     if (pageId === 'home') {
       window.history.pushState({}, '', '/');
@@ -46,6 +55,8 @@ function App() {
       window.history.pushState({}, '', '/gallery');
     } else if (pageId === 'blog') {
       window.history.pushState({}, '', '/blog');
+    } else if (pageId === 'event-detail') {
+      window.history.pushState({}, '', `/event/${eventId}`);
     } else {
       window.history.pushState({}, '', `/${pageId}`);
     }
@@ -60,7 +71,9 @@ function App() {
       case 'uzv':
         return <Uzv />;
       case 'events':
-        return <Events />;
+        return <Events onEventClick={handlePageChange} />;
+      case 'event-detail':
+        return <EventsDetail eventId={eventDetailId} onBackToEvents={() => handlePageChange('events')} />;
       case 'gallery':
         return <Gallery />;
       case 'blog':
@@ -93,7 +106,7 @@ function App() {
         <TestPage />
       ) : (
         <>
-          <Header onPageChange={handlePageChange} showTopImage={currentPage === 'about' || currentPage === 'contact' || currentPage === 'uzv' || currentPage === 'events' || currentPage === 'gallery' || currentPage === 'blog'} />
+          <Header onPageChange={handlePageChange} showTopImage={currentPage === 'about' || currentPage === 'contact' || currentPage === 'uzv' || currentPage === 'events' || currentPage === 'gallery' || currentPage === 'blog' || currentPage === 'event-detail'} />
           {renderPage()}
           <Footer />
         </>

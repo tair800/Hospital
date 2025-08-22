@@ -28,7 +28,7 @@
     color: white;
     padding: 0rem 2rem;
     border-radius: 8px;
-    background: linear-gradient( #1243AC 97.59%);
+    background: linear-gradient(#1243AC 97.59%);
     position: relative;
     overflow: hidden;
     transform: skewX(-15deg);
@@ -48,11 +48,11 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(45deg, 
-        rgba(255, 255, 255, 0.25) 0%, 
-        rgba(255, 255, 255, 0.15) 20%, 
-        rgba(255, 255, 255, 0.05) 50%, 
-        transparent 80%);
+    background: linear-gradient(45deg,
+            rgba(255, 255, 255, 0.25) 0%,
+            rgba(255, 255, 255, 0.15) 20%,
+            rgba(255, 255, 255, 0.05) 50%,
+            transparent 80%);
     pointer-events: none;
     border-radius: 4px;
 }
@@ -64,10 +64,10 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(225deg, 
-        transparent 0%, 
-        rgba(0, 0, 0, 0.1) 50%, 
-        rgba(0, 0, 0, 0.2) 100%);
+    background: linear-gradient(225deg,
+            transparent 0%,
+            rgba(0, 0, 0, 0.1) 50%,
+            rgba(0, 0, 0, 0.2) 100%);
     pointer-events: none;
     border-radius: 4px;
 }
@@ -304,11 +304,14 @@
     position: relative;
 }
 
+/* Event Date (inside card) */
 .event-date {
     position: absolute;
     top: 10.5rem;
     left: 18%;
+    /* Reverted back to original */
     transform: translateX(-50%);
+    /* Reverted back to original */
     display: inline-block;
 }
 
@@ -343,21 +346,28 @@
     line-height: 0.3;
 }
 
+/* Event Month (inside card) */
 .event-month {
     position: absolute;
     top: -0.5rem;
-    right: -2.5rem;
+    left: 100%;
+    /* Position relative to the day text, not from right edge */
+    margin-left: 0.2rem;
+    /* Add some spacing from the day */
     color: white;
     font-size: 1.3rem;
     font-weight: 400;
     line-height: 1;
 }
 
+/* Event Venue (inside card) */
 .event-venue {
     position: absolute;
     top: 51%;
-    left: 170%;
-    transform: translateX(-50%);
+    left: 100%;
+    /* Position relative to the month text, not from left edge */
+    margin-left: 0.2rem;
+    /* Add spacing from the month text */
     color: white;
     font-size: 0.5rem;
     font-weight: 400;
@@ -380,11 +390,13 @@
     height: 25px;
     margin-top: 5px;
     opacity: 0.8;
-    transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .card-icon:hover {
     opacity: 1;
+    transform: scale(1.1);
 }
 
 /* Responsive Design - Same as About page */
@@ -394,11 +406,11 @@
         padding: 1rem;
         gap: 2rem;
     }
-    
+
     .events-title {
         font-size: 2.5rem;
     }
-    
+
     .events-subtitle {
         font-size: 1rem;
     }
@@ -409,11 +421,11 @@
         margin-top: 120px;
         padding: 0.5rem;
     }
-    
+
     .events-title {
         font-size: 2rem;
     }
-    
+
     .events-subtitle {
         font-size: 0.9rem;
     }

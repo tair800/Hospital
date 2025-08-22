@@ -3,9 +3,10 @@ import searchIcon from '../assets/search-icon.png';
 import cardIcon from '../assets/card-icon.png';
 import eventImg from '../assets/event-img.png';
 import LogoCarousel from './LogoCarousel';
+import { eventData } from '../data/eventData';
 import './Events.css';
 
-const Events = () => {
+const Events = ({ onEventClick }) => {
     // Get current date for calendar
     const today = new Date();
     const currentMonth = today.getMonth();
@@ -34,6 +35,12 @@ const Events = () => {
     for (let i = 1; i <= daysInMonth; i++) {
         calendarDays.push(i);
     }
+
+    const handleEventClick = (eventId) => {
+        if (onEventClick) {
+            onEventClick('event-detail', eventId);
+        }
+    };
 
     return (
         <div className="events-page">
@@ -90,77 +97,25 @@ const Events = () => {
                 <div className="events-right-section">
                     <div className="events-main-content">
                         <div className="events-grid">
-                            <div className="events-card">
-                                <span className="event-title">HPB Cərrahiyyə Hallarının Klinik Təhlili</span>
-                                <span className="trainer-name">Təlimçi : Yusif Qasımov</span>
-                                <div className="event-date">
-                                    <span className="event-day">31</span>
-                                    <span className="event-month">May</span>
-                                    <span className="event-venue">Baku Crystal Hall</span>
+                            {eventData.map((event, index) => (
+                                <div key={index} className="events-card">
+                                    <span className="event-title">{event.title}</span>
+                                    <span className="trainer-name">Təlimçi : {event.trainer}</span>
+                                    <div className="event-date">
+                                        <span className="event-day">{event.day}</span>
+                                        <span className="event-month">{event.month}</span>
+                                        <span className="event-venue">{event.venue}</span>
+                                    </div>
+                                    <img src={event.image} alt="Event" className="event-image" />
+                                    <img
+                                        src={cardIcon}
+                                        alt="Card Icon"
+                                        className="card-icon"
+                                        onClick={() => handleEventClick(event.id)}
+                                        style={{ cursor: 'pointer' }}
+                                    />
                                 </div>
-                                <img src={eventImg} alt="Event" className="event-image" />
-                                <img src={cardIcon} alt="Card Icon" className="card-icon" />
-                            </div>
-
-                            <div className="events-card">
-                                <span className="event-title">HPB Cərrahiyyə Hallarının Klinik Təhlili</span>
-                                <span className="trainer-name">Təlimçi : Yusif Qasımov</span>
-                                <div className="event-date">
-                                    <span className="event-day">31</span>
-                                    <span className="event-month">May</span>
-                                    <span className="event-venue">Baku Crystal Hall</span>
-                                </div>
-                                <img src={eventImg} alt="Event" className="event-image" />
-                                <img src={cardIcon} alt="Card Icon" className="card-icon" />
-                            </div>
-
-                            <div className="events-card">
-                                <span className="event-title">HPB Cərrahiyyə Hallarının Klinik Təhlili</span>
-                                <span className="trainer-name">Təlimçi : Yusif Qasımov</span>
-                                <div className="event-date">
-                                    <span className="event-day">31</span>
-                                    <span className="event-month">May</span>
-                                    <span className="event-venue">Baku Crystal Hall</span>
-                                </div>
-                                <img src={eventImg} alt="Event" className="event-image" />
-                                <img src={cardIcon} alt="Card Icon" className="card-icon" />
-                            </div>
-
-                            <div className="events-card">
-                                <span className="event-title">HPB Cərrahiyyə Hallarının Klinik Təhlili</span>
-                                <span className="trainer-name">Təlimçi : Yusif Qasımov</span>
-                                <div className="event-date">
-                                    <span className="event-day">31</span>
-                                    <span className="event-month">May</span>
-                                    <span className="event-venue">Baku Crystal Hall</span>
-                                </div>
-                                <img src={eventImg} alt="Event" className="event-image" />
-                                <img src={cardIcon} alt="Card Icon" className="card-icon" />
-                            </div>
-
-                            <div className="events-card">
-                                <span className="event-title">HPB Cərrahiyyə Hallarının Klinik Təhlili</span>
-                                <span className="trainer-name">Təlimçi : Yusif Qasımov</span>
-                                <div className="event-date">
-                                    <span className="event-day">31</span>
-                                    <span className="event-month">May</span>
-                                    <span className="event-venue">Baku Crystal Hall</span>
-                                </div>
-                                <img src={eventImg} alt="Event" className="event-image" />
-                                <img src={cardIcon} alt="Card Icon" className="card-icon" />
-                            </div>
-
-                            <div className="events-card">
-                                <span className="event-title">HPB Cərrahiyyə Hallarının Klinik Təhlili</span>
-                                <span className="trainer-name">Təlimçi : Yusif Qasımov</span>
-                                <div className="event-date">
-                                    <span className="event-day">31</span>
-                                    <span className="event-month">May</span>
-                                    <span className="event-venue">Baku Crystal Hall</span>
-                                </div>
-                                <img src={eventImg} alt="Event" className="event-image" />
-                                <img src={cardIcon} alt="Card Icon" className="card-icon" />
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>
