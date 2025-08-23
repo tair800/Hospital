@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { eventData } from '../data/eventData';
+import LogoCarousel from './LogoCarousel';
 import './EventsDetail.css';
 
 const EventsDetail = ({ eventId, onBackToEvents }) => {
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
+    const [showModal, setShowModal] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '',
+        surname: '',
+        email: '',
+        phone: '',
+        position: '',
+        finCode: ''
+    });
 
     // Find the specific event data
     const event = eventData.find(e => e.id === eventId);
@@ -46,6 +56,30 @@ const EventsDetail = ({ eventId, onBackToEvents }) => {
         return () => clearInterval(timer);
     }, [event]);
 
+    // Form handling functions
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log('Form submitted:', formData);
+        // Here you can add API call or other logic
+        setShowModal(false);
+        setFormData({
+            name: '',
+            surname: '',
+            email: '',
+            phone: '',
+            position: '',
+            finCode: ''
+        });
+    };
+
     // If event not found, show error or redirect
     if (!event) {
         return (
@@ -64,29 +98,29 @@ const EventsDetail = ({ eventId, onBackToEvents }) => {
             <img src="/src/assets/events-star2.png" alt="Star 2" className="events-star-right" />
 
             <div className="events-detail-main-title">
-                <div className="title-line-1">Biliar Forum 2025: Müasir</div>
-                <div className="title-line-2">Diaqnostika və Müalicə Yanaşmaları</div>
+                <div className="title-line-1">{event.title}</div>
+                <div className="title-line-2">{event.subtitle}</div>
             </div>
 
             <div className="events-detail-cards">
                 <div className="event-detail-card event-date-card">
-                    <img src="/src/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
+                    <img src={event.detailImages.background} alt="Event Detail" className="card-event-detail-image" />
                     <img src="/src/assets/calendar.png" alt="Calendar" className="card-calendar-icon" />
                     <div className="card-date-info">
-                        <span className="card-date-day">{event.day}</span>
-                        <span className="card-date-month">{event.month}</span>
-                        <span className="card-date-year">2025</span>
+                        <span className="card-date-day">{new Date(event.eventDate).getDate()}</span>
+                        <span className="card-date-month">{new Date(event.eventDate).toLocaleDateString('en-US', { month: 'long' })}</span>
+                        <span className="card-date-year">{new Date(event.eventDate).getFullYear()}</span>
                     </div>
                 </div>
                 <div className="event-detail-card event-location-card">
-                    <img src="/src/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
+                    <img src={event.detailImages.background} alt="Event Detail" className="card-event-detail-image" />
                     <img src="/src/assets/clock.png" alt="Clock" className="card-clock-icon" />
                     <div className="card-time-info">
                         <span className="card-time">{event.time}</span>
                     </div>
                 </div>
                 <div className="event-detail-card event-participants-card">
-                    <img src="/src/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
+                    <img src={event.detailImages.background} alt="Event Detail" className="card-event-detail-image" />
                     <img src="/src/assets/location.png" alt="Location" className="card-location-icon" />
                     <div className="card-location-info">
                         <span className="card-location">{event.venue}</span>
@@ -95,12 +129,7 @@ const EventsDetail = ({ eventId, onBackToEvents }) => {
             </div>
 
             <div className="events-detail-description">
-                <p>
-                    Qaraciyər, öd yolları və pankreas xəstəliklərinin diaqnostika və müalicəsində ən son yenilikləri bir araya gətirən nüfuzlu elmi tədbirdir. Forumun əsas məqsədi bu sahədə çalışan həkimlər, cərrahlar, radioloqlar, gastroenteroloqlar, onkoloqlar və tədqiqatçıların bilik və təcrübə mübadiləsini təmin etməkdir. Tədbirdə müasir görüntüləmə texnologiyaları, minimal invaziv müdaxilələr, endoskopik və cərrahi yanaşmalar, həmçinin farmakoloji və molekulyar səviyyədə yeni müalicə üsulları geniş şəkildə müzakirə olunacaq. Dünyanın müxtəlif ölkələrindən dəvət olunmuş aparıcı mütəxəssislər elmi çıxışlar edəcək, klinik halların təhlilini təqdim edəcək və iştirakçılarla interaktiv sessiyalarda fikir mübadiləsi aparacaqlar.
-                </p>
-                <p>
-                    Forum həm də gənc mütəxəssislər və rezidentlər üçün öyrədici məzmunu ilə seçilir. Onlar üçün xüsusi workshop-lar, "case study" sessiyaları və praktik təlimlər təşkil olunacaq. Bu, iştirakçılara yalnız nəzəri bilikləri deyil, həm də real klinik təcrübəni öyrənmək imkanı yaradacaq.
-                </p>
+                <p>{event.longDescription}</p>
             </div>
 
             <div className="events-detail-main-image">
@@ -121,14 +150,115 @@ const EventsDetail = ({ eventId, onBackToEvents }) => {
                             <span className="timer-label">Dəq</span>
                         </div>
                     </div>
-                    <div style={{ fontSize: '12px', color: '#666', marginTop: '10px', textAlign: 'center' }}>
-                        Event: {event?.eventDate || 'No date'}
+
+                </div>
+                <img src={event.detailImages.left} alt="Event Detail Left" className="left-event-image" />
+                <img src={event.detailImages.main} alt="Event Detail Main" className="main-event-image" />
+                <img src={event.detailImages.right} alt="Event Detail Right" className="right-event-image" />
+                <button className="muraciet-btn" onClick={() => setShowModal(true)}>Müraciət et</button>
+            </div>
+
+            <LogoCarousel />
+
+            {/* Application Modal */}
+            {showModal && (
+                <div className="modal-overlay" onClick={() => setShowModal(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2>Müraciət göndər</h2>
+                            <button className="modal-close" onClick={() => setShowModal(false)}>×</button>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="modal-form">
+                            <div className="form-columns">
+                                <div className="form-left-column">
+                                    <div className="form-group">
+                                        <label htmlFor="name">Ad</label>
+                                        <input
+                                            type="text"
+                                            id="name"
+                                            name="name"
+                                            value={formData.name}
+                                            onChange={handleInputChange}
+                                            placeholder="Adınızı daxil edin"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="email">Email</label>
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
+                                            placeholder="Emailinizi daxil edin"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="position">Vəzifəsi</label>
+                                        <input
+                                            type="text"
+                                            id="position"
+                                            name="position"
+                                            value={formData.position}
+                                            onChange={handleInputChange}
+                                            placeholder="Vəzifənizi daxil edin"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="form-right-column">
+                                    <div className="form-group">
+                                        <label htmlFor="surname">Soyad</label>
+                                        <input
+                                            type="text"
+                                            id="surname"
+                                            name="surname"
+                                            value={formData.surname}
+                                            onChange={handleInputChange}
+                                            placeholder="Soyadınızı daxil edin"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="phone">Telefon</label>
+                                        <input
+                                            type="tel"
+                                            id="phone"
+                                            name="phone"
+                                            value={formData.phone}
+                                            onChange={handleInputChange}
+                                            placeholder="Telefon nömrənizi daxil edin"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="finCode">FİN kodu</label>
+                                        <input
+                                            type="text"
+                                            id="finCode"
+                                            name="finCode"
+                                            value={formData.finCode}
+                                            onChange={handleInputChange}
+                                            placeholder="FİN kodunuzu daxil edin"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" className="submit-btn">Müraciət et</button>
+                        </form>
                     </div>
                 </div>
-                <img src="/src/assets/events-detail-left.png" alt="Event Detail Left" className="left-event-image" />
-                <img src="/src/assets/events-detail-main.png" alt="Event Detail Main" className="main-event-image" />
-                <img src="/src/assets/events-detail-right.png" alt="Event Detail Right" className="right-event-image" />
-            </div>
+            )}
         </div>
     );
 };

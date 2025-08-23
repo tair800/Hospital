@@ -8,7 +8,7 @@
 /* Events Header Text - Using margins for positioning */
 .events-header-text {
     margin-top: 188px;
-    margin-left: 4rem;
+    margin-left: 8rem;
     display: flex;
     flex-direction: row;
     gap: 1rem;
@@ -271,8 +271,9 @@
 .events-main-content {
     flex: 1;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     padding: 2rem;
     min-height: 300px;
 }
@@ -286,6 +287,7 @@
     max-width: 900px;
     width: 100%;
     margin-left: -16rem;
+    margin-bottom: 2rem;
 }
 
 /* Events Card */
@@ -429,4 +431,125 @@
     .events-subtitle {
         font-size: 0.9rem;
     }
+}
+
+/* Pagination Styles */
+.pagination-container {
+    margin-top: 40px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    width: 100%;
+    clear: both;
+    margin-left: -16rem;
+    max-width: 900px;
+    position: relative;
+    z-index: 1;
+}
+
+.pagination-info {
+    display: none;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.pagination-btn {
+    padding: 0;
+    background: linear-gradient(135deg, #1243AC, #4A90E2);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 40px;
+    transition: all 0.3s ease;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    line-height: 1;
+    text-align: center;
+}
+
+.pagination-btn::before {
+    content: attr(data-arrow);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -62%);
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1;
+    color: white;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+}
+
+.pagination-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.pagination-numbers {
+    display: flex;
+    gap: 10px;
+}
+
+.pagination-number {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #1243AC;
+    background: transparent;
+    color: #1243AC;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination-number:hover {
+    background: #1243AC;
+    color: white;
+    transform: scale(1.1);
+}
+
+.pagination-number.active {
+    background: #1243AC;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Responsive pagination */
+@media (max-width: 768px) {
+    .pagination-controls {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .pagination-info {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .pagination-numbers {
+        justify-content: center;
+    }
+}
+
+/* Logo Carousel Section */
+.logo-carousel-section {
+    margin-top: 2rem;
 }

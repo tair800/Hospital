@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import searchIcon from '../assets/search-icon.png';
 import cardIcon from '../assets/card-icon.png';
 import eventImg from '../assets/event-img.png';
@@ -7,6 +7,10 @@ import { eventData } from '../data/eventData';
 import './Events.css';
 
 const Events = ({ onEventClick }) => {
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const eventsPerPage = 6;
+
     // Get current date for calendar
     const today = new Date();
     const currentMonth = today.getMonth();
@@ -40,6 +44,18 @@ const Events = ({ onEventClick }) => {
         if (onEventClick) {
             onEventClick('event-detail', eventId);
         }
+    };
+
+    // Pagination logic
+    const indexOfLastEvent = currentPage * eventsPerPage;
+    const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
+    const currentEvents = eventData.slice(indexOfFirstEvent, indexOfLastEvent);
+    const totalPages = Math.ceil(eventData.length / eventsPerPage);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        // Scroll to top when page changes
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (
@@ -97,30 +113,78 @@ const Events = ({ onEventClick }) => {
                 <div className="events-right-section">
                     <div className="events-main-content">
                         <div className="events-grid">
-                            {eventData.map((event, index) => (
-                                <div key={index} className="events-card">
-                                    <span className="event-title">{event.title}</span>
-                                    <span className="trainer-name">Təlimçi : {event.trainer}</span>
-                                    <div className="event-date">
-                                        <span className="event-day">{event.day}</span>
-                                        <span className="event-month">{event.month}</span>
-                                        <span className="event-venue">{event.venue}</span>
+                            {currentEvents.map((event, index) => {
+                                // Extract date components from eventDate
+                                const eventDate = new Date(event.eventDate);
+                                const day = eventDate.getDate();
+                                const monthNames = [
+                                    'January', 'February', 'March', 'April', 'May', 'June',
+                                    'July', 'August', 'September', 'October', 'November', 'December'
+                                ];
+                                const month = monthNames[eventDate.getMonth()];
+
+                                return (
+                                    <div key={event.id} className="events-card">
+                                        <span className="event-title">{event.title}</span>
+                                        <span className="trainer-name">Təlimçi : {event.trainerTitle} {event.trainer}</span>
+                                        <div className="event-date">
+                                            <span className="event-day">{day}</span>
+                                            <span className="event-month">{month}</span>
+                                            <span className="event-venue">{event.venue}</span>
+                                        </div>
+                                        <img src={event.mainImage} alt="Event" className="event-image" />
+                                        <img
+                                            src={cardIcon}
+                                            alt="Card Icon"
+                                            className="card-icon"
+                                            onClick={() => handleEventClick(event.id)}
+                                            style={{ cursor: 'pointer' }}
+                                        />
                                     </div>
-                                    <img src={event.image} alt="Event" className="event-image" />
-                                    <img
-                                        src={cardIcon}
-                                        alt="Card Icon"
-                                        className="card-icon"
-                                        onClick={() => handleEventClick(event.id)}
-                                        style={{ cursor: 'pointer' }}
-                                    />
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
+
+                        {/* Pagination Controls */}
+                        {totalPages > 1 && (
+                            <div className="pagination-container">
+                                <div className="pagination-controls">
+                                    <button
+                                        className="pagination-btn"
+                                        onClick={() => handlePageChange(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                        data-arrow="‹"
+                                    >
+                                    </button>
+
+                                    <div className="pagination-numbers">
+                                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
+                                            <button
+                                                key={pageNumber}
+                                                className={`pagination-number ${pageNumber === currentPage ? 'active' : ''}`}
+                                                onClick={() => handlePageChange(pageNumber)}
+                                            >
+                                                {pageNumber}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    <button
+                                        className="pagination-btn"
+                                        onClick={() => handlePageChange(currentPage + 1)}
+                                        disabled={currentPage === totalPages}
+                                        data-arrow="›"
+                                    >
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
-            <LogoCarousel />
+            <div className="logo-carousel-section">
+                <LogoCarousel />
+            </div>
         </div>
     );
 };
