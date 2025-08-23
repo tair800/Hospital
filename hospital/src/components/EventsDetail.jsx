@@ -158,7 +158,9 @@ const EventsDetail = ({ eventId, onBackToEvents }) => {
                 <button className="muraciet-btn" onClick={() => setShowModal(true)}>Müraciət et</button>
             </div>
 
-            <LogoCarousel />
+            <div className="logo-carousel-section events-detail-logo-carousel">
+                <LogoCarousel />
+            </div>
 
             {/* Application Modal */}
             {showModal && (

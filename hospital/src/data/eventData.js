@@ -11,7 +11,6 @@ export const eventData = [
         eventDate: "2025-09-15T14:00:00",
         time: "14:00",
         venue: "Baku Crystal Hall",
-        address: "Bakı şəhəri, Dənizkənarı Milli Park",
         capacity: 500,
         currentRegistrations: 127,
 
@@ -72,7 +71,6 @@ export const eventData = [
         eventDate: "2025-09-25T10:00:00",
         time: "10:00",
         venue: "Medical Center Baku",
-        address: "Bakı şəhəri, Nərimanov rayonu",
         capacity: 300,
         currentRegistrations: 89,
 
@@ -133,7 +131,7 @@ export const eventData = [
         eventDate: "2025-10-08T16:00:00",
         time: "16:00",
         venue: "Children's Hospital",
-        address: "Bakı şəhəri, Yasamal rayonu",
+
         capacity: 200,
         currentRegistrations: 156,
 
@@ -194,7 +192,7 @@ export const eventData = [
         eventDate: "2025-10-20T09:00:00",
         time: "09:00",
         venue: "Neuroscience Center",
-        address: "Bakı şəhəri, Binəqədi rayonu",
+
         capacity: 400,
         currentRegistrations: 203,
 
@@ -255,7 +253,6 @@ export const eventData = [
         eventDate: "2025-11-05T13:00:00",
         time: "13:00",
         venue: "Oncology Hospital",
-        address: "Bakı şəhəri, Suraxanı rayonu",
         capacity: 600,
         currentRegistrations: 445,
 
@@ -316,7 +313,6 @@ export const eventData = [
         eventDate: "2025-11-25T10:00:00",
         time: "10:00",
         venue: "Endocrinology Center",
-        address: "Bakı şəhəri, Nəsimi rayonu",
         capacity: 350,
         currentRegistrations: 178,
 
@@ -377,7 +373,6 @@ export const eventData = [
         eventDate: "2025-12-10T11:00:00",
         time: "11:00",
         venue: "Women's Health Center",
-        address: "Bakı şəhəri, Sabunçu rayonu",
         capacity: 250,
         currentRegistrations: 189,
 
@@ -438,7 +433,6 @@ export const eventData = [
         eventDate: "2025-12-18T14:00:00",
         time: "14:00",
         venue: "Dermatology Clinic",
-        address: "Bakı şəhəri, Xətai rayonu",
         capacity: 180,
         currentRegistrations: 142,
 
@@ -499,7 +493,6 @@ export const eventData = [
         eventDate: "2026-01-15T09:00:00",
         time: "09:00",
         venue: "Eye Surgery Center",
-        address: "Bakı şəhəri, Nərimanov rayonu",
         capacity: 450,
         currentRegistrations: 312,
 
@@ -560,7 +553,6 @@ export const eventData = [
         eventDate: "2026-01-25T13:00:00",
         time: "13:00",
         venue: "Orthopedic Hospital",
-        address: "Bakı şəhəri, Binəqədi rayonu",
         capacity: 380,
         currentRegistrations: 267,
 
@@ -621,7 +613,6 @@ export const eventData = [
         eventDate: "2026-02-08T10:00:00",
         time: "10:00",
         venue: "Mental Health Center",
-        address: "Bakı şəhəri, Yasamal rayonu",
         capacity: 320,
         currentRegistrations: 198,
 
@@ -682,7 +673,6 @@ export const eventData = [
         eventDate: "2026-02-20T15:00:00",
         time: "15:00",
         venue: "Urology Center",
-        address: "Bakı şəhəri, Suraxanı rayonu",
         capacity: 280,
         currentRegistrations: 203,
 

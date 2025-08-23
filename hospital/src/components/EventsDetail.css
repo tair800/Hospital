@@ -978,3 +978,9 @@
         font-size: 1rem;
     }
 }
+
+/* Logo Carousel Section - Events Detail Page */
+.events-detail-page .logo-carousel-section,
+.events-detail-logo-carousel {
+    margin-top: 10rem !important;
+}

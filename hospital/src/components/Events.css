@@ -7,13 +7,12 @@
 
 /* Events Header Text - Using margins for positioning */
 .events-header-text {
-    margin-top: 188px;
+    margin-top: 200px;
     margin-left: 8rem;
     display: flex;
     flex-direction: row;
     gap: 1rem;
     align-items: center;
-    padding-top: 10rem;
 }
 
 .events-header-first {
@@ -549,7 +548,400 @@
     }
 }
 
-/* Logo Carousel Section */
-.logo-carousel-section {
-    margin-top: 2rem;
+/* Events Top Card with Background Image */
+.events-top-card {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 16rem auto 0 auto;
+    height: 400px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.events-top-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.events-top-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Featured Events Content - Inside Top Card */
+.featured-events-content {
+    position: relative;
+    z-index: 10;
+    padding: 2rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 40%;
+    margin-top: -20px;
+}
+
+/* Featured Events Section */
+.featured-events-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 3rem auto;
+    padding: 0 2rem;
+}
+
+
+
+
+
+.featured-event-card {
+    background: none;
+    padding: 1.5rem;
+    color: white;
+    transition: all 0.3s ease;
+    position: relative;
+    height: 100%;
+}
+
+.featured-event-header {
+    margin-bottom: 1.5rem;
+}
+
+.featured-event-title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+    color: white;
+}
+
+
+
+.featured-event-subtitle {
+    font-size: 1.2rem;
+    color: white;
+    margin: 0 0 0.5rem 0;
+    text-align: center;
+    opacity: 0.9;
+}
+
+.featured-event-trainer {
+    font-size: 1rem;
+    color: rgba(142, 205, 255, 1);
+    margin: 0;
+}
+
+
+
+.featured-event-timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+    padding: 0.7rem 0.5rem;
+    background: transparent;
+    border: 1px solid rgba(119, 201, 99, 1);
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.timer-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.featured-event-timer .timer-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #77C963;
+}
+
+
+
+.featured-event-timer .timer-separator {
+    font-size: 1.2rem;
+    font-weight: 600;
+    opacity: 0.8;
+    color: #77C963;
+    margin-top: -5px;
+}
+
+.featured-event-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.featured-event-date-venue-row {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.featured-event-date,
+.featured-event-venue {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 1rem;
+    font-weight: 100;
+}
+
+
+
+.featured-event-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Slider Navigation - Outside the Card */
+.featured-slider-navigation {
+    position: absolute;
+    top: 26rem;
+    right: 8rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Buttons Outside the Background */
+.featured-event-buttons-outer {
+    position: absolute;
+    bottom: -10px;
+    left: 21px;
+    display: flex;
+    gap: 1rem;
+    z-index: 20;
+}
+
+.slider-nav-btn {
+    background: rgba(18, 67, 172, 1);
+    border: 2px solid white;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.slider-nav-btn:hover:not(:disabled) {
+    transform: scale(1.1);
+}
+
+.slider-nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Slider Navigation Icon - Specific to prevent conflicts */
+.slider-nav-btn .slider-nav-icon {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
+    transition: all 0.3s ease;
+}
+
+/* Rotate prev button icon to point left */
+.slider-nav-btn.prev-btn .slider-nav-icon {
+    transform: rotate(180deg);
+}
+
+
+
+.slider-dots {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.slider-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.slider-dot.active {
+    background: white;
+}
+
+.slider-dot:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+
+
+.featured-event-btn {
+    padding: 0.5rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 140px;
+}
+
+.qeydiyyat-btn {
+    background: rgba(18, 67, 172, 1);
+    color: white;
+}
+
+.qeydiyyat-btn:hover {
+    background: linear-gradient(0deg, #454471, #454471),
+        linear-gradient(87.1deg, #0B0B2F -14.15%, #0A33A0 97.59%);
+    transform: translateY(-2px);
+}
+
+.detalli-btn {
+    background: transparent;
+    color: white;
+
+    border: 1px solid #81BBE9;
+    border-image-slice: 1;
+}
+
+.detalli-btn:hover {
+    background: white;
+    color: #1B1B3F;
+    transform: translateY(-2px);
+}
+
+.featured-icon {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1) saturate(0);
+}
+
+/* Responsive design for featured events card */
+@media (max-width: 768px) {
+    .events-top-card {
+        height: 350px;
+        margin: 12rem auto 0 auto;
+    }
+
+    .featured-events-content {
+        width: 60%;
+        padding: 1.5rem;
+    }
+
+    .featured-events-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .featured-event-card {
+        padding: 1.2rem;
+    }
+
+    .featured-event-title {
+        font-size: 1.1rem;
+    }
+
+    .timer-number {
+        font-size: 1.3rem;
+    }
+
+    .timer-separator {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .events-top-card {
+        height: 300px;
+        margin: 8rem auto 0 auto;
+    }
+
+    .featured-events-content {
+        width: 80%;
+        padding: 1rem;
+    }
+
+    .featured-events-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .featured-event-card {
+        padding: 1rem;
+    }
+
+    .featured-event-title {
+        font-size: 1rem;
+    }
+
+    .timer-number {
+        font-size: 1.1rem;
+    }
+
+    .timer-separator {
+        font-size: 0.9rem;
+    }
+}
+
+/* Logo Carousel Section - Events Page */
+.events-page .logo-carousel-section,
+.events-logo-carousel {
+    margin-top: 2rem !important;
+}
+
+/* === Slider Animations === */
+.featured-event-card {
+    opacity: 0;
+    transform: translateX(0);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    position: relative;
+}
+
+/* Slide in from left */
+.featured-event-card.slide-left {
+    animation: slideInFromLeft 0.6s forwards;
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Slide in from right */
+.featured-event-card.slide-right {
+    animation: slideInFromRight 0.6s forwards;
+}
+
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }

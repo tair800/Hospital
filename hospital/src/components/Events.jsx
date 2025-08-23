@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import searchIcon from '../assets/search-icon.png';
 import cardIcon from '../assets/card-icon.png';
 import eventImg from '../assets/event-img.png';
@@ -10,6 +10,11 @@ const Events = ({ onEventClick }) => {
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const eventsPerPage = 6;
+
+    // Countdown timer state
+    const [timeLeft, setTimeLeft] = useState({});
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [direction, setDirection] = useState('right'); // 👈 for animations
 
     // Get current date for calendar
     const today = new Date();
@@ -28,17 +33,48 @@ const Events = ({ onEventClick }) => {
 
     // Get first day of month (0 = Sunday, 1 = Monday, etc.)
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-    // Convert to Monday start (0 = Monday, 1 = Tuesday, etc.)
+    // Convert to Monday start
     const mondayStart = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
 
     // Generate calendar days
     const calendarDays = [];
     for (let i = 0; i < mondayStart; i++) {
-        calendarDays.push(null); // Empty cells for days before month starts
+        calendarDays.push(null);
     }
     for (let i = 1; i <= daysInMonth; i++) {
         calendarDays.push(i);
     }
+
+    // Countdown timer effect
+    useEffect(() => {
+        const calculateTimeLeft = () => {
+            const now = new Date().getTime();
+            const newTimeLeft = {};
+
+            eventData
+                .filter(event => event.isMain)
+                .forEach(event => {
+                    const eventTime = new Date(event.eventDate).getTime();
+                    const difference = eventTime - now;
+
+                    if (difference > 0) {
+                        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+
+                        newTimeLeft[event.id] = { days, hours, minutes };
+                    } else {
+                        newTimeLeft[event.id] = { days: 0, hours: 0, minutes: 0 };
+                    }
+                });
+
+            setTimeLeft(newTimeLeft);
+        };
+
+        calculateTimeLeft();
+        const timer = setInterval(calculateTimeLeft, 1000);
+        return () => clearInterval(timer);
+    }, []);
 
     const handleEventClick = (eventId) => {
         if (onEventClick) {
@@ -54,26 +90,133 @@ const Events = ({ onEventClick }) => {
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-        // Scroll to top when page changes
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (
         <div className="events-page">
+            <div className="events-top-card">
+                <div className="events-top-background">
+                    <img src="/src/assets/events-top.png" alt="Events Top" />
+                </div>
+
+                {/* Featured Event Section */}
+                {(() => {
+                    const mainEvents = eventData.filter(event => event.isMain);
+                    if (mainEvents.length === 0) return null;
+
+                    const currentEvent = mainEvents[currentSlide];
+                    const eventDate = new Date(currentEvent.eventDate);
+                    const eventTimeLeft = timeLeft[currentEvent.id] || { days: 0, hours: 0, minutes: 0 };
+
+                    return (
+                        <div className="featured-events-content">
+                            <div
+                                key={currentEvent.id}
+                                className={`featured-event-card slide-${direction}`} // 👈 new animation class
+                            >
+                                <div className="featured-event-header">
+                                    <h3 className="featured-event-title">
+                                        {currentEvent.title}:
+                                    </h3>
+                                    <p className="featured-event-subtitle">
+                                        {currentEvent.subtitle}
+                                    </p>
+                                    <p className="featured-event-trainer">
+                                        Təlimçi: {currentEvent.trainerTitle} {currentEvent.trainer}
+                                    </p>
+                                </div>
+
+                                <div className="featured-event-timer">
+                                    <div className="timer-unit">
+                                        <span className="timer-number">{eventTimeLeft.days.toString().padStart(2, '0')}</span>
+                                    </div>
+                                    <span className="timer-separator">:</span>
+                                    <div className="timer-unit">
+                                        <span className="timer-number">{eventTimeLeft.hours.toString().padStart(2, '0')}</span>
+                                    </div>
+                                    <span className="timer-separator">:</span>
+                                    <div className="timer-unit">
+                                        <span className="timer-number">{eventTimeLeft.minutes.toString().padStart(2, '0')}</span>
+                                    </div>
+                                </div>
+
+                                <div className="featured-event-details">
+                                    <div className="featured-event-date-venue-row">
+                                        <div className="featured-event-date">
+                                            <img src="/src/assets/calendar.png" alt="Calendar" className="featured-icon" />
+                                            <span>{eventDate.toLocaleDateString('en-US', {
+                                                month: 'long',
+                                                day: 'numeric',
+                                                year: 'numeric'
+                                            })}</span>
+                                        </div>
+                                        <div className="featured-event-venue">
+                                            <img src="/src/assets/location.png" alt="Venue" className="featured-icon" />
+                                            <span>{currentEvent.venue}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="featured-event-buttons-outer">
+                                    <button className="featured-event-btn qeydiyyat-btn">Qeydiyyatdan keç</button>
+                                    <button
+                                        className="featured-event-btn detalli-btn"
+                                        onClick={() => {
+                                            const mainEvents = eventData.filter(event => event.isMain);
+                                            const currentEvent = mainEvents[currentSlide];
+                                            if (currentEvent) {
+                                                onEventClick('event-detail', currentEvent.id);
+                                            }
+                                        }}
+                                    >
+                                        Detallı bax
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })()}
+            </div>
+
+            {/* Slider Navigation */}
+            <div className="featured-slider-navigation">
+                <button
+                    className="slider-nav-btn prev-btn"
+                    onClick={() => {
+                        const mainEvents = eventData.filter(event => event.isMain);
+                        setDirection('left');
+                        setCurrentSlide(prev => prev === 0 ? mainEvents.length - 1 : prev - 1);
+                    }}
+                >
+                    <img src="/src/assets/card-icon.png" alt="Previous" className="slider-nav-icon" />
+                </button>
+
+                <button
+                    className="slider-nav-btn next-btn"
+                    onClick={() => {
+                        const mainEvents = eventData.filter(event => event.isMain);
+                        setDirection('right');
+                        setCurrentSlide(prev => prev === mainEvents.length - 1 ? 0 : prev + 1);
+                    }}
+                >
+                    <img src="/src/assets/card-icon.png" alt="Next" className="slider-nav-icon" />
+                </button>
+            </div>
+
+            {/* Header */}
             <div className="events-header-text">
                 <span className="events-header-first">Bütün</span>
                 <span className="events-header-second">
                     <span>Tədbirlər</span>
                 </span>
             </div>
+
+            {/* Content */}
             <div className="events-content-container">
                 <div className="events-left-section">
                     <div className="search-container">
-                        <input
-                            type="text"
-                            placeholder=""
-                            className="search-input"
-                        />
+                        <input type="text" placeholder="" className="search-input" />
                         <img src={searchIcon} alt="Search" className="search-icon" />
                     </div>
 
@@ -107,20 +250,14 @@ const Events = ({ onEventClick }) => {
                             ))}
                         </div>
                     </div>
-
-                    {/* Left content area */}
                 </div>
+
                 <div className="events-right-section">
                     <div className="events-main-content">
                         <div className="events-grid">
-                            {currentEvents.map((event, index) => {
-                                // Extract date components from eventDate
+                            {currentEvents.map((event) => {
                                 const eventDate = new Date(event.eventDate);
                                 const day = eventDate.getDate();
-                                const monthNames = [
-                                    'January', 'February', 'March', 'April', 'May', 'June',
-                                    'July', 'August', 'September', 'October', 'November', 'December'
-                                ];
                                 const month = monthNames[eventDate.getMonth()];
 
                                 return (
@@ -145,7 +282,7 @@ const Events = ({ onEventClick }) => {
                             })}
                         </div>
 
-                        {/* Pagination Controls */}
+                        {/* Pagination */}
                         {totalPages > 1 && (
                             <div className="pagination-container">
                                 <div className="pagination-controls">
@@ -154,8 +291,7 @@ const Events = ({ onEventClick }) => {
                                         onClick={() => handlePageChange(currentPage - 1)}
                                         disabled={currentPage === 1}
                                         data-arrow="‹"
-                                    >
-                                    </button>
+                                    />
 
                                     <div className="pagination-numbers">
                                         {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
@@ -174,15 +310,15 @@ const Events = ({ onEventClick }) => {
                                         onClick={() => handlePageChange(currentPage + 1)}
                                         disabled={currentPage === totalPages}
                                         data-arrow="›"
-                                    >
-                                    </button>
+                                    />
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
             </div>
-            <div className="logo-carousel-section">
+
+            <div className="logo-carousel-section events-logo-carousel">
                 <LogoCarousel />
             </div>
         </div>

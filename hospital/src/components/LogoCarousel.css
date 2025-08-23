@@ -1,8 +1,9 @@
 .logo-carousel-section {
     width: 100%;
-    margin-top: 10rem;
     padding: 0;
     background-color: white;
+    padding-bottom: 2.5rem 
+
 }
 
 .logo-carousel-container {
@@ -69,11 +70,6 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
-    .logo-carousel-section {
-        flex-direction: column;
-        gap: 20px;
-    }
-
     .logo-carousel-wrapper {
         width: 100%;
     }
@@ -89,11 +85,6 @@
 }
 
 @media (max-width: 480px) {
-    .logo-carousel-section {
-        flex-direction: column;
-        gap: 20px;
-    }
-
     .logo-carousel-wrapper {
         width: 100%;
     }
