@@ -37,6 +37,13 @@ header {
     min-height: 80px;
 }
 
+/* Home page specific header styling */
+.home-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 .logo-section {
     display: flex;
     align-items: center;

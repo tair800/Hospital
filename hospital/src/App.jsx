@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import Home from './components/Home'
 import About from './components/About'
 import Contact from './components/Contact'
 import TestPage from './pages/TestPage'
@@ -22,20 +23,7 @@ function App() {
           <Route path="/" element={
             <>
               <Header showTopImage={false} />
-              <main>
-                <h2>Welcome to Our Hospital</h2>
-                <p>Providing quality healthcare services to our community.</p>
-                <div>
-                  <h3>Our Services</h3>
-                  <ul>
-                    <li>Emergency Care</li>
-                    <li>Surgery</li>
-                    <li>Pediatrics</li>
-                    <li>Cardiology</li>
-                    <li>Neurology</li>
-                  </ul>
-                </div>
-              </main>
+              <Home />
               <Footer />
             </>
           } />

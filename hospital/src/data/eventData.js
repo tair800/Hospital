@@ -17,9 +17,6 @@ export const eventData = [
         // Organizer Information
         organizer: "Azərbaycan Tibb Universiteti",
         trainer: "Yusif Qasımov",
-        trainerTitle: "Prof. Dr.",
-        trainerSpecialty: "HPB Cərrahiyyə",
-        trainerHospital: "Bakı Tibb Universiteti Xəstəxanası",
 
         // Event Type & Category
         eventType: "conference",
@@ -76,10 +73,7 @@ export const eventData = [
 
         // Organizer Information
         organizer: "Bakı Tibb Mərkəzi",
-        trainer: "Aysu Məmmədova",
-        trainerTitle: "Dr.",
-        trainerSpecialty: "Kardiolojiya",
-        trainerHospital: "Bakı Tibb Mərkəzi",
+        trainer: "Ali Veliyev",
 
         // Event Type & Category
         eventType: "workshop",
@@ -137,10 +131,7 @@ export const eventData = [
 
         // Organizer Information
         organizer: "Uşaq Xəstəxanası",
-        trainer: "Elvin Əliyev",
-        trainerTitle: "Dr.",
-        trainerSpecialty: "Pediatriya",
-        trainerHospital: "Uşaq Xəstəxanası",
+        trainer: "Nurlan Mammadov",
 
         // Event Type & Category
         eventType: "seminar",
@@ -198,10 +189,7 @@ export const eventData = [
 
         // Organizer Information
         organizer: "Azərbaycan Nevrologiya İnstitutu",
-        trainer: "Rəşad Hüseynov",
-        trainerTitle: "Prof. Dr.",
-        trainerSpecialty: "Beyin Cərrahiyyəsi",
-        trainerHospital: "Neuroscience Center",
+        trainer: "Fərid Məmmədov",
 
         // Event Type & Category
         eventType: "symposium",
@@ -258,10 +246,7 @@ export const eventData = [
 
         // Organizer Information
         organizer: "Azərbaycan Onkologiya Mərkəzi",
-        trainer: "Leyla Əliyeva",
-        trainerTitle: "Prof. Dr.",
-        trainerSpecialty: "Onkologiya",
-        trainerHospital: "Oncology Hospital",
+        trainer: "Rəşad Məmmədov",
 
         // Event Type & Category
         eventType: "forum",
@@ -318,10 +303,7 @@ export const eventData = [
 
         // Organizer Information
         organizer: "Azərbaycan Endokrinologiya İnstitutu",
-        trainer: "Nigar Məmmədli",
-        trainerTitle: "Dr.",
-        trainerSpecialty: "Endokrinologiya",
-        trainerHospital: "Endocrinology Center",
+        trainer: "Nərgiz Məmmədova",
 
         // Event Type & Category
         eventType: "conference",
@@ -378,10 +360,7 @@ export const eventData = [
 
         // Organizer Information
         organizer: "Azərbaycan Ginekologiya İnstitutu",
-        trainer: "Aynur Hüseynova",
-        trainerTitle: "Prof. Dr.",
-        trainerSpecialty: "Ginekologiya",
-        trainerHospital: "Women's Health Center",
+        trainer: "Ləman Hüseynova",
 
         // Event Type & Category
         eventType: "seminar",
@@ -438,10 +417,7 @@ export const eventData = [
 
         // Organizer Information
         organizer: "Bakı Dermatologiya Klinikası",
-        trainer: "Rəna Əliyeva",
-        trainerTitle: "Dr.",
-        trainerSpecialty: "Dermatologiya",
-        trainerHospital: "Dermatology Clinic",
+        trainer: "Nərgiz Məmmədova",
 
         // Event Type & Category
         eventType: "workshop",
@@ -498,10 +474,7 @@ export const eventData = [
 
         // Organizer Information
         organizer: "Azərbaycan Oftalmologiya Mərkəzi",
-        trainer: "Vüsal Məmmədov",
-        trainerTitle: "Prof. Dr.",
-        trainerSpecialty: "Oftalmologiya",
-        trainerHospital: "Eye Surgery Center",
+        trainer: "Fərid Məmmədov",
 
         // Event Type & Category
         eventType: "forum",
@@ -558,10 +531,7 @@ export const eventData = [
 
         // Organizer Information
         organizer: "Azərbaycan Ortopediya Xəstəxanası",
-        trainer: "Elşən Əliyev",
-        trainerTitle: "Dr.",
-        trainerSpecialty: "Ortopediya",
-        trainerHospital: "Orthopedic Hospital",
+        trainer: "Rəşad Məmmədov",
 
         // Event Type & Category
         eventType: "conference",
@@ -618,10 +588,7 @@ export const eventData = [
 
         // Organizer Information
         organizer: "Azərbaycan Psixiatriya İnstitutu",
-        trainer: "Leyla Məmmədli",
-        trainerTitle: "Prof. Dr.",
-        trainerSpecialty: "Psixiatriya",
-        trainerHospital: "Mental Health Center",
+        trainer: "Ləman Hüseynova",
 
         // Event Type & Category
         eventType: "symposium",
@@ -678,10 +645,7 @@ export const eventData = [
 
         // Organizer Information
         organizer: "Azərbaycan Urologiya Mərkəzi",
-        trainer: "Rəşad Əliyev",
-        trainerTitle: "Dr.",
-        trainerSpecialty: "Urologiya",
-        trainerHospital: "Urology Center",
+        trainer: "Rəşad Məmmədov",
 
         // Event Type & Category
         eventType: "forum",

@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import logoHeader from '../assets/logo-header.png'
 import topImage from '../assets/top.png'
+import homeBgImage from '../assets/home-bg.png'
 import './Header.css'
 
 function Header({ showTopImage = false }) {
     const [activePage, setActivePage] = useState('home');
     const navigate = useNavigate();
     const location = useLocation();
+
+    // Check if we're on the home page
+    const isHomePage = location.pathname === '/';
 
     const navigationItems = [
         { label: 'Ana səhifə', href: '/', id: 'home' },
@@ -35,6 +39,8 @@ function Header({ showTopImage = false }) {
             setActivePage('uzv');
         } else if (path === '/events') {
             setActivePage('events');
+        } else if (path.startsWith('/event/')) {
+            setActivePage('events');
         } else if (path === '/gallery') {
             setActivePage('gallery');
         } else if (path === '/blog') {
@@ -53,7 +59,7 @@ function Header({ showTopImage = false }) {
                     <img src={topImage} alt="Top Background" />
                 </div>
             )}
-            <div className="header-container">
+            <div className={`header-container ${isHomePage ? 'home-header' : ''}`}>
                 <div className="logo-section">
                     <img
                         src={logoHeader}
