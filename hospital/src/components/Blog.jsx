@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Blog.css';
 import { blogData } from '../data/blog-data';
+import LogoCarousel from './LogoCarousel';
 
 const Blog = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const navigate = useNavigate();
     const totalBlogs = blogData.length;
     const cardsPerScreen = 3;
     const totalSlides = Math.ceil(totalBlogs / cardsPerScreen);
@@ -16,13 +19,13 @@ const Blog = () => {
         setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
     };
 
-    const goToSlide = (slideIndex) => {
-        setCurrentSlide(slideIndex);
-    };
-
     const getVisibleBlogs = () => {
         const startIndex = currentSlide * cardsPerScreen;
         return blogData.slice(startIndex, startIndex + cardsPerScreen);
+    };
+
+    const handleCardClick = (blogId) => {
+        navigate(`/blog/${blogId}`);
     };
 
     const renderSeparator = (blogIndex) => {
@@ -48,7 +51,10 @@ const Blog = () => {
             <div className="blog-slider-container">
                 <div className="blog-cards-container">
                     {getVisibleBlogs().map((blog) => (
-                        <div key={blog.id} className="blog-card">
+                        <div
+                            key={blog.id}
+                            className="blog-card"
+                        >
                             <div className="blog-card-number">{blog.number}</div>
 
                             <div className="blog-card-header">
@@ -74,7 +80,11 @@ const Blog = () => {
                                 />
                             </div>
 
-                            <div className="blog-card-arrow">
+                            <div
+                                className="blog-card-arrow"
+                                onClick={() => handleCardClick(blog.id)}
+                                style={{ cursor: 'pointer' }}
+                            >
                                 <img
                                     src="/src/assets/blog-arrow.png"
                                     alt="Arrow"
@@ -106,6 +116,10 @@ const Blog = () => {
                         ›
                     </button>
                 </div>
+            </div>
+
+            <div className="logo-carousel-section blog-logo-carousel">
+                <LogoCarousel />
             </div>
         </div>
     );

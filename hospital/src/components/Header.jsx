@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import logoHeader from '../assets/logo-header.png'
 import topImage from '../assets/top.png'
 import './Header.css'
 
-function Header({ onPageChange, showTopImage = false }) {
+function Header({ showTopImage = false }) {
     const [activePage, setActivePage] = useState('home');
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const navigationItems = [
         { label: 'Ana səhifə', href: '/', id: 'home' },
@@ -17,32 +20,31 @@ function Header({ onPageChange, showTopImage = false }) {
 
     const handleItemClick = (item) => {
         setActivePage(item.id);
-        if (onPageChange) {
-            onPageChange(item.id);
-        }
+        navigate(item.href);
         console.log('Navigation clicked:', item);
     };
 
     // Set initial active page based on current path
     useEffect(() => {
-        const path = window.location.pathname;
+        const path = location.pathname;
         if (path === '/about') {
             setActivePage('about');
         } else if (path === '/contact') {
-            setActivePage('contact'); // Set contact as active page
+            setActivePage('contact');
         } else if (path === '/uzv') {
-            setActivePage('uzv'); // Set uzv as active page
+            setActivePage('uzv');
         } else if (path === '/events') {
-            setActivePage('events'); // Set events as active page
+            setActivePage('events');
         } else if (path === '/gallery') {
-            setActivePage('gallery'); // Set gallery as active page
+            setActivePage('gallery');
         } else if (path === '/blog') {
-            setActivePage('blog'); // Set blog as active page
+            setActivePage('blog');
+        } else if (path.startsWith('/blog/')) {
+            setActivePage('blog');
         } else if (path === '/') {
             setActivePage('home');
         }
-        // Add more path checks as needed
-    }, []);
+    }, [location.pathname]);
 
     return (
         <header>
@@ -56,7 +58,7 @@ function Header({ onPageChange, showTopImage = false }) {
                     <img
                         src={logoHeader}
                         alt="Hospital Logo"
-                        onClick={() => handleItemClick({ id: 'home', label: 'Ana səhifə' })}
+                        onClick={() => handleItemClick({ id: 'home', label: 'Ana səhifə', href: '/' })}
                         style={{ cursor: 'pointer' }}
                     />
                 </div>

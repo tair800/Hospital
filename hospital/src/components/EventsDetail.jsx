@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { eventData } from '../data/eventData';
 import LogoCarousel from './LogoCarousel';
 import './EventsDetail.css';
 
-const EventsDetail = ({ eventId, onBackToEvents }) => {
+const EventsDetail = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const eventId = parseInt(id);
+
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({
@@ -86,7 +91,7 @@ const EventsDetail = ({ eventId, onBackToEvents }) => {
             <div className="events-detail-page">
                 <div className="events-detail-header-text">
                     <span className="events-detail-header-first">Event Not Found</span>
-                    <button onClick={onBackToEvents} className="back-button">Back to Events</button>
+                    <button onClick={() => navigate('/events')} className="back-button">Back to Events</button>
                 </div>
             </div>
         );

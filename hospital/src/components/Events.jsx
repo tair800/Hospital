@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import searchIcon from '../assets/search-icon.png';
 import cardIcon from '../assets/card-icon.png';
 import eventImg from '../assets/event-img.png';
@@ -6,7 +7,9 @@ import LogoCarousel from './LogoCarousel';
 import { eventData } from '../data/eventData';
 import './Events.css';
 
-const Events = ({ onEventClick }) => {
+const Events = () => {
+    const navigate = useNavigate();
+
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const eventsPerPage = 6;
@@ -77,9 +80,7 @@ const Events = ({ onEventClick }) => {
     }, []);
 
     const handleEventClick = (eventId) => {
-        if (onEventClick) {
-            onEventClick('event-detail', eventId);
-        }
+        navigate(`/event/${eventId}`);
     };
 
     // Pagination logic
@@ -166,7 +167,7 @@ const Events = ({ onEventClick }) => {
                                             const mainEvents = eventData.filter(event => event.isMain);
                                             const currentEvent = mainEvents[currentSlide];
                                             if (currentEvent) {
-                                                onEventClick('event-detail', currentEvent.id);
+                                                navigate(`/event/${currentEvent.id}`);
                                             }
                                         }}
                                     >
