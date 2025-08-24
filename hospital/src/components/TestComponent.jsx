@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Application } from '@splinetool/runtime';
+import HealthcareCard from './HealthcareCard';
 import './TestComponent.css';
 
 const TestComponent = () => {
@@ -14,8 +15,11 @@ const TestComponent = () => {
 
     return (
         <div className="test-component">
-            <div className="spline-container">
-                <canvas ref={canvasRef} />
+
+
+            {/* Healthcare Card Section */}
+            <div className="healthcare-section">
+                <HealthcareCard />
             </div>
         </div>
     );
