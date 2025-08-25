@@ -21,44 +21,90 @@ const Gallery = () => {
     const handleMouseDown = (e) => {
         e.preventDefault();
         setIsDragging(true);
-        setStartX(e.pageX - sliderRef.current.offsetLeft);
+        setStartX(e.pageX);
         setScrollLeft(sliderRef.current.scrollLeft);
+
+        // Add grabbing cursor and disable smooth scrolling
+        sliderRef.current.style.cursor = 'grabbing';
+        sliderRef.current.style.userSelect = 'none';
+        sliderRef.current.style.scrollBehavior = 'auto';
+        sliderRef.current.classList.add('grabbing');
     };
 
     const handleMouseUp = () => {
         setIsDragging(false);
+
+        // Reset cursor, user select, and smooth scrolling
+        if (sliderRef.current) {
+            sliderRef.current.style.cursor = 'grab';
+            sliderRef.current.style.userSelect = 'auto';
+            sliderRef.current.style.scrollBehavior = 'smooth';
+            sliderRef.current.classList.remove('grabbing');
+        }
     };
 
     const handleMouseMove = (e) => {
         if (!isDragging) return;
         e.preventDefault();
-        const x = e.pageX - sliderRef.current.offsetLeft;
-        const walk = (x - startX) * 2;
+
+        const x = e.pageX;
+        const walk = (x - startX);
         sliderRef.current.scrollLeft = scrollLeft - walk;
     };
 
     const handleTouchStart = (e) => {
         setIsDragging(true);
-        setStartX(e.touches[0].pageX - sliderRef.current.offsetLeft);
+        setStartX(e.touches[0].pageX);
         setScrollLeft(sliderRef.current.scrollLeft);
+
+        // Disable smooth scrolling during touch
+        sliderRef.current.style.scrollBehavior = 'auto';
+        sliderRef.current.classList.add('grabbing');
     };
 
     const handleTouchMove = (e) => {
         if (!isDragging) return;
-        const x = e.touches[0].pageX - sliderRef.current.offsetLeft;
-        const walk = (x - startX) * 2;
+        e.preventDefault();
+
+        const x = e.touches[0].pageX;
+        const walk = (x - startX);
         sliderRef.current.scrollLeft = scrollLeft - walk;
     };
 
     const handleTouchEnd = () => {
         setIsDragging(false);
+
+        // Re-enable smooth scrolling
+        if (sliderRef.current) {
+            sliderRef.current.style.scrollBehavior = 'smooth';
+            sliderRef.current.classList.remove('grabbing');
+        }
     };
 
-    // Global mouse event listeners
+    // Handle mouse leave
+    const handleMouseLeave = () => {
+        if (isDragging) {
+            setIsDragging(false);
+            if (sliderRef.current) {
+                sliderRef.current.style.cursor = 'grab';
+                sliderRef.current.style.userSelect = 'auto';
+                sliderRef.current.style.scrollBehavior = 'smooth';
+                sliderRef.current.classList.remove('grabbing');
+            }
+        }
+    };
+
+    // Global mouse event listeners for better drag experience
     useEffect(() => {
         const handleGlobalMouseUp = () => {
             if (isDragging) {
                 setIsDragging(false);
+                if (sliderRef.current) {
+                    sliderRef.current.style.cursor = 'grab';
+                    sliderRef.current.style.userSelect = 'auto';
+                    sliderRef.current.style.scrollBehavior = 'smooth';
+                    sliderRef.current.classList.remove('grabbing');
+                }
             }
         };
 
@@ -67,6 +113,7 @@ const Gallery = () => {
             handleMouseMove(e);
         };
 
+        // Add global event listeners
         document.addEventListener('mouseup', handleGlobalMouseUp);
         document.addEventListener('mousemove', handleGlobalMouseMove);
         document.addEventListener('mouseleave', handleGlobalMouseUp);
@@ -76,7 +123,7 @@ const Gallery = () => {
             document.removeEventListener('mousemove', handleGlobalMouseMove);
             document.removeEventListener('mouseleave', handleGlobalMouseUp);
         };
-    }, [isDragging]);
+    }, [isDragging, startX, scrollLeft]);
 
     return (
         <div className="gallery-page">
@@ -86,13 +133,13 @@ const Gallery = () => {
                     ref={sliderRef}
                     onMouseDown={handleMouseDown}
                     onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseUp}
+                    onMouseLeave={handleMouseLeave}
                     onTouchStart={handleTouchStart}
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
                     style={{
-                        cursor: isDragging ? 'grabbing' : 'grab',
-                        userSelect: isDragging ? 'none' : 'auto'
+                        cursor: 'grab',
+                        userSelect: 'none'
                     }}
                 >
                     <div className="images-container">
@@ -107,6 +154,7 @@ const Gallery = () => {
                                         objectFit: 'cover',
                                         pointerEvents: 'none'
                                     }}
+                                    draggable={false}
                                 />
                             </div>
                         ))}

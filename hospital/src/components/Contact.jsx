@@ -1,7 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Application } from '@splinetool/runtime';
 import './Contact.css';
-import { contactData, contactDataHelpers } from '../data/contact-data.js';
 import phoneIcon from '../assets/phone-icon.png';
 import whatsappIcon from '../assets/whatsapp-icon.png';
 import mailIcon from '../assets/mail-icon.png';
@@ -15,6 +14,35 @@ import LogoCarousel from './LogoCarousel';
 
 const Contact = () => {
     const canvasRef = useRef(null);
+    const [contactData, setContactData] = useState({
+        heading: { line1: '', line2: '' },
+        contactInfo: [],
+        socialMedia: []
+    });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // Fetch contact data from API
+    useEffect(() => {
+        const fetchContactData = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch('http://localhost:5000/api/contacts');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch contact data');
+                }
+                const data = await response.json();
+                setContactData(data);
+            } catch (err) {
+                console.error('Error fetching contact data:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchContactData();
+    }, []);
 
     useEffect(() => {
         if (canvasRef.current) {
@@ -57,6 +85,28 @@ const Contact = () => {
         }
     };
 
+    // Show loading state
+    if (loading) {
+        return (
+            <div className="contact-page">
+                <div style={{ textAlign: 'center', padding: '50px' }}>
+                    <p>Loading contact information...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Show error state
+    if (error) {
+        return (
+            <div className="contact-page">
+                <div style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
+                    <p>Error loading contact information: {error}</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="contact-page">
             <div className="contact-content-container">
@@ -71,7 +121,7 @@ const Contact = () => {
                             </div>
 
                             <div className="contact-details">
-                                {contactDataHelpers.getContactInfo().map((item, index) => (
+                                {contactData.contactInfo.map((item, index) => (
                                     <div key={index} className="contact-item">
                                         <img
                                             src={getIcon(item.icon)}
@@ -85,7 +135,7 @@ const Contact = () => {
 
                             {/* Social Media Icons */}
                             <div className="social-media-icons">
-                                {contactDataHelpers.getSocialMedia().map((social, index) => (
+                                {contactData.socialMedia.map((social, index) => (
                                     <a
                                         key={index}
                                         href={social.url}

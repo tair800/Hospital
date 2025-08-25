@@ -74,17 +74,46 @@
     display: flex;
     align-items: center;
     height: 70vh;
+    width: 100%;
 
     scroll-behavior: smooth;
     scrollbar-width: none;
     /* Firefox */
     -ms-overflow-style: none;
     /* IE and Edge */
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .gallery-slider::-webkit-scrollbar {
     display: none;
     /* Chrome, Safari, Opera */
+}
+
+/* Slider dragging state */
+.gallery-slider:active {
+    cursor: grabbing;
+}
+
+.gallery-slider.grabbing {
+    cursor: grabbing;
+    scroll-behavior: auto;
+}
+
+/* Prevent text selection during drag */
+.gallery-slider.grabbing * {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Smooth transition for cursor changes */
+.gallery-slider {
+    transition: cursor 0.1s ease;
 }
 
 /* Images Container */
@@ -94,6 +123,8 @@
     height: 70vh;
     min-width: max-content;
     padding: 0 1rem;
+    align-items: center;
+    flex-shrink: 0;
 }
 
 .image-item {

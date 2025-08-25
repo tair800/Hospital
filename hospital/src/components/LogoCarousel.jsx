@@ -1,9 +1,33 @@
-import React, { useRef, useEffect } from 'react';
-import { logoData } from '../data/logo-data.js';
+import React, { useRef, useEffect, useState } from 'react';
 import './LogoCarousel.css';
 
 const LogoCarousel = () => {
     const carouselRef = useRef(null);
+    const [logoData, setLogoData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // Fetch logo data from API
+    useEffect(() => {
+        const fetchLogoData = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch('http://localhost:5000/api/logos');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch logo data');
+                }
+                const data = await response.json();
+                setLogoData(data);
+            } catch (err) {
+                console.error('Error fetching logo data:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchLogoData();
+    }, []);
 
     // Create zigzag pattern: odd IDs on first row, even IDs on second row
     const createZigzagData = () => {
@@ -21,6 +45,8 @@ const LogoCarousel = () => {
 
     // Auto-scroll functionality
     useEffect(() => {
+        if (logoData.length === 0) return; // Don't start scrolling until data is loaded
+
         const autoScroll = setInterval(() => {
             if (carouselRef.current) {
                 const maxScroll = carouselRef.current.scrollWidth - carouselRef.current.clientWidth;
@@ -34,7 +60,46 @@ const LogoCarousel = () => {
         }, 30); // Update every 30ms for smooth scrolling
 
         return () => clearInterval(autoScroll);
-    }, []);
+    }, [logoData]);
+
+    // Show loading state
+    if (loading) {
+        return (
+            <div className="logo-carousel-section">
+                <div className="logo-carousel-container">
+                    <div style={{ textAlign: 'center', padding: '20px' }}>
+                        <p>Loading logos...</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Show error state
+    if (error) {
+        return (
+            <div className="logo-carousel-section">
+                <div className="logo-carousel-container">
+                    <div style={{ textAlign: 'center', padding: '20px', color: 'red' }}>
+                        <p>Error loading logos: {error}</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Show empty state
+    if (logoData.length === 0) {
+        return (
+            <div className="logo-carousel-section">
+                <div className="logo-carousel-container">
+                    <div style={{ textAlign: 'center', padding: '20px' }}>
+                        <p>No logos available.</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="logo-carousel-section">

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
 import './About.css'
-import { carouselData } from '../data/about-data.js'
 import aboutMainImage from '../assets/about-main.png'
 import aboutTop1Image from '../assets/about-dot1.png'
 import aboutTop2Image from '../assets/about-dot2.png'
@@ -15,7 +14,32 @@ function About() {
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
+    const [carouselData, setCarouselData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const carouselRef = useRef(null);
+
+    // Fetch carousel data from API
+    useEffect(() => {
+        const fetchCarouselData = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch('http://localhost:5000/api/aboutcarousel');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch carousel data');
+                }
+                const data = await response.json();
+                setCarouselData(data);
+            } catch (err) {
+                console.error('Error fetching carousel data:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCarouselData();
+    }, []);
 
     // Counter animation for dot4 (Events)
     useEffect(() => {
@@ -72,6 +96,28 @@ function About() {
 
     const extendedData = [...carouselData, ...carouselData, ...carouselData];
 
+    // Show loading state
+    if (loading) {
+        return (
+            <div className="about-page">
+                <div style={{ textAlign: 'center', padding: '50px' }}>
+                    <p>Loading...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Show error state
+    if (error) {
+        return (
+            <div className="about-page">
+                <div style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
+                    <p>Error loading data: {error}</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="about-page">
             <img
@@ -102,8 +148,8 @@ function About() {
                     <div className="dot4-image-container">
                         <img src={aboutTop4Image} alt="About Dot 4 Image" />
                         <div className="dot4-text-overlay">
-                            <span className="dot4-number">+{counter}</span>
-                            <span className="dot4-label">Events</span>
+                            <span className="dot3-number">+{counter}</span>
+                            <span className="dot3-label">Events</span>
                         </div>
                     </div>
                     <div className="main-image-container">

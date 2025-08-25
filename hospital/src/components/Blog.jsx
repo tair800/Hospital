@@ -1,12 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Blog.css';
-import { blogData } from '../data/blog-data';
 import LogoCarousel from './LogoCarousel';
 
 const Blog = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [blogData, setBlogData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
+
+    // Fetch blog data from API
+    useEffect(() => {
+        const fetchBlogData = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch('http://localhost:5000/api/blogs');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch blog data');
+                }
+                const data = await response.json();
+                setBlogData(data);
+            } catch (err) {
+                console.error('Error fetching blog data:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBlogData();
+    }, []);
+
     const totalBlogs = blogData.length;
     const cardsPerScreen = 3;
     const totalSlides = Math.ceil(totalBlogs / cardsPerScreen);
@@ -45,6 +70,39 @@ const Blog = () => {
             </div>
         );
     };
+
+    // Show loading state
+    if (loading) {
+        return (
+            <div className="blog-page">
+                <div style={{ textAlign: 'center', padding: '50px' }}>
+                    <p>Loading blogs...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Show error state
+    if (error) {
+        return (
+            <div className="blog-page">
+                <div style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
+                    <p>Error loading blogs: {error}</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Show empty state
+    if (blogData.length === 0) {
+        return (
+            <div className="blog-page">
+                <div style={{ textAlign: 'center', padding: '50px' }}>
+                    <p>No blogs available.</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="blog-page">
