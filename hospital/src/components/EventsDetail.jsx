@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { eventData } from '../data/eventData';
 import LogoCarousel from './LogoCarousel';
 import './EventsDetail.css';
 
@@ -9,6 +8,9 @@ const EventsDetail = () => {
     const navigate = useNavigate();
     const eventId = parseInt(id);
 
+    const [event, setEvent] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({
@@ -20,8 +22,29 @@ const EventsDetail = () => {
         finCode: ''
     });
 
-    // Find the specific event data
-    const event = eventData.find(e => e.id === eventId);
+    // Fetch event data from API
+    useEffect(() => {
+        const fetchEvent = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch(`http://localhost:5000/api/events/${eventId}`);
+                if (!response.ok) {
+                    throw new Error('Event not found');
+                }
+                const eventData = await response.json();
+                setEvent(eventData);
+            } catch (err) {
+                console.error('Error fetching event:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (eventId) {
+            fetchEvent();
+        }
+    }, [eventId]);
 
     // Countdown timer effect
     useEffect(() => {
@@ -85,12 +108,25 @@ const EventsDetail = () => {
         });
     };
 
-    // If event not found, show error or redirect
-    if (!event) {
+    // Show loading state
+    if (loading) {
         return (
             <div className="events-detail-page">
                 <div className="events-detail-header-text">
-                    <span className="events-detail-header-first">Event Not Found</span>
+                    <span className="events-detail-header-first">Yüklənir...</span>
+                </div>
+            </div>
+        );
+    }
+
+    // Show error state
+    if (error || !event) {
+        return (
+            <div className="events-detail-page">
+                <div className="events-detail-header-text">
+                    <span className="events-detail-header-first">
+                        {error || 'Event Not Found'}
+                    </span>
                     <button onClick={() => navigate('/events')} className="back-button">Back to Events</button>
                 </div>
             </div>
@@ -109,7 +145,7 @@ const EventsDetail = () => {
 
             <div className="events-detail-cards">
                 <div className="event-detail-card event-date-card">
-                    <img src={event.detailImages.background} alt="Event Detail" className="card-event-detail-image" />
+                    <img src="/src/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
                     <img src="/src/assets/calendar.png" alt="Calendar" className="card-calendar-icon" />
                     <div className="card-date-info">
                         <span className="card-date-day">{new Date(event.eventDate).getDate()}</span>
@@ -118,14 +154,14 @@ const EventsDetail = () => {
                     </div>
                 </div>
                 <div className="event-detail-card event-location-card">
-                    <img src={event.detailImages.background} alt="Event Detail" className="card-event-detail-image" />
+                    <img src="/src/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
                     <img src="/src/assets/clock.png" alt="Clock" className="card-clock-icon" />
                     <div className="card-time-info">
                         <span className="card-time">{event.time}</span>
                     </div>
                 </div>
                 <div className="event-detail-card event-participants-card">
-                    <img src={event.detailImages.background} alt="Event Detail" className="card-event-detail-image" />
+                    <img src="/src/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
                     <img src="/src/assets/location.png" alt="Location" className="card-location-icon" />
                     <div className="card-location-info">
                         <span className="card-location">{event.venue}</span>
@@ -157,9 +193,9 @@ const EventsDetail = () => {
                     </div>
 
                 </div>
-                <img src={event.detailImages.left} alt="Event Detail Left" className="left-event-image" />
-                <img src={event.detailImages.main} alt="Event Detail Main" className="main-event-image" />
-                <img src={event.detailImages.right} alt="Event Detail Right" className="right-event-image" />
+                <img src={event.detailImageLeft} alt="Event Detail Left" className="left-event-image" />
+                <img src={event.detailImageMain} alt="Event Detail Main" className="main-event-image" />
+                <img src={event.detailImageRight} alt="Event Detail Right" className="right-event-image" />
                 <button className="muraciet-btn" onClick={() => setShowModal(true)}>Müraciət et</button>
             </div>
 

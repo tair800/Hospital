@@ -630,6 +630,13 @@
     margin: 0 0 0.5rem 0;
     text-align: center;
     opacity: 0.9;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+    margin-left: -17px;
 }
 
 .featured-event-trainer {
@@ -684,10 +691,24 @@
 }
 
 .featured-event-date-venue-row {
-    display: flex;
+    position: absolute;
+    bottom: 50px;
+    left: 46%;
+    transform: translateX(-50%);
+    display: flex
+;
     align-items: center;
     gap: 2rem;
-    margin-bottom: 0.5rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow: hidden;
+    width: auto;
+    justify-content: center;
+    z-index: 10;
+    /* background: rgba(0, 0, 0, 0.1); */
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    min-width: 300px;
 }
 
 .featured-event-date,
@@ -697,6 +718,19 @@
     gap: 0.8rem;
     font-size: 1rem;
     font-weight: 100;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    flex-shrink: 0;
+}
+
+.featured-event-date span,
+.featured-event-venue span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 117px;
 }
 
 
@@ -924,6 +958,7 @@
         opacity: 0;
         transform: translateX(-60px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -940,6 +975,7 @@
         opacity: 0;
         transform: translateX(60px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);

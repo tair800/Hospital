@@ -4,11 +4,16 @@ import searchIcon from '../assets/search-icon.png';
 import cardIcon from '../assets/card-icon.png';
 import eventImg from '../assets/event-img.png';
 import LogoCarousel from './LogoCarousel';
-import { eventData } from '../data/eventData';
 import './Events.css';
 
 const Events = () => {
     const navigate = useNavigate();
+
+    // API state
+    const [events, setEvents] = useState([]);
+    const [mainEvents, setMainEvents] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
@@ -48,14 +53,45 @@ const Events = () => {
         calendarDays.push(i);
     }
 
+    // Fetch events from API
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                setLoading(true);
+                const [eventsResponse, mainEventsResponse] = await Promise.all([
+                    fetch('http://localhost:5000/api/events'),
+                    fetch('http://localhost:5000/api/events/featured')
+                ]);
+
+                if (!eventsResponse.ok || !mainEventsResponse.ok) {
+                    throw new Error('Failed to fetch events');
+                }
+
+                const eventsData = await eventsResponse.json();
+                const mainEventsData = await mainEventsResponse.json();
+
+                setEvents(eventsData);
+                setMainEvents(mainEventsData);
+            } catch (err) {
+                console.error('Error fetching events:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchEvents();
+    }, []);
+
     // Countdown timer effect
     useEffect(() => {
+        if (mainEvents.length === 0) return;
+
         const calculateTimeLeft = () => {
             const now = new Date().getTime();
             const newTimeLeft = {};
 
-            eventData
-                .filter(event => event.isMain)
+            mainEvents
                 .forEach(event => {
                     const eventTime = new Date(event.eventDate).getTime();
                     const difference = eventTime - now;
@@ -77,7 +113,7 @@ const Events = () => {
         calculateTimeLeft();
         const timer = setInterval(calculateTimeLeft, 1000);
         return () => clearInterval(timer);
-    }, []);
+    }, [mainEvents]);
 
     const handleEventClick = (eventId) => {
         navigate(`/event/${eventId}`);
@@ -86,8 +122,8 @@ const Events = () => {
     // Pagination logic
     const indexOfLastEvent = currentPage * eventsPerPage;
     const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-    const currentEvents = eventData.slice(indexOfFirstEvent, indexOfLastEvent);
-    const totalPages = Math.ceil(eventData.length / eventsPerPage);
+    const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent);
+    const totalPages = Math.ceil(events.length / eventsPerPage);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -103,7 +139,8 @@ const Events = () => {
 
                 {/* Featured Event Section */}
                 {(() => {
-                    const mainEvents = eventData.filter(event => event.isMain);
+                    if (loading) return <div className="loading-message">Yüklənir...</div>;
+                    if (error) return <div className="error-message">Xəta: {error}</div>;
                     if (mainEvents.length === 0) return null;
 
                     const currentEvent = mainEvents[currentSlide];
@@ -120,11 +157,13 @@ const Events = () => {
                                     <h3 className="featured-event-title">
                                         {currentEvent.title}:
                                     </h3>
-                                    <p className="featured-event-subtitle">
-                                        {currentEvent.subtitle}
+                                    <p className="featured-event-subtitle" title={currentEvent.subtitle}>
+                                        {currentEvent.subtitle && currentEvent.subtitle.length > 50
+                                            ? currentEvent.subtitle.substring(0, 50) + '...'
+                                            : currentEvent.subtitle}
                                     </p>
                                     <p className="featured-event-trainer">
-                                        Təlimçi: {currentEvent.trainerTitle} {currentEvent.trainer}
+                                        Təlimçi: {currentEvent.trainer}
                                     </p>
                                 </div>
 
@@ -141,6 +180,7 @@ const Events = () => {
                                         <span className="timer-number">{eventTimeLeft.minutes.toString().padStart(2, '0')}</span>
                                     </div>
                                 </div>
+
 
                                 <div className="featured-event-details">
                                     <div className="featured-event-date-venue-row">
@@ -164,7 +204,6 @@ const Events = () => {
                                     <button
                                         className="featured-event-btn detalli-btn"
                                         onClick={() => {
-                                            const mainEvents = eventData.filter(event => event.isMain);
                                             const currentEvent = mainEvents[currentSlide];
                                             if (currentEvent) {
                                                 navigate(`/event/${currentEvent.id}`);
@@ -185,7 +224,6 @@ const Events = () => {
                 <button
                     className="slider-nav-btn prev-btn"
                     onClick={() => {
-                        const mainEvents = eventData.filter(event => event.isMain);
                         setDirection('left');
                         setCurrentSlide(prev => prev === 0 ? mainEvents.length - 1 : prev - 1);
                     }}
@@ -196,7 +234,6 @@ const Events = () => {
                 <button
                     className="slider-nav-btn next-btn"
                     onClick={() => {
-                        const mainEvents = eventData.filter(event => event.isMain);
                         setDirection('right');
                         setCurrentSlide(prev => prev === mainEvents.length - 1 ? 0 : prev + 1);
                     }}
@@ -255,65 +292,73 @@ const Events = () => {
 
                 <div className="events-right-section">
                     <div className="events-main-content">
-                        <div className="events-grid">
-                            {currentEvents.map((event) => {
-                                const eventDate = new Date(event.eventDate);
-                                const day = eventDate.getDate();
-                                const month = monthNames[eventDate.getMonth()];
+                        {loading ? (
+                            <div className="loading-message">Yüklənir...</div>
+                        ) : error ? (
+                            <div className="error-message">Xəta: {error}</div>
+                        ) : (
+                            <>
+                                <div className="events-grid">
+                                    {currentEvents.map((event) => {
+                                        const eventDate = new Date(event.eventDate);
+                                        const day = eventDate.getDate();
+                                        const month = monthNames[eventDate.getMonth()];
 
-                                return (
-                                    <div key={event.id} className="events-card">
-                                        <span className="event-title">{event.title}</span>
-                                        <span className="trainer-name">Təlimçi : {event.trainerTitle} {event.trainer}</span>
-                                        <div className="event-date">
-                                            <span className="event-day">{day}</span>
-                                            <span className="event-month">{month}</span>
-                                            <span className="event-venue">{event.venue}</span>
-                                        </div>
-                                        <img src={event.mainImage} alt="Event" className="event-image" />
-                                        <img
-                                            src={cardIcon}
-                                            alt="Card Icon"
-                                            className="card-icon"
-                                            onClick={() => handleEventClick(event.id)}
-                                            style={{ cursor: 'pointer' }}
-                                        />
-                                    </div>
-                                );
-                            })}
-                        </div>
-
-                        {/* Pagination */}
-                        {totalPages > 1 && (
-                            <div className="pagination-container">
-                                <div className="pagination-controls">
-                                    <button
-                                        className="pagination-btn"
-                                        onClick={() => handlePageChange(currentPage - 1)}
-                                        disabled={currentPage === 1}
-                                        data-arrow="‹"
-                                    />
-
-                                    <div className="pagination-numbers">
-                                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-                                            <button
-                                                key={pageNumber}
-                                                className={`pagination-number ${pageNumber === currentPage ? 'active' : ''}`}
-                                                onClick={() => handlePageChange(pageNumber)}
-                                            >
-                                                {pageNumber}
-                                            </button>
-                                        ))}
-                                    </div>
-
-                                    <button
-                                        className="pagination-btn"
-                                        onClick={() => handlePageChange(currentPage + 1)}
-                                        disabled={currentPage === totalPages}
-                                        data-arrow="›"
-                                    />
+                                        return (
+                                            <div key={event.id} className="events-card">
+                                                <span className="event-title">{event.title}</span>
+                                                <span className="trainer-name">Təlimçi : {event.trainer}</span>
+                                                <div className="event-date">
+                                                    <span className="event-day">{day}</span>
+                                                    <span className="event-month">{month}</span>
+                                                    <span className="event-venue">{event.venue}</span>
+                                                </div>
+                                                <img src={event.mainImage} alt="Event" className="event-image" />
+                                                <img
+                                                    src={cardIcon}
+                                                    alt="Card Icon"
+                                                    className="card-icon"
+                                                    onClick={() => handleEventClick(event.id)}
+                                                    style={{ cursor: 'pointer' }}
+                                                />
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                            </div>
+
+                                {/* Pagination */}
+                                {totalPages > 1 && (
+                                    <div className="pagination-container">
+                                        <div className="pagination-controls">
+                                            <button
+                                                className="pagination-btn"
+                                                onClick={() => handlePageChange(currentPage - 1)}
+                                                disabled={currentPage === 1}
+                                                data-arrow="‹"
+                                            />
+
+                                            <div className="pagination-numbers">
+                                                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
+                                                    <button
+                                                        key={pageNumber}
+                                                        className={`pagination-number ${pageNumber === currentPage ? 'active' : ''}`}
+                                                        onClick={() => handlePageChange(pageNumber)}
+                                                    >
+                                                        {pageNumber}
+                                                    </button>
+                                                ))}
+                                            </div>
+
+                                            <button
+                                                className="pagination-btn"
+                                                onClick={() => handlePageChange(currentPage + 1)}
+                                                disabled={currentPage === totalPages}
+                                                data-arrow="›"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
                 </div>

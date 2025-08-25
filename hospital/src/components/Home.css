@@ -145,8 +145,12 @@
     color: #63BAFF;
     font-family: 'Questrial:Regular', sans-serif;
     position: absolute;
-    left: 50px;
+    left: 60px;
     top: 155px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
 }
 
 /* Card Right Section */
