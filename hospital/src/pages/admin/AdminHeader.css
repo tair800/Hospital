@@ -1,0 +1,98 @@
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    border-bottom: 1px solid #e5e5d0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header-left {
+    display: flex;
+    align-items: center;
+}
+
+.admin-header-title {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1e3a8a;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-header-right {
+    display: flex;
+    align-items: center;
+}
+
+.admin-header-icons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.admin-header-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-header-icon-btn:hover {
+    background-color: rgba(30, 58, 138, 0.1);
+    transform: translateY(-2px);
+}
+
+.admin-header-icon-btn.profile {
+    background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+    padding: 12px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.admin-header-icon-btn.profile:hover {
+    background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.admin-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(2000%) hue-rotate(220deg) brightness(0.8) contrast(1.2);
+}
+
+.admin-header-icon-btn.profile .admin-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .admin-header {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .admin-header-title {
+        font-size: 2rem;
+    }
+
+    .admin-header-icons {
+        gap: 10px;
+    }
+
+    .admin-header-icon-btn {
+        padding: 6px;
+    }
+
+    .admin-header-icon-btn.profile {
+        padding: 10px;
+    }
+}

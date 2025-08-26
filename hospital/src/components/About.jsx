@@ -15,6 +15,7 @@ function About() {
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
     const [carouselData, setCarouselData] = useState([]);
+    const [aboutData, setAboutData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const carouselRef = useRef(null);
@@ -23,7 +24,6 @@ function About() {
     useEffect(() => {
         const fetchCarouselData = async () => {
             try {
-                setLoading(true);
                 const response = await fetch('http://localhost:5000/api/aboutcarousel');
                 if (!response.ok) {
                     throw new Error('Failed to fetch carousel data');
@@ -31,7 +31,21 @@ function About() {
                 const data = await response.json();
                 setCarouselData(data);
             } catch (err) {
-                console.error('Error fetching carousel data:', err);
+                setError(err.message);
+            }
+        };
+
+        // Fetch About data from API
+        const fetchAboutData = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch('http://localhost:5000/api/about');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch about data');
+                }
+                const data = await response.json();
+                setAboutData(data[0]); // Get the first about entry
+            } catch (err) {
                 setError(err.message);
             } finally {
                 setLoading(false);
@@ -39,7 +53,31 @@ function About() {
         };
 
         fetchCarouselData();
+        fetchAboutData();
     }, []);
+
+    // Carousel drag handlers
+    const handleMouseDown = (e) => {
+        e.preventDefault();
+        setIsDragging(true);
+        setStartX(e.pageX);
+        setScrollLeft(carouselRef.current.scrollLeft);
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX;
+        const walk = (x - startX);
+        const newScrollLeft = scrollLeft - walk;
+        carouselRef.current.scrollLeft = newScrollLeft;
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+    };
+
+    const extendedData = carouselData && carouselData.length > 0 ? [...carouselData, ...carouselData, ...carouselData] : [];
 
     // Counter animation for dot4 (Events)
     useEffect(() => {
@@ -73,28 +111,7 @@ function About() {
         return () => clearInterval(timer);
     }, []);
 
-    // Carousel drag handlers
-    const handleMouseDown = (e) => {
-        e.preventDefault();
-        setIsDragging(true);
-        setStartX(e.pageX);
-        setScrollLeft(carouselRef.current.scrollLeft);
-    };
 
-    const handleMouseMove = (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        const x = e.pageX;
-        const walk = (x - startX);
-        const newScrollLeft = scrollLeft - walk;
-        carouselRef.current.scrollLeft = newScrollLeft;
-    };
-
-    const handleMouseUp = () => {
-        setIsDragging(false);
-    };
-
-    const extendedData = [...carouselData, ...carouselData, ...carouselData];
 
     // Show loading state
     if (loading) {
@@ -153,29 +170,38 @@ function About() {
                         </div>
                     </div>
                     <div className="main-image-container">
-                        <img src={aboutMainImage} alt="About Main Image" />
+                        <img
+                            src={aboutMainImage}
+                            alt="About Main Image"
+                        />
                     </div>
                 </div>
 
                 <div className="right-text-section" style={{ color: 'black' }}>
-                    <h1 className="main-title" style={{ color: 'inherit', filter: 'contrast(0)' }}>
-                        Azərbaycan Hepato-<br />
-                        Pankreato-Biliar Cərrahlar<br />
-                        İctimai Birliyi
+                    <h1 className="main-title">
+                        {aboutData?.title || 'Azərbaycan Hepato-Pankreato-Biliar Cərrahlar İctimai Birliyi'}
                     </h1>
 
-                    <div className="text-content">
-                        <p>
-                            Azərbaycan Hepato-Pankreato-Biliar Cərrahlar İctimai Birliyi, qaraciyər, öd yolları və mədəaltı vəzi xəstəliklərinin diaqnostika və cərrahiyyəsi sahəsində fəaliyyət göstərən mütəxəssisləri bir araya gətirən elmi-ictimai təşkilatdır.
-                        </p>
-
-                        <p>
-                            Birliyin əsas məqsədi HPB sahəsində bilik və təcrübə mübadiləsini təşviq etmək, peşəkar inkişafı dəstəkləmək və ölkədə bu sahənin inkişafına töhfə verməkdir. Birlik həm yerli, həm də beynəlxalq əməkdaşlıqlar quraraq seminarlar, elmi konfranslar və təlimlər təşkil edir. Gənc cərrahların və mütəxəssislərin dəstəklənməsi, müasir cərrahiyyə metodlarının tətbiqi və elmi tədqiqatların təşviqi də fəaliyyətimizin əsas istiqamətlərindəndir.
-                        </p>
-
-                        <p>
-                            Azərbaycan HPB Cərrahları İctimai Birliyi olaraq, səhiyyə sisteminə dəyər qatmaq və xəstələrin həyat keyfiyyətini artırmaq üçün peşəkar bir cəmiyyət olaraq çalışırıq.
-                        </p>
+                    <div className="text-content" style={{ marginTop: '2rem' }}>
+                        {aboutData?.description ? (
+                            aboutData.description.split('\n\n').map((paragraph, index) => (
+                                <p key={index}>
+                                    {paragraph.trim()}
+                                </p>
+                            ))
+                        ) : (
+                            <>
+                                <p>
+                                    Azərbaycan Hepato-Pankreato-Biliar Cərrahlar İctimai Birliyi, qaraciyər, öd yolları və mədəaltı vəzi xəstəliklərinin diaqnostika və cərrahiyyəsi sahəsində fəaliyyət göstərən mütəxəssisləri bir araya gətirən elmi-ictimai təşkilatdır.
+                                </p>
+                                <p>
+                                    Birliyin əsas məqsədi HPB sahəsində bilik və təcrübə mübadiləsini təşviq etmək, peşəkar inkişafı dəstəkləmək və ölkədə bu sahənin inkişafına töhfə verməkdir. Birlik həm yerli, həm də beynəlxalq əməkdaşlıqlar quraraq seminarlar, elmi konfranslar və təlimlər təşkil edir. Gənc cərrahların və mütəxəssislərin dəstəklənməsi, müasir cərrahiyyə metodlarının tətbiqi və elmi tədqiqatların təşviqi də fəaliyyətimizin əsas istiqamətlərindəndir.
+                                </p>
+                                <p>
+                                    Azərbaycan HPB Cərrahları İctimai Birliyi olaraq, səhiyyə sisteminə dəyər qatmaq və xəstələrin həyat keyfiyyətini artırmaq üçün peşəkar bir cəmiyyət olaraq çalışırıq.
+                                </p>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
@@ -189,11 +215,24 @@ function About() {
                     onMouseUp={handleMouseUp}
                     onMouseLeave={handleMouseUp}
                 >
-                    {extendedData.map((item, index) => (
-                        <div key={`${item.id}-${index}`} className="carousel-item">
-                            <img src={item.image} alt={item.name} />
+                    {carouselData && carouselData.length > 0 ? (
+                        extendedData.map((item, index) => (
+                            <div key={`${item.id}-${index}`} className="carousel-item">
+                                <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    onError={(e) => {
+                                        e.target.style.display = 'none';
+                                    }}
+                                />
+                            </div>
+                        ))
+                    ) : (
+                        <div style={{ padding: '20px', textAlign: 'center' }}>
+                            <p>No carousel data loaded</p>
+                            <p>Carousel data count: {carouselData?.length || 0}</p>
                         </div>
-                    ))}
+                    )}
                 </div>
             </div>
 

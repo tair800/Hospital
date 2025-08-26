@@ -14,8 +14,9 @@ namespace HospitalAPI.Data
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<SocialMedia> SocialMedia { get; set; }
         public DbSet<ContactHeading> ContactHeadings { get; set; }
-        public DbSet<Logo> Logos { get; set; }
+                public DbSet<Logo> Logos { get; set; }
         public DbSet<AboutCarousel> AboutCarousel { get; set; }
+        public DbSet<About> About { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -108,6 +109,15 @@ namespace HospitalAPI.Data
                 entity.Property(ac => ac.Image).IsRequired().HasMaxLength(500).HasColumnType("nvarchar(500)");
                 entity.Property(ac => ac.CreatedAt).HasDefaultValueSql("GETDATE()");
                 entity.Property(ac => ac.UpdatedAt).HasDefaultValueSql("GETDATE()");
+            });
+
+            // Configure About table
+            modelBuilder.Entity<About>(entity =>
+            {
+                entity.HasKey(a => a.Id);
+                entity.Property(a => a.Title).IsRequired().HasMaxLength(500).HasColumnType("nvarchar(500)");
+                entity.Property(a => a.Description).IsRequired().HasColumnType("nvarchar(max)");
+                entity.Property(a => a.Img).IsRequired().HasMaxLength(500).HasColumnType("nvarchar(500)");
             });
         }
 

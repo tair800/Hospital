@@ -12,6 +12,10 @@ import EventsDetail from './components/EventsDetail'
 import Gallery from './components/Gallery'
 import Blog from './components/Blog'
 import BlogDetail from './components/BlogDetail'
+import Dashboard from './pages/admin/Dashboard'
+import AdminHome from './pages/admin/AdminHome'
+import AdminAbout from './pages/admin/AdminAbout'
+import AdminLayout from './pages/admin/AdminLayout'
 import './App.css'
 
 function App() {
@@ -69,6 +73,11 @@ function App() {
               <Footer />
             </>
           } />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="home" element={<AdminHome />} />
+            <Route path="about" element={<AdminAbout />} />
+          </Route>
           <Route path="/blog" element={
             <>
               <Header showTopImage={true} />

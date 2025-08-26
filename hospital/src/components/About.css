@@ -29,6 +29,7 @@
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }
@@ -39,6 +40,7 @@
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }
@@ -239,6 +241,23 @@ h1[style*="color: black"] {
 .about-page .about-content-container .right-text-section h1.main-title * {
     color: black !important;
 }
+
+/* Maximum specificity override for global h1 styles */
+.about-page .about-content-container .right-text-section h1.main-title {
+    color: black !important;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    margin-bottom: 2rem !important;
+    text-align: left !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    filter: none !important;
+    position: relative !important;
+    z-index: 1000 !important;
+}
+
 .text-content {
     width: 80%;
 }

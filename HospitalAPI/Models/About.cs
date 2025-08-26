@@ -1,24 +1,20 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HospitalAPI.Models
 {
-    [Table("AboutCarousel")]
-    public class AboutCarousel
+    public class About
     {
-        [Key]
         public int Id { get; set; }
         
         [Required]
-        [MaxLength(200)]
-        public string Name { get; set; } = string.Empty;
+        [MaxLength(500)]
+        public string Title { get; set; } = string.Empty;
+        
+        [Required]
+        public string Description { get; set; } = string.Empty;
         
         [Required]
         [MaxLength(500)]
-        public string Image { get; set; } = string.Empty;
-        
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public string Img { get; set; } = string.Empty;
     }
 }
