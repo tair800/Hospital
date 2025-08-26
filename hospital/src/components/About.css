@@ -1,7 +1,7 @@
 /* About Page Styles */
 .about-page {
     min-height: 100vh;
-    width: 100vw;
+    width: 100%;
     background: white;
     position: relative;
 }
@@ -54,6 +54,7 @@
     margin-top: 180px;
     gap: 3rem;
     padding-bottom: 80px;
+    max-width: 100%;
 }
 
 /* Left Image Section */
@@ -268,52 +269,4 @@ h1[style*="color: black"] {
     line-height: 1.8;
     margin-bottom: 1.5rem;
     text-align: left;
-}
-
-/* Carousel Section */
-.carousel-section {
-    width: 100%;
-    margin-top: 4rem;
-    padding: 0;
-}
-
-.carousel-container {
-    display: flex;
-    width: 120%;
-    /* Changed from 400% to 500% to show 5 images per screen */
-    gap: 0;
-    overflow-x: scroll;
-    scroll-behavior: smooth;
-    user-select: none;
-    cursor: grab;
-    white-space: nowrap;
-    position: relative;
-    padding-bottom: 40px;
-}
-
-.carousel-container::-webkit-scrollbar {
-    display: none;
-}
-
-.carousel-container {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-.carousel-item {
-    flex: 0 0 20%;
-    /* Fixed width, no growing */
-    position: relative;
-    overflow: hidden;
-    /* Ensure minimum width */
-    flex-shrink: 0;
-    /* Prevent shrinking */
-}
-
-.carousel-item img {
-    width: 100%;
-    height: 249px;
-    /* Restored to original height */
-    object-fit: cover;
-    display: block;
 }

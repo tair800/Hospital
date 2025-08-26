@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import './About.css'
 import aboutMainImage from '../assets/about-main.png'
 import aboutTop1Image from '../assets/about-dot1.png'
@@ -7,35 +7,17 @@ import aboutTop3Image from '../assets/about-dot3.png'
 import aboutTop4Image from '../assets/about-dot4.png'
 import circleImage from '../assets/circle.png'
 import LogoCarousel from './LogoCarousel.jsx'
+import AboutCarousel from './AboutCarousel.jsx'
 
 function About() {
     const [counter, setCounter] = useState(1);
     const [counter2, setCounter2] = useState(1);
-    const [isDragging, setIsDragging] = useState(false);
-    const [startX, setStartX] = useState(0);
-    const [scrollLeft, setScrollLeft] = useState(0);
-    const [carouselData, setCarouselData] = useState([]);
     const [aboutData, setAboutData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const carouselRef = useRef(null);
 
-    // Fetch carousel data from API
+    // Fetch About data from API
     useEffect(() => {
-        const fetchCarouselData = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/api/aboutcarousel');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch carousel data');
-                }
-                const data = await response.json();
-                setCarouselData(data);
-            } catch (err) {
-                setError(err.message);
-            }
-        };
-
-        // Fetch About data from API
         const fetchAboutData = async () => {
             try {
                 setLoading(true);
@@ -52,32 +34,14 @@ function About() {
             }
         };
 
-        fetchCarouselData();
         fetchAboutData();
     }, []);
 
-    // Carousel drag handlers
-    const handleMouseDown = (e) => {
-        e.preventDefault();
-        setIsDragging(true);
-        setStartX(e.pageX);
-        setScrollLeft(carouselRef.current.scrollLeft);
-    };
 
-    const handleMouseMove = (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        const x = e.pageX;
-        const walk = (x - startX);
-        const newScrollLeft = scrollLeft - walk;
-        carouselRef.current.scrollLeft = newScrollLeft;
-    };
 
-    const handleMouseUp = () => {
-        setIsDragging(false);
-    };
 
-    const extendedData = carouselData && carouselData.length > 0 ? [...carouselData, ...carouselData, ...carouselData] : [];
+
+
 
     // Counter animation for dot4 (Events)
     useEffect(() => {
@@ -206,35 +170,9 @@ function About() {
                 </div>
             </div>
 
-            <div className="carousel-section">
-                <div
-                    className="carousel-container"
-                    ref={carouselRef}
-                    onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseUp}
-                >
-                    {carouselData && carouselData.length > 0 ? (
-                        extendedData.map((item, index) => (
-                            <div key={`${item.id}-${index}`} className="carousel-item">
-                                <img
-                                    src={item.image}
-                                    alt={item.name}
-                                    onError={(e) => {
-                                        e.target.style.display = 'none';
-                                    }}
-                                />
-                            </div>
-                        ))
-                    ) : (
-                        <div style={{ padding: '20px', textAlign: 'center' }}>
-                            <p>No carousel data loaded</p>
-                            <p>Carousel data count: {carouselData?.length || 0}</p>
-                        </div>
-                    )}
-                </div>
-            </div>
+
+
+            <AboutCarousel />
 
             <LogoCarousel />
         </div>
