@@ -11,12 +11,11 @@ namespace HospitalAPI.Data
 
         public DbSet<Event> Events { get; set; }
         public DbSet<Blog> Blogs { get; set; }
-        public DbSet<Contact> Contacts { get; set; }
-        public DbSet<SocialMedia> SocialMedia { get; set; }
-        public DbSet<ContactHeading> ContactHeadings { get; set; }
-                public DbSet<Logo> Logos { get; set; }
+
+        public DbSet<Logo> Logos { get; set; }
         public DbSet<AboutCarousel> AboutCarousel { get; set; }
         public DbSet<About> About { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,38 +57,7 @@ namespace HospitalAPI.Data
                 entity.Property(b => b.UpdatedAt).HasDefaultValueSql("GETDATE()");
             });
 
-            // Configure Contacts table
-            modelBuilder.Entity<Contact>(entity =>
-            {
-                entity.HasKey(c => c.Id);
-                entity.Property(c => c.Type).IsRequired().HasMaxLength(100).HasColumnType("nvarchar(100)");
-                entity.Property(c => c.Value).IsRequired().HasMaxLength(200).HasColumnType("nvarchar(200)");
-                entity.Property(c => c.Icon).HasMaxLength(100).HasColumnType("nvarchar(100)");
-                entity.Property(c => c.CreatedAt).HasDefaultValueSql("GETDATE()");
-                entity.Property(c => c.UpdatedAt).HasDefaultValueSql("GETDATE()");
-            });
 
-            // Configure SocialMedia table
-            modelBuilder.Entity<SocialMedia>(entity =>
-            {
-                entity.HasKey(s => s.Id);
-                entity.Property(s => s.Platform).IsRequired().HasMaxLength(50).HasColumnType("nvarchar(50)");
-                entity.Property(s => s.Name).IsRequired().HasMaxLength(100).HasColumnType("nvarchar(100)");
-                entity.Property(s => s.Url).IsRequired().HasMaxLength(500).HasColumnType("nvarchar(500)");
-                entity.Property(s => s.Icon).HasMaxLength(100).HasColumnType("nvarchar(100)");
-                entity.Property(s => s.CreatedAt).HasDefaultValueSql("GETDATE()");
-                entity.Property(s => s.UpdatedAt).HasDefaultValueSql("GETDATE()");
-            });
-
-            // Configure ContactHeadings table
-            modelBuilder.Entity<ContactHeading>(entity =>
-            {
-                entity.HasKey(ch => ch.Id);
-                entity.Property(ch => ch.Line1).IsRequired().HasMaxLength(100).HasColumnType("nvarchar(100)");
-                entity.Property(ch => ch.Line2).IsRequired().HasMaxLength(100).HasColumnType("nvarchar(100)");
-                entity.Property(ch => ch.CreatedAt).HasDefaultValueSql("GETDATE()");
-                entity.Property(ch => ch.UpdatedAt).HasDefaultValueSql("GETDATE()");
-            });
 
             // Configure Logos table
             modelBuilder.Entity<Logo>(entity =>
@@ -118,6 +86,17 @@ namespace HospitalAPI.Data
                 entity.Property(a => a.Title).IsRequired().HasMaxLength(500).HasColumnType("nvarchar(500)");
                 entity.Property(a => a.Description).IsRequired().HasColumnType("nvarchar(max)");
                 entity.Property(a => a.Img).IsRequired().HasMaxLength(500).HasColumnType("nvarchar(500)");
+            });
+
+            // Configure Contact table
+            modelBuilder.Entity<Contact>(entity =>
+            {
+                entity.HasKey(c => c.Id);
+                entity.Property(c => c.Type).IsRequired().HasMaxLength(50).HasColumnType("nvarchar(50) COLLATE SQL_Latin1_General_CP1254_CI_AS");
+                entity.Property(c => c.Value).IsRequired().HasMaxLength(500).HasColumnType("nvarchar(500) COLLATE SQL_Latin1_General_CP1254_CI_AS");
+                entity.Property(c => c.Icon).IsRequired().HasMaxLength(100).HasColumnType("nvarchar(100) COLLATE SQL_Latin1_General_CP1254_CI_AS");
+                entity.Property(c => c.CreatedAt).HasDefaultValueSql("GETDATE()");
+                entity.Property(c => c.UpdatedAt).HasDefaultValueSql("GETDATE()");
             });
         }
 

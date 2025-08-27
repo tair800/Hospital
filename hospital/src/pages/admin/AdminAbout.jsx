@@ -5,15 +5,23 @@ import adminBrowseIcon from '../../assets/admin-browse.png';
 import './AdminAbout.css';
 
 function AdminAbout() {
-    const [aboutData, setAboutData] = useState({
-        title: '',
-        description: '',
-        img: ''
-    });
+    const [aboutData, setAboutData] = useState({ title: '', description: '', img: '' });
     const [carouselData, setCarouselData] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Fetch existing about data
+    // Configuration for form fields
+    const formConfig = {
+        title: { label: 'Heading', type: 'text', placeholder: 'Enter heading' },
+        description: { label: 'Subtext', type: 'textarea', placeholder: 'Enter your description here. Use double line breaks to separate paragraphs for proper spacing.' }
+    };
+
+    // SweetAlert configuration
+    const swalConfig = {
+        confirmButtonColor: '#1976d2',
+        timer: 2000,
+        showConfirmButton: false
+    };
+
     useEffect(() => {
         fetchAboutData();
         fetchCarouselData();
@@ -25,28 +33,34 @@ function AdminAbout() {
             const response = await fetch('http://localhost:5000/api/about');
             if (response.ok) {
                 const data = await response.json();
-                if (data.length > 0) {
-                    setAboutData(data[0]);
-                }
+                if (data.length > 0) setAboutData(data[0]);
             }
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'Failed to fetch data. Please try again.',
-                confirmButtonColor: '#1976d2'
-            });
+            showAlert('error', 'Error!', 'Failed to fetch data. Please try again.');
         } finally {
             setLoading(false);
         }
     };
 
+    const fetchCarouselData = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/aboutcarousel');
+            if (response.ok) {
+                const data = await response.json();
+                setCarouselData(data);
+            }
+        } catch (error) {
+            showAlert('error', 'Error!', 'Failed to fetch carousel data.');
+        }
+    };
+
+    const showAlert = (icon, title, text) => {
+        Swal.fire({ icon, title, text, ...swalConfig });
+    };
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setAboutData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setAboutData(prev => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e) => {
@@ -55,36 +69,17 @@ function AdminAbout() {
             setLoading(true);
             const response = await fetch(`http://localhost:5000/api/about/${aboutData.id}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(aboutData),
             });
 
             if (response.ok) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'About page updated successfully!',
-                    confirmButtonColor: '#1976d2',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
+                showAlert('success', 'Success!', 'About page updated successfully!');
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Failed to update about page. Please try again.',
-                    confirmButtonColor: '#1976d2'
-                });
+                showAlert('error', 'Error!', 'Failed to update about page. Please try again.');
             }
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'Failed to update about page. Please try again.',
-                confirmButtonColor: '#1976d2'
-            });
+            showAlert('error', 'Error!', 'Failed to update about page. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -102,23 +97,12 @@ function AdminAbout() {
         });
 
         if (result.isConfirmed) {
-            setAboutData(prev => ({
-                ...prev,
-                img: ''
-            }));
-            Swal.fire({
-                icon: 'success',
-                title: 'Deleted!',
-                text: 'Image has been removed.',
-                confirmButtonColor: '#1976d2',
-                timer: 2000,
-                showConfirmButton: false
-            });
+            setAboutData(prev => ({ ...prev, img: '' }));
+            showAlert('success', 'Deleted!', 'Image has been removed.');
         }
     };
 
     const handleImageBrowse = () => {
-        // Create a hidden file input
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/*';
@@ -127,43 +111,14 @@ function AdminAbout() {
         fileInput.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                // For now, we'll just update the image name
-                // In a real app, you'd upload the file to the server
-                const fileName = file.name;
-                setAboutData(prev => ({
-                    ...prev,
-                    img: fileName
-                }));
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Image Selected!',
-                    text: `Image "${fileName}" has been selected. Don't forget to save changes!`,
-                    confirmButtonColor: '#1976d2'
-                });
+                setAboutData(prev => ({ ...prev, img: file.name }));
+                showAlert('success', 'Image Selected!', `Image "${file.name}" has been selected. Don't forget to save changes!`);
             }
         };
 
         document.body.appendChild(fileInput);
         fileInput.click();
         document.body.removeChild(fileInput);
-    };
-
-    const fetchCarouselData = async () => {
-        try {
-            const response = await fetch('http://localhost:5000/api/aboutcarousel');
-            if (response.ok) {
-                const data = await response.json();
-                setCarouselData(data);
-            }
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'Failed to fetch carousel data.',
-                confirmButtonColor: '#1976d2'
-            });
-        }
     };
 
     const handleAddCarouselItem = () => {
@@ -188,68 +143,32 @@ function AdminAbout() {
                 return { name, imageFile };
             }
         }).then((result) => {
-            if (result.isConfirmed) {
-                addCarouselItem(result.value);
-            }
+            if (result.isConfirmed) addCarouselItem(result.value);
         });
     };
 
     const addCarouselItem = async (itemData) => {
         try {
-            // Construct the image path from the filename
-            const imagePath = `/src/assets/${itemData.imageFile.name}`;
-
             const carouselData = {
                 name: itemData.name,
-                image: imagePath
+                image: `/src/assets/${itemData.imageFile.name}`
             };
 
             const response = await fetch('http://localhost:5000/api/aboutcarousel', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(carouselData),
             });
 
             if (response.ok) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Carousel item added successfully!',
-                    confirmButtonColor: '#1976d2',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-                fetchCarouselData(); // Refresh the list
+                showAlert('success', 'Success!', 'Carousel item added successfully!');
+                fetchCarouselData();
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Failed to add carousel item.',
-                    confirmButtonColor: '#1976d2'
-                });
+                showAlert('error', 'Error!', 'Failed to add carousel item.');
             }
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'Failed to add carousel item.',
-                confirmButtonColor: '#1976d2'
-            });
+            showAlert('error', 'Error!', 'Failed to add carousel item.');
         }
-    };
-
-    const handleRefreshCarousel = () => {
-        fetchCarouselData();
-        Swal.fire({
-            icon: 'info',
-            title: 'Refreshed!',
-            text: 'Carousel data has been refreshed.',
-            confirmButtonColor: '#1976d2',
-            timer: 2000,
-            showConfirmButton: false
-        });
     };
 
     const handleEditCarouselItem = (item) => {
@@ -274,60 +193,31 @@ function AdminAbout() {
                 return { name, imageFile };
             }
         }).then((result) => {
-            if (result.isConfirmed) {
-                updateCarouselItem(item.id, result.value);
-            }
+            if (result.isConfirmed) updateCarouselItem(item.id, result.value);
         });
     };
 
     const updateCarouselItem = async (id, itemData) => {
         try {
-            // If a new image file is selected, construct the new path
-            // Otherwise, keep the existing image path
-            let imagePath = itemData.imageFile ? `/src/assets/${itemData.imageFile.name}` : undefined;
-
-            const carouselData = {
-                name: itemData.name
-            };
-
-            // Only include image if a new one was selected
-            if (imagePath) {
-                carouselData.image = imagePath;
+            const carouselData = { name: itemData.name };
+            if (itemData.imageFile) {
+                carouselData.image = `/src/assets/${itemData.imageFile.name}`;
             }
 
             const response = await fetch(`http://localhost:5000/api/aboutcarousel/${id}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(carouselData),
             });
 
             if (response.ok) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Carousel item updated successfully!',
-                    confirmButtonColor: '#1976d2',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-                fetchCarouselData(); // Refresh the list
+                showAlert('success', 'Success!', 'Carousel item updated successfully!');
+                fetchCarouselData();
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Failed to update carousel item.',
-                    confirmButtonColor: '#1976d2'
-                });
+                showAlert('error', 'Error!', 'Failed to update carousel item.');
             }
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'Failed to update carousel item.',
-                confirmButtonColor: '#1976d2'
-            });
+            showAlert('error', 'Error!', 'Failed to update carousel item.');
         }
     };
 
@@ -344,42 +234,101 @@ function AdminAbout() {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:5000/api/aboutcarousel/${id}`, {
-                    method: 'DELETE',
-                });
-
+                const response = await fetch(`http://localhost:5000/api/aboutcarousel/${id}`, { method: 'DELETE' });
                 if (response.ok) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Deleted!',
-                        text: 'Carousel item has been deleted.',
-                        confirmButtonColor: '#1976d2',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-                    fetchCarouselData(); // Refresh the list
+                    showAlert('success', 'Deleted!', 'Carousel item has been deleted.');
+                    fetchCarouselData();
                 } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'Failed to delete carousel item.',
-                        confirmButtonColor: '#1976d2'
-                    });
+                    showAlert('error', 'Error!', 'Failed to delete carousel item.');
                 }
             } catch (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'Failed to delete carousel item.',
-                    confirmButtonColor: '#1976d2'
-                });
+                showAlert('error', 'Error!', 'Failed to delete carousel item.');
             }
         }
     };
 
-    if (loading) {
-        return <div className="admin-about-loading">Loading...</div>;
-    }
+    const renderFormField = (name) => {
+        const config = formConfig[name];
+        if (config.type === 'textarea') {
+            return (
+                <div className="form-group" key={name}>
+                    <label htmlFor={name}>{config.label}</label>
+                    <textarea
+                        id={name}
+                        name={name}
+                        value={aboutData[name]}
+                        onChange={handleInputChange}
+                        placeholder={config.placeholder}
+                        className="form-textarea"
+                        rows="8"
+                    />
+                </div>
+            );
+        }
+        return (
+            <div className="form-group" key={name}>
+                <label htmlFor={name}>{config.label}</label>
+                <div className="input-container">
+                    <input
+                        type={config.type}
+                        id={name}
+                        name={name}
+                        value={aboutData[name]}
+                        onChange={handleInputChange}
+                        placeholder={config.placeholder}
+                        className="form-input"
+                    />
+                </div>
+            </div>
+        );
+    };
+
+    const renderCarouselItem = (item, index) => (
+        <div key={item.id || index} className="carousel-placeholder">
+            <div className="placeholder-number">#{index + 1}</div>
+            <div className="carousel-image-container">
+                <img
+                    src={item.image}
+                    alt={item.name}
+                    className="carousel-image"
+                    onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'block';
+                    }}
+                />
+                <div className="image-fallback" style={{ display: 'none' }}>No Image</div>
+                <button
+                    type="button"
+                    onClick={() => handleDeleteCarouselItem(item.id)}
+                    className="placeholder-action-btn delete-btn"
+                    title="Delete image"
+                >
+                    <img src={adminDeleteIcon} alt="Delete" className="action-icon" />
+                </button>
+            </div>
+        </div>
+    );
+
+    const renderEmptyPlaceholder = (index) => (
+        <div key={`empty-${index}`} className="carousel-placeholder">
+            <div className="placeholder-number">#{carouselData.length + index + 1}</div>
+            <div className="placeholder-icon">🖼️</div>
+            <div className="placeholder-text">
+                <span className="click-upload">Click to upload</span>
+                <span className="drag-drop">or drag and drop</span>
+            </div>
+            <button
+                type="button"
+                onClick={handleAddCarouselItem}
+                className="placeholder-action-btn browse-btn"
+                title="Browse image"
+            >
+                📁
+            </button>
+        </div>
+    );
+
+    if (loading) return <div className="admin-about-loading">Loading...</div>;
 
     return (
         <div className="admin-about-page">
@@ -391,33 +340,7 @@ function AdminAbout() {
 
                     <div className="admin-about-form">
                         <div className="form-fields-left">
-                            <div className="form-group">
-                                <label htmlFor="title">Heading</label>
-                                <div className="input-container">
-                                    <input
-                                        type="text"
-                                        id="title"
-                                        name="title"
-                                        value={aboutData.title}
-                                        onChange={handleInputChange}
-                                        placeholder="Enter heading"
-                                        className="form-input"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="description">Subtext</label>
-                                <textarea
-                                    id="description"
-                                    name="description"
-                                    value={aboutData.description}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter your description here. Use double line breaks to separate paragraphs for proper spacing."
-                                    className="form-textarea"
-                                    rows="8"
-                                />
-                            </div>
+                            {Object.keys(formConfig).map(renderFormField)}
                         </div>
 
                         <div className="image-section-right">
@@ -429,9 +352,7 @@ function AdminAbout() {
                                         className="current-image"
                                     />
                                 ) : (
-                                    <div className="image-placeholder-text">
-                                        No image uploaded
-                                    </div>
+                                    <div className="image-placeholder-text">No image uploaded</div>
                                 )}
 
                                 <div className="image-bottom-left-content">
@@ -493,58 +414,10 @@ function AdminAbout() {
 
                         <div className="carousel-right">
                             <div className="carousel-grid">
-
-
-                                {/* Show existing carousel items */}
-                                {carouselData.map((item, index) => (
-                                    <div key={item.id || index} className="carousel-placeholder">
-                                        <div className="placeholder-number">#{index + 1}</div>
-                                        <div className="carousel-image-container">
-                                            <img
-                                                src={item.image}
-                                                alt={item.name}
-                                                className="carousel-image"
-                                                onError={(e) => {
-                                                    e.target.style.display = 'none';
-                                                    e.target.nextSibling.style.display = 'block';
-                                                }}
-                                            />
-                                            <div className="image-fallback" style={{ display: 'none' }}>
-                                                No Image
-                                            </div>
-                                            {/* Delete button for existing images */}
-                                            <button
-                                                type="button"
-                                                onClick={() => handleDeleteCarouselItem(item.id)}
-                                                className="placeholder-action-btn delete-btn"
-                                                title="Delete image"
-                                            >
-                                                <img src={adminDeleteIcon} alt="Delete" className="action-icon" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-
-                                {/* Show empty placeholders for remaining slots (up to 8 total) */}
-                                {Array.from({ length: Math.max(0, 8 - carouselData.length) }, (_, index) => (
-                                    <div key={`empty-${index}`} className="carousel-placeholder">
-                                        <div className="placeholder-number">#{carouselData.length + index + 1}</div>
-                                        <div className="placeholder-icon">🖼️</div>
-                                        <div className="placeholder-text">
-                                            <span className="click-upload">Click to upload</span>
-                                            <span className="drag-drop">or drag and drop</span>
-                                        </div>
-                                        {/* Browse button for empty placeholders */}
-                                        <button
-                                            type="button"
-                                            onClick={handleAddCarouselItem}
-                                            className="placeholder-action-btn browse-btn"
-                                            title="Browse image"
-                                        >
-                                            📁
-                                        </button>
-                                    </div>
-                                ))}
+                                {carouselData.map(renderCarouselItem)}
+                                {Array.from({ length: Math.max(0, 8 - carouselData.length) }, (_, index) =>
+                                    renderEmptyPlaceholder(index)
+                                )}
                             </div>
 
                             <div className="carousel-info-text">

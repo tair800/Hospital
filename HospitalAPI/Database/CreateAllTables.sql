@@ -1,5 +1,5 @@
 -- Create all new tables for Hospital API
--- This script creates tables for Blogs, Contacts, SocialMedia, ContactHeadings, Logos, and AboutCarousel
+-- This script creates tables for Blogs, Logos, and AboutCarousel
 
 -- Create Blogs table
 CREATE TABLE [dbo].[Blogs] (
@@ -17,35 +17,7 @@ CREATE TABLE [dbo].[Blogs] (
     [UpdatedAt] DATETIME2 NOT NULL DEFAULT GETDATE()
 );
 
--- Create Contacts table
-CREATE TABLE [dbo].[Contacts] (
-    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    [Type] NVARCHAR(100) NOT NULL,
-    [Value] NVARCHAR(200) NOT NULL,
-    [Icon] NVARCHAR(100) NULL,
-    [CreatedAt] DATETIME2 NOT NULL DEFAULT GETDATE(),
-    [UpdatedAt] DATETIME2 NOT NULL DEFAULT GETDATE()
-);
 
--- Create SocialMedia table
-CREATE TABLE [dbo].[SocialMedia] (
-    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    [Platform] NVARCHAR(50) NOT NULL,
-    [Name] NVARCHAR(100) NOT NULL,
-    [Url] NVARCHAR(500) NOT NULL,
-    [Icon] NVARCHAR(100) NULL,
-    [CreatedAt] DATETIME2 NOT NULL DEFAULT GETDATE(),
-    [UpdatedAt] DATETIME2 NOT NULL DEFAULT GETDATE()
-);
-
--- Create ContactHeadings table
-CREATE TABLE [dbo].[ContactHeadings] (
-    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    [Line1] NVARCHAR(100) NOT NULL,
-    [Line2] NVARCHAR(100) NOT NULL,
-    [CreatedAt] DATETIME2 NOT NULL DEFAULT GETDATE(),
-    [UpdatedAt] DATETIME2 NOT NULL DEFAULT GETDATE()
-);
 
 -- Create Logos table
 CREATE TABLE [dbo].[Logos] (
@@ -77,26 +49,7 @@ VALUES
 ('07', N'Dermatologiya və Kosmetologiya', N'Dəri xəstəliklərinin müalicəsi və kosmetik problemlərin həllində yeni üsullar və texnologiyalar.', N'23 Avqust 2025', 38, N'Dəri Xəstəliklərinin Müalicəsi', N'Dəri xəstəlikləri həm fiziki, həm də psixoloji problemlər yarada bilər. Müasir dermatologiya müalicəsində həm xəstəliyin müalicəsi, həm də estetik nəticələrə diqqət yetirilir.', N'Kosmetik Dermatologiya', N'Kosmetik dermatologiyada lazer texnologiyaları, botoks və dəri dolğuları geniş istifadə olunur. Bu üsullar dərinin gəncliyini qoruyur və estetik görünüşü yaxşılaşdırır.'),
 ('08', N'Ortopediya və Travmatologiya', N'Sümük-əzələ sistemi xəstəliklərinin və zədələnmələrini müalicəsində müasir cərrahiyyə üsulları.', N'21 Avqust 2025', 29, N'Ortopedik Müalicənin Əsasları', N'Sümük-əzələ sistemi xəstəlikləri insanın hərəkət etmə qabiliyyətini məhdudlaşdırır. Müasir ortopedik müalicədə həm funksional bərpa, həm də estetik nəticələrə diqqət yetirilir.', N'Müasir Ortopedik Texnologiyalar', N'Müasir ortopedik müalicədə 3D çap texnologiyası, robotik cərrahiyyə və bioloji materiallar geniş istifadə olunur. Bu texnologiyalar müalicənin effektivliyini artırır və sağalma müddətini qısaldır.');
 
--- Insert sample contact data
-INSERT INTO [dbo].[Contacts] ([Type], [Value], [Icon])
-VALUES 
-(N'phone', N'+(994) 50 xxx xx xx', N'phone-icon.png'),
-(N'whatsapp', N'+(994) 50 xxx xx xx', N'whatsapp-icon.png'),
-(N'email', N'examplegmail.com', N'mail-icon.png'),
-(N'location', N'Bakı, Azərbaycan', N'location-icon.png');
 
--- Insert sample social media data
-INSERT INTO [dbo].[SocialMedia] ([Platform], [Name], [Url], [Icon])
-VALUES 
-(N'facebook', N'Facebook', N'https://facebook.com/hospital', N'facebook.png'),
-(N'instagram', N'Instagram', N'https://instagram.com/hospital', N'instagram.png'),
-(N'linkedin', N'LinkedIn', N'https://linkedin.com/company/hospital', N'linkedin.png'),
-(N'youtube', N'YouTube', N'https://youtube.com/hospital', N'youtube.png'),
-(N'telegram', N'Telegram', N'https://t.me/hospital', N'telegram.png');
-
--- Insert sample contact heading data
-INSERT INTO [dbo].[ContactHeadings] ([Line1], [Line2])
-VALUES (N'Nə sualın varsa,', N'buradayıq!');
 
 -- Insert sample logo data
 INSERT INTO [dbo].[Logos] ([Name], [Image])
