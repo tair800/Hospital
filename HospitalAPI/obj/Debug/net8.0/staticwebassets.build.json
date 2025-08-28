@@ -1,11 +1,39 @@
 {
   "Version": 1,
-  "Hash": "/zbp9O1ye2YDxScxh4HBXmvJ2mbTVYgaCub0HNoPl3k=",
+  "Hash": "6J48805jY2l1OhqHTugjlzNBCFKqIjG+N2YKU+559XI=",
   "Source": "HospitalAPI",
   "BasePath": "_content/HospitalAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "HospitalAPI\\wwwroot",
+      "Source": "HospitalAPI",
+      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\hospitalApp\\HospitalAPI\\wwwroot\\",
+      "BasePath": "_content/HospitalAPI",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\taira\\OneDrive\\Desktop\\hospitalApp\\HospitalAPI\\wwwroot\\uploads\\.gitkeep",
+      "SourceId": "HospitalAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\hospitalApp\\HospitalAPI\\wwwroot\\",
+      "BasePath": "_content/HospitalAPI",
+      "RelativePath": "uploads/.gitkeep",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\.gitkeep"
+    }
+  ]
 }

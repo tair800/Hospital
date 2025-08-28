@@ -140,3 +140,4 @@ C:\Users\taira\OneDrive\Desktop\hospitalApp\HospitalAPI\bin\Debug\net8.0\Hospita
 C:\Users\taira\OneDrive\Desktop\hospitalApp\HospitalAPI\bin\Debug\net8.0\HospitalAPI.pdb
 C:\Users\taira\OneDrive\Desktop\hospitalApp\HospitalAPI\obj\Debug\net8.0\HospitalAPI.genruntimeconfig.cache
 C:\Users\taira\OneDrive\Desktop\hospitalApp\HospitalAPI\obj\Debug\net8.0\ref\HospitalAPI.dll
+C:\Users\taira\OneDrive\Desktop\hospitalApp\HospitalAPI\bin\Debug\net8.0\HospitalAPI.staticwebassets.runtime.json

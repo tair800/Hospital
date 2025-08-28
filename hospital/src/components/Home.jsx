@@ -5,8 +5,42 @@ import './Home.css';
 const Home = () => {
     const navigate = useNavigate();
     const [latestEvents, setLatestEvents] = useState([]);
+    const [homeData, setHomeData] = useState({
+        section1Description: '',
+        section2Image: '',
+        section3Image: '',
+        section4Title: '',
+        section4Description: '',
+        section4PurposeTitle: '',
+        section4PurposeDescription: ''
+    });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    // Fetch home sections data from API
+    useEffect(() => {
+        const fetchHomeData = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/HomeSection/first');
+                if (response.ok) {
+                    const data = await response.json();
+                    setHomeData({
+                        section1Description: data.section1Description || '',
+                        section2Image: data.section2Image || '',
+                        section3Image: data.section3Image || '',
+                        section4Title: data.section4Title || '',
+                        section4Description: data.section4Description || '',
+                        section4PurposeTitle: data.section4PurposeTitle || '',
+                        section4PurposeDescription: data.section4PurposeDescription || ''
+                    });
+                }
+            } catch (err) {
+                console.error('Error fetching home data:', err);
+            }
+        };
+
+        fetchHomeData();
+    }, []);
 
     // Fetch latest events from API
     useEffect(() => {
@@ -42,6 +76,33 @@ const Home = () => {
         return text.slice(0, maxLength) + '...';
     };
 
+    // Helper function to format section 1 text with proper line breaks
+    const formatSection1Text = (text) => {
+        if (!text) {
+            return (
+                <>
+                    Azərbaycan<br />
+                    Hepato-Pankreato-Biliar<br />
+                    Cərrahlar İctimai Birliyi
+                </>
+            );
+        }
+
+        // If the text contains the expected structure, format it with line breaks
+        if (text.includes('Azərbaycan') && text.includes('Hepato-Pankreato-Biliar')) {
+            return (
+                <>
+                    Azərbaycan<br />
+                    Hepato-Pankreato-Biliar<br />
+                    Cərrahlar İctimai Birliyi
+                </>
+            );
+        }
+
+        // For other text, try to split intelligently or return as is
+        return text;
+    };
+
     // Helper function to format date
     const formatEventDate = (dateString) => {
         const date = new Date(dateString);
@@ -73,10 +134,115 @@ const Home = () => {
                 />
             </div>
 
+            {/* Home Circle Right Decorative Element */}
+            <div className="home-circle-right">
+                <img
+                    src="/src/assets/home-circle-right.png"
+                    alt="Decorative Circle"
+                    className="home-circle-right-image"
+                />
+            </div>
+
+            {/* Home Circle Left Decorative Element */}
+            <div className="home-circle-left">
+                <img
+                    src="/src/assets/home-circle-left1.png"
+                    alt="Decorative Circle Left"
+                    className="home-circle-left-image"
+                />
+            </div>
+
+            {/* Home Circle Left 2 Decorative Element */}
+            <div className="home-circle-left2">
+                <img
+                    src="/src/assets/home-circle-left2.png"
+                    alt="Decorative Circle Left 2"
+                    className="home-circle-left2-image"
+                />
+            </div>
+
+            {/* Home Circle Left 3 Decorative Element */}
+            <div className="home-circle-left3">
+                <img
+                    src="/src/assets/home-circle-left3.png"
+                    alt="Decorative Circle Left 3"
+                    className="home-circle-left3-image"
+                />
+            </div>
+
+            {/* Four Sections Grid */}
+            <div className="four-sections-grid">
+                <div className="section section-1">
+                    <div className="section-content">
+                        <div className="section-1-text">
+                            <h1>{formatSection1Text(homeData.section1Description)}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div className="section section-2">
+                    <div className="section-bg-image">
+                        <img
+                            src="/src/assets/home1-bg.png"
+                            alt="Background Pattern"
+                            className="section-2-bg-pattern"
+                        />
+                    </div>
+                    <div className="section-content">
+                        <div className="section-2-image">
+                            <img
+                                src={homeData.section2Image ?
+                                    (homeData.section2Image.startsWith('http') || homeData.section2Image.includes('/')
+                                        ? homeData.section2Image
+                                        : `/uploads/${homeData.section2Image}`)
+                                    : "/src/assets/home1.png"}
+                                alt="Section 2"
+                                className="section-2-main-image"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className="section section-3">
+                    <div className="section-3-bg-image">
+                        <img
+                            src="/src/assets/home2-bg.png"
+                            alt="Background Pattern"
+                            className="section-3-bg-pattern"
+                        />
+                    </div>
+                    <div className="section-content">
+                        <div className="section-3-image">
+                            <img
+                                src={homeData.section3Image ?
+                                    (homeData.section3Image.startsWith('http') || homeData.section3Image.includes('/')
+                                        ? homeData.section3Image
+                                        : `/uploads/${homeData.section3Image}`)
+                                    : "/src/assets/home2.png"}
+                                alt="Section 3"
+                                className="section-3-main-image"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className="section section-4">
+                    <div className="section-content">
+                        <div className="section-4-text">
+                            <h1>{homeData.section4Title || 'Azərbaycan Hepato-Pankreato-Biliar Cərrahlar İctimai Birliyi'}</h1>
+                            <div className="section-4-description">
+                                <p>{homeData.section4Description || 'qaraciyər, öd yolları və mədəaltı vəzi xəstəliklərinin cərrahiyyəsi sahəsində çalışan mütəxəssisləri bir araya gətirən elmi-ictimai təşkilatdır.'}</p>
+                            </div>
+                            <div className="section-4-purpose">
+                                <h3>{homeData.section4PurposeTitle || 'Birliyin məqsədi'}</h3>
+                                <p>{homeData.section4PurposeDescription || 'bu sahədə bilik və təcrübə mübadiləsini təşviq etmək, gənc həkimlərin inkişafını dəstəkləmək və beynəlxalq əməkdaşlıq vasitəsilə ölkəmizdə müasir tibbi yanaşmaların tətbiqinə töhfə verməkdir.'}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* Home Header Text */}
             <div className="home-header-text">
                 <div className="home-header-left">
-                    <span className="home-header-first">Ən son</span>
+                    <span className="home-header-first">Gözlənilən</span>
                     <span className="home-header-second">
                         <span>Tədbirlər</span>
                     </span>

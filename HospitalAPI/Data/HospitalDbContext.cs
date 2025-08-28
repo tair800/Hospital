@@ -16,6 +16,7 @@ namespace HospitalAPI.Data
         public DbSet<AboutCarousel> AboutCarousel { get; set; }
         public DbSet<About> About { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<HomeSection> HomeSections { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -97,6 +98,21 @@ namespace HospitalAPI.Data
                 entity.Property(c => c.Icon).IsRequired().HasMaxLength(100).HasColumnType("nvarchar(100) COLLATE SQL_Latin1_General_CP1254_CI_AS");
                 entity.Property(c => c.CreatedAt).HasDefaultValueSql("GETDATE()");
                 entity.Property(c => c.UpdatedAt).HasDefaultValueSql("GETDATE()");
+            });
+
+            // Configure HomeSection table with proper Unicode support
+            modelBuilder.Entity<HomeSection>(entity =>
+            {
+                entity.HasKey(h => h.Id);
+                entity.Property(h => h.Section1Description).HasColumnName("section_1_description").HasMaxLength(2000).HasColumnType("nvarchar(2000) COLLATE SQL_Latin1_General_CP1254_CI_AS");
+                entity.Property(h => h.Section2Image).HasColumnName("section_2_image").HasMaxLength(500).HasColumnType("nvarchar(500)");
+                entity.Property(h => h.Section3Image).HasColumnName("section_3_image").HasMaxLength(500).HasColumnType("nvarchar(500)");
+                entity.Property(h => h.Section4Title).HasColumnName("section_4_title").HasMaxLength(500).HasColumnType("nvarchar(500) COLLATE SQL_Latin1_General_CP1254_CI_AS");
+                entity.Property(h => h.Section4Description).HasColumnName("section_4_description").HasMaxLength(2000).HasColumnType("nvarchar(2000) COLLATE SQL_Latin1_General_CP1254_CI_AS");
+                entity.Property(h => h.Section4PurposeTitle).HasColumnName("section_4_purpose_title").HasMaxLength(500).HasColumnType("nvarchar(500) COLLATE SQL_Latin1_General_CP1254_CI_AS");
+                entity.Property(h => h.Section4PurposeDescription).HasColumnName("section_4_purpose_description").HasMaxLength(2000).HasColumnType("nvarchar(2000) COLLATE SQL_Latin1_General_CP1254_CI_AS");
+                entity.Property(h => h.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("GETDATE()");
+                entity.Property(h => h.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("GETDATE()");
             });
         }
 
