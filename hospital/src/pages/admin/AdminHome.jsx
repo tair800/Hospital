@@ -15,10 +15,6 @@ function AdminHome() {
         section4PurposeDescription: ''
     });
     const [loading, setLoading] = useState(false);
-    const [imageFiles, setImageFiles] = useState({
-        section2Image: null,
-        section3Image: null
-    });
 
     useEffect(() => {
         fetchHomeData();
@@ -62,11 +58,9 @@ function AdminHome() {
         fileInput.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                // Store the actual file object
-                setImageFiles(prev => ({ ...prev, [sectionName]: file }));
-                // Update the display name
+                // Store only the filename, not the File object
                 setHomeData(prev => ({ ...prev, [sectionName]: file.name }));
-                showAlert('success', 'Image Selected!', `Image "${file.name}" selected for ${sectionName}.`);
+                showAlert('success', 'Image Selected!', `Image "${file.name}" selected for ${sectionName}. Don't forget to save changes!`);
             }
         };
 
@@ -87,7 +81,6 @@ function AdminHome() {
         }).then((result) => {
             if (result.isConfirmed) {
                 setHomeData(prev => ({ ...prev, [sectionName]: '' }));
-                setImageFiles(prev => ({ ...prev, [sectionName]: null }));
                 showAlert('success', 'Deleted!', 'Image has been removed.');
             }
         });
@@ -98,39 +91,16 @@ function AdminHome() {
         try {
             setLoading(true);
 
-            // Create FormData for file uploads
-            const formData = new FormData();
-            formData.append('id', '1');
-            formData.append('section1Description', homeData.section1Description);
-            formData.append('section4Title', homeData.section4Title);
-            formData.append('section4Description', homeData.section4Description);
-            formData.append('section4PurposeTitle', homeData.section4PurposeTitle);
-            formData.append('section4PurposeDescription', homeData.section4PurposeDescription);
-
-            // Add image files if they exist
-            if (imageFiles.section2Image) {
-                formData.append('section2Image', imageFiles.section2Image);
-            } else {
-                formData.append('section2Image', homeData.section2Image || '');
-            }
-
-            if (imageFiles.section3Image) {
-                formData.append('section3Image', imageFiles.section3Image);
-            } else {
-                formData.append('section3Image', homeData.section3Image || '');
-            }
-
-            const response = await fetch('http://localhost:5000/api/HomeSection/1', {
+            const response = await fetch('http://localhost:5000/api/HomeSection/first', {
                 method: 'PUT',
-                body: formData, // Send as FormData instead of JSON
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(homeData),
             });
 
             if (response.ok) {
                 showAlert('success', 'Success!', 'Home sections updated successfully!');
-                // Clear the image files after successful upload
-                setImageFiles({ section2Image: null, section3Image: null });
-                // Refresh data to show updated images
-                fetchHomeData();
             } else {
                 showAlert('error', 'Error!', 'Failed to update home sections.');
             }
@@ -146,19 +116,10 @@ function AdminHome() {
             <h3>{title}</h3>
             <div className="image-section">
                 <div className="image-placeholder">
-                    {imageFiles[sectionName] ? (
-                        // Show preview of selected file
+                    {homeData[sectionName] ? (
+                        // Show existing uploaded image
                         <img
-                            src={URL.createObjectURL(imageFiles[sectionName])}
-                            alt={`${title} preview`}
-                            className="current-image"
-                        />
-                    ) : homeData[sectionName] ? (
-                        // Show existing uploaded image - check if it's a local asset or uploaded file
-                        <img
-                            src={homeData[sectionName].startsWith('http') || homeData[sectionName].includes('/')
-                                ? homeData[sectionName]
-                                : `/uploads/${homeData[sectionName]}`}
+                            src={`/src/assets/${homeData[sectionName]}`}
                             alt={`${title} image`}
                             className="current-image"
                         />
@@ -185,6 +146,7 @@ function AdminHome() {
                         <img src={adminBrowseIcon} alt="Browse" className="action-icon" />
                     </button>
                 </div>
+
                 <div className="image-info">
                     *Yüklənən şəkil 400 x 400 ölçüsündə olmalıdır
                 </div>

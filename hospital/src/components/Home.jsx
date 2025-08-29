@@ -190,12 +190,8 @@ const Home = () => {
                     <div className="section-content">
                         <div className="section-2-image">
                             <img
-                                src={homeData.section2Image ?
-                                    (homeData.section2Image.startsWith('http') || homeData.section2Image.includes('/')
-                                        ? homeData.section2Image
-                                        : `/uploads/${homeData.section2Image}`)
-                                    : "/src/assets/home1.png"}
-                                alt="Section 2"
+                                src={homeData.section2Image ? `/src/assets/${homeData.section2Image}` : "/src/assets/home1.png"}
+                                alt="Hospital Services"
                                 className="section-2-main-image"
                             />
                         </div>
@@ -212,12 +208,8 @@ const Home = () => {
                     <div className="section-content">
                         <div className="section-3-image">
                             <img
-                                src={homeData.section3Image ?
-                                    (homeData.section3Image.startsWith('http') || homeData.section3Image.includes('/')
-                                        ? homeData.section3Image
-                                        : `/uploads/${homeData.section3Image}`)
-                                    : "/src/assets/home2.png"}
-                                alt="Section 3"
+                                src={homeData.section3Image ? `/src/assets/${homeData.section3Image}` : "/src/assets/home2.png"}
+                                alt="Hospital Services"
                                 className="section-3-main-image"
                             />
                         </div>

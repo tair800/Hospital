@@ -69,9 +69,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Add static files support for uploaded images
-app.UseStaticFiles();
-
 app.UseCors("AllowAll");
 
 app.UseAuthorization();
