@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import blog1Image from '../assets/blog1.png';
 import './BlogDetail.css';
 import LogoCarousel from './LogoCarousel';
 
@@ -21,6 +22,16 @@ const BlogDetail = () => {
                     throw new Error('Failed to fetch blog data');
                 }
                 const data = await response.json();
+
+                // Debug: Log the raw API response
+                console.log('=== BLOG DETAIL DEBUG INFO ===');
+                console.log('Raw API response:', data);
+                console.log('Total blogs received:', data.length);
+
+                data.forEach((blog, index) => {
+                    console.log(`Blog ${index + 1}: ID=${blog.id}, Number='${blog.number}', Title='${blog.title}'`);
+                });
+
                 setBlogData(data);
 
                 // Find the specific blog
@@ -153,21 +164,66 @@ const BlogDetail = () => {
 
                     {/* Right Side - Blog Image */}
                     <div className="blog-detail-right">
-                        <div className="blog-detail-image">
+                        {blog.image ? (
                             <img
-                                src="/src/assets/blog1.png"
+                                src={blog.image === 'blog1.png' ? blog1Image : `/src/assets/${blog.image}`}
                                 alt="Blog Image"
+                                className="blog-detail-image"
+                                onError={(e) => {
+                                    console.log('Image failed to load:', blog.image);
+                                    e.target.style.display = 'none';
+                                }}
                             />
-                        </div>
+                        ) : (
+                            <div className="blog-detail-no-image">
+                                No image (API returned: {blog.image || 'null'})
+                            </div>
+                        )}
 
-                        {/* More Blog Posts Section */}
+                        {/* More Blog Posts Section - Moved under the image */}
                         <div className="more-blog-posts">
                             <h3 className="more-blog-header">Daha çox blog yazı</h3>
                             <div className="blog-posts-list">
-                                {blogData
-                                    .filter(blogItem => blogItem.id !== blog.id)
-                                    .slice(0, 5)
-                                    .map((blogItem) => (
+                                {(() => {
+                                    // Get the next 5 blogs with circular navigation
+                                    const currentBlogNumber = parseInt(blog.number);
+                                    const totalBlogs = blogData.length;
+
+                                    // First, get next blogs after current
+                                    const nextBlogs = blogData
+                                        .filter(blogItem => blogItem.id !== blog.id) // Exclude current blog
+                                        .sort((a, b) => parseInt(a.number) - parseInt(b.number)) // Sort numerically
+                                        .filter(blogItem => parseInt(blogItem.number) > currentBlogNumber); // Only blogs with higher numbers
+
+                                    // If we don't have 5 next blogs, loop back to beginning
+                                    let finalBlogs = [...nextBlogs];
+
+                                    if (finalBlogs.length < 5) {
+                                        // Get blogs from the beginning to fill up to 5
+                                        const remainingCount = 5 - finalBlogs.length;
+                                        const beginningBlogs = blogData
+                                            .filter(blogItem => blogItem.id !== blog.id) // Exclude current blog
+                                            .sort((a, b) => parseInt(a.number) - parseInt(b.number)) // Sort numerically
+                                            .filter(blogItem => parseInt(blogItem.number) <= currentBlogNumber) // Only blogs with lower or equal numbers
+                                            .slice(0, remainingCount); // Take only what we need
+
+                                        finalBlogs = [...nextBlogs, ...beginningBlogs];
+                                    }
+
+                                    // Take only first 5 blogs
+                                    finalBlogs = finalBlogs.slice(0, 5);
+
+                                    // Debug: Log the circular navigation logic
+                                    console.log('=== MORE BLOG POSTS CIRCULAR NAVIGATION DEBUG ===');
+                                    console.log('Current blog number:', currentBlogNumber);
+                                    console.log('Total available blogs:', totalBlogs);
+                                    console.log('Next blogs found:', nextBlogs.length);
+                                    console.log('Final blogs selected:', finalBlogs.length);
+                                    finalBlogs.forEach((blogItem, index) => {
+                                        console.log(`Final Blog ${index + 1}: ID=${blogItem.id}, Number='${blogItem.number}', Title='${blogItem.title}'`);
+                                    });
+
+                                    return finalBlogs.map((blogItem) => (
                                         <div
                                             key={blogItem.id}
                                             className="blog-post-item"
@@ -182,11 +238,14 @@ const BlogDetail = () => {
                                                 />
                                             </div>
                                         </div>
-                                    ))}
+                                    ));
+                                })()}
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {/* Remove the old more-blog-posts section that was here */}
             </div>
 
             <div className="logo-carousel-section blog-detail-logo-carousel">

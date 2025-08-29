@@ -380,9 +380,9 @@
 
 /* More Blog Posts Section */
 .more-blog-posts {
-    margin-top: 0;
-    padding-top: 0;
-    border-top: none;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #f0f0f0;
     width: 100%;
 }
 
@@ -488,3 +488,14 @@
 }
 
 /* Responsive Design */
+.blog-detail-no-image {
+    width: 100%;
+    height: 300px;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 16px;
+    border-radius: 8px;
+}

@@ -16,6 +16,7 @@ import Dashboard from './pages/admin/Dashboard'
 import AdminHome from './pages/admin/AdminHome'
 import AdminAbout from './pages/admin/AdminAbout'
 import AdminContact from './pages/admin/AdminContact'
+import AdminBlog from './pages/admin/AdminBlog'
 import AdminLayout from './pages/admin/AdminLayout'
 import './App.css'
 
@@ -79,6 +80,7 @@ function App() {
             <Route path="home" element={<AdminHome />} />
             <Route path="about" element={<AdminAbout />} />
             <Route path="contact" element={<AdminContact />} />
+            <Route path="blog" element={<AdminBlog />} />
           </Route>
           <Route path="/blog" element={
             <>

@@ -9,7 +9,6 @@ namespace HospitalAPI.Models
         [Key]
         public int Id { get; set; }
         
-        [Required]
         [MaxLength(10)]
         public string Number { get; set; } = string.Empty;
         
@@ -37,6 +36,9 @@ namespace HospitalAPI.Models
         
         [MaxLength(1000)]
         public string? ThirdTextBody { get; set; }
+        
+        [MaxLength(500)]
+        public string? Image { get; set; }
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         

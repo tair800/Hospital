@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import blog1Image from '../assets/blog1.png';
 import './Blog.css';
 import LogoCarousel from './LogoCarousel';
 
@@ -20,7 +21,40 @@ const Blog = () => {
                     throw new Error('Failed to fetch blog data');
                 }
                 const data = await response.json();
-                setBlogData(data);
+
+                console.log('=== FRONTEND DEBUG INFO ===');
+                console.log('Raw API response:', data);
+                console.log('Total blogs received:', data.length);
+
+                // Log each blog with its details
+                data.forEach((blog, index) => {
+                    console.log(`Blog ${index + 1}: ID=${blog.id}, Number='${blog.number}', Title='${blog.title}'`);
+                });
+
+                // Sort blogs by Number field numerically
+                const sortedData = data.sort((a, b) => {
+                    const numA = parseInt(a.number);
+                    const numB = parseInt(b.number);
+                    return numA - numB;
+                });
+
+                console.log('=== AFTER FRONTEND SORTING ===');
+                sortedData.forEach((blog, index) => {
+                    console.log(`Sorted Blog ${index + 1}: ID=${blog.id}, Number='${blog.number}', Title='${blog.title}'`);
+                });
+
+                // Check if data is now sorted
+                const numbers = sortedData.map(b => b.number);
+                console.log('Blog numbers after sorting:', numbers);
+
+                // Verify if it's numerically sorted
+                const isNumericallySorted = numbers.every((num, index) => {
+                    if (index === 0) return true;
+                    return parseInt(num) >= parseInt(numbers[index - 1]);
+                });
+                console.log('Is numerically sorted after frontend sort:', isNumericallySorted);
+
+                setBlogData(sortedData);
             } catch (err) {
                 console.error('Error fetching blog data:', err);
                 setError(err.message);
@@ -46,7 +80,17 @@ const Blog = () => {
 
     const getVisibleBlogs = () => {
         const startIndex = currentSlide * cardsPerScreen;
-        return blogData.slice(startIndex, startIndex + cardsPerScreen);
+        const visibleBlogs = blogData.slice(startIndex, startIndex + cardsPerScreen);
+
+        console.log('=== SLIDE DEBUG INFO ===');
+        console.log('Current slide:', currentSlide);
+        console.log('Cards per screen:', cardsPerScreen);
+        console.log('Start index:', startIndex);
+        console.log('End index:', startIndex + cardsPerScreen);
+        console.log('Total blogs:', blogData.length);
+        console.log('Visible blogs:', visibleBlogs.map(b => ({ id: b.id, number: b.number, title: b.title })));
+
+        return visibleBlogs;
     };
 
     const handleCardClick = (blogId) => {
@@ -128,14 +172,35 @@ const Blog = () => {
                             {renderSeparator(blog.id)}
 
                             <div className="blog-card-image">
-                                <img
-                                    src="/src/assets/blog1.png"
-                                    alt="Blog Image"
-                                    style={{
+                                {blog.image ? (
+                                    <img
+                                        src={blog.image === 'blog1.png' ? blog1Image : `/src/assets/${blog.image}`}
+                                        alt="Blog Image"
+                                        style={{
+                                            width: '100%',
+                                            height: '200px',
+                                            objectFit: 'cover',
+                                            borderRadius: '8px'
+                                        }}
+                                        onError={(e) => {
+                                            console.log('Image failed to load:', blog.image);
+                                            e.target.style.display = 'none';
+                                        }}
+                                    />
+                                ) : (
+                                    <div style={{
                                         width: '100%',
-                                        height: 'auto'
-                                    }}
-                                />
+                                        height: '200px',
+                                        backgroundColor: '#f0f0f0',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        borderRadius: '8px',
+                                        color: '#666'
+                                    }}>
+                                        No image (API returned: {blog.image || 'null'})
+                                    </div>
+                                )}
                             </div>
 
                             <div
