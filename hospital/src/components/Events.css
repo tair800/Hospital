@@ -695,15 +695,14 @@
     bottom: 50px;
     left: 46%;
     transform: translateX(-50%);
-    display: flex
-;
+    display: flex;
     align-items: center;
     gap: 2rem;
     flex-wrap: nowrap;
     white-space: nowrap;
     overflow: hidden;
-    width: auto;
-    justify-content: center;
+    width: 350px;
+    justify-content: space-between;
     z-index: 10;
     /* background: rgba(0, 0, 0, 0.1); */
     padding: 0.5rem 1rem;
@@ -721,8 +720,9 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-width: 0;
+    min-width: 120px;
     flex-shrink: 0;
+    flex: 1;
 }
 
 .featured-event-date span,

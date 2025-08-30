@@ -52,11 +52,11 @@ const Home = () => {
                     throw new Error('Failed to fetch latest events');
                 }
                 const data = await response.json();
-                // Sort by date (closest upcoming events first) and take the first 3
+                // Sort by date (longest waiting period first - furthest in the future) and take the first 3
                 const now = new Date();
                 const sortedEvents = data
                     .filter(event => new Date(event.eventDate) > now) // Only upcoming events
-                    .sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate)) // Closest date first
+                    .sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate)) // Furthest date first (longest waiting)
                     .slice(0, 3);
                 setLatestEvents(sortedEvents);
             } catch (err) {
@@ -119,8 +119,8 @@ const Home = () => {
     };
 
     // Helper function to format price
-    const formatPrice = (price, currency, isFree) => {
-        if (isFree) return 'Pulsuz';
+    const formatPrice = (price, currency) => {
+        if (price === 0 || price === '0' || price === null || price === undefined) return 'Pulsuz';
         return `${price} ${currency}`;
     };
 
@@ -234,7 +234,7 @@ const Home = () => {
             {/* Home Header Text */}
             <div className="home-header-text">
                 <div className="home-header-left">
-                    <span className="home-header-first">Gözlənilən</span>
+                    <span className="home-header-first">Uzaq Tarixli</span>
                     <span className="home-header-second">
                         <span>Tədbirlər</span>
                     </span>
@@ -254,7 +254,7 @@ const Home = () => {
                     latestEvents.map((event, index) => {
                         const { day, month } = formatEventDate(event.eventDate);
                         const truncatedDescription = truncateText(event.description, 120);
-                        const formattedPrice = formatPrice(event.price, event.currency, event.isFree);
+                        const formattedPrice = formatPrice(event.price, event.currency);
 
                         return (
                             <div key={event.id} className="home-long-card">

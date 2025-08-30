@@ -19,7 +19,7 @@ function AdminLayout() {
             case '/admin/members':
                 return 'Üzvlər';
             case '/admin/events':
-                return 'Tədbirlər';
+                return 'Events';
             case '/admin/sponsors':
                 return 'Sponsors';
             case '/admin/contact':

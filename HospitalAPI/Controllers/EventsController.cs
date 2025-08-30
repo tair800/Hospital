@@ -131,6 +131,18 @@ namespace HospitalAPI.Controllers
                     return BadRequest(ModelState);
                 }
 
+                // Automatically set IsFree based on Price
+                eventItem.IsFree = eventItem.Price == 0 || eventItem.Price == null;
+                
+                // Ensure Price is not negative
+                if (eventItem.Price.HasValue && eventItem.Price < 0)
+                {
+                    return BadRequest("Price cannot be negative");
+                }
+
+                // Log the creation for debugging
+                Console.WriteLine($"Creating Event: Price={eventItem.Price}, Currency={eventItem.Currency}, IsFree={eventItem.IsFree}");
+
                 eventItem.CreatedAt = DateTime.UtcNow;
                 eventItem.UpdatedAt = DateTime.UtcNow;
 
@@ -162,6 +174,16 @@ namespace HospitalAPI.Controllers
                     return NotFound($"Event with ID {id} not found");
                 }
 
+                // Log the existing event state
+                Console.WriteLine($"Existing Event {id}: Price={existingEvent.Price}, Currency={existingEvent.Currency}, IsFree={existingEvent.IsFree}");
+                Console.WriteLine($"Entity State: {_context.Entry(existingEvent).State}");
+
+                // Validate price first before updating
+                if (eventItem.Price.HasValue && eventItem.Price < 0)
+                {
+                    return BadRequest("Price cannot be negative");
+                }
+
                 // Update all properties
                 existingEvent.Title = eventItem.Title;
                 existingEvent.Subtitle = eventItem.Subtitle;
@@ -171,7 +193,6 @@ namespace HospitalAPI.Controllers
                 existingEvent.Time = eventItem.Time;
                 existingEvent.Venue = eventItem.Venue;
                 existingEvent.Trainer = eventItem.Trainer;
-                existingEvent.IsFree = eventItem.IsFree;
                 existingEvent.Price = eventItem.Price;
                 existingEvent.Currency = eventItem.Currency;
                 existingEvent.MainImage = eventItem.MainImage;
@@ -179,9 +200,30 @@ namespace HospitalAPI.Controllers
                 existingEvent.DetailImageMain = eventItem.DetailImageMain;
                 existingEvent.DetailImageRight = eventItem.DetailImageRight;
                 existingEvent.IsMain = eventItem.IsMain;
+                
+                // Automatically set IsFree based on Price
+                bool newIsFreeValue = eventItem.Price == 0 || eventItem.Price == null;
+                existingEvent.IsFree = newIsFreeValue;
+                
+                Console.WriteLine($"Price: {eventItem.Price}, New IsFree value: {newIsFreeValue}");
+                
                 existingEvent.UpdatedAt = DateTime.UtcNow;
 
+                // Explicitly mark the entity as modified
+                _context.Entry(existingEvent).State = EntityState.Modified;
+                
+                // Explicitly mark IsFree as modified to ensure it's tracked
+                _context.Entry(existingEvent).Property(e => e.IsFree).IsModified = true;
+
+                // Log the update for debugging
+                Console.WriteLine($"Updating Event {id}: Price={eventItem.Price}, Currency={eventItem.Currency}, IsFree={existingEvent.IsFree}");
+                Console.WriteLine($"Before save - Existing Event Price: {existingEvent.Price}, IsFree: {existingEvent.IsFree}");
+                Console.WriteLine($"Before save - New Event Price: {eventItem.Price}, IsFree: {eventItem.IsFree}");
+
                 await _context.SaveChangesAsync();
+                
+                // Log after save
+                Console.WriteLine($"After save - Event Price: {existingEvent.Price}, IsFree: {existingEvent.IsFree}");
 
                 return NoContent();
             }
@@ -239,9 +281,9 @@ namespace HospitalAPI.Controllers
             }
         }
 
-        // PATCH: api/events/{id}/toggle-free - Toggle IsFree status
-        [HttpPatch("{id}/toggle-free")]
-        public async Task<IActionResult> ToggleFreeStatus(int id)
+        // GET: api/events/{id}/debug - Debug endpoint to check event state
+        [HttpGet("{id}/debug")]
+        public async Task<IActionResult> DebugEvent(int id)
         {
             try
             {
@@ -251,17 +293,60 @@ namespace HospitalAPI.Controllers
                     return NotFound($"Event with ID {id} not found");
                 }
 
-                eventItem.IsFree = !eventItem.IsFree;
-                eventItem.UpdatedAt = DateTime.UtcNow;
+                var entityState = _context.Entry(eventItem).State;
+                var modifiedProperties = _context.Entry(eventItem).Properties
+                    .Where(p => p.IsModified)
+                    .Select(p => new { Property = p.Metadata.Name, IsModified = p.IsModified })
+                    .ToList();
 
-                await _context.SaveChangesAsync();
-
-                return Ok(new { id = eventItem.Id, isFree = eventItem.IsFree });
+                return Ok(new
+                {
+                    id = eventItem.Id,
+                    title = eventItem.Title,
+                    price = eventItem.Price,
+                    currency = eventItem.Currency,
+                    isFree = eventItem.IsFree,
+                    entityState = entityState.ToString(),
+                    modifiedProperties = modifiedProperties
+                });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        // GET: api/events/test-db - Test database connection and basic operations
+        [HttpGet("test-db")]
+        public async Task<IActionResult> TestDatabase()
+        {
+            try
+            {
+                // Test if we can connect to the database
+                var eventCount = await _context.Events.CountAsync();
+                
+                // Test if we can read from the database
+                var sampleEvent = await _context.Events.FirstOrDefaultAsync();
+                
+                return Ok(new
+                {
+                    message = "Database connection successful",
+                    totalEvents = eventCount,
+                    sampleEvent = sampleEvent != null ? new
+                    {
+                        id = sampleEvent.Id,
+                        title = sampleEvent.Title,
+                        price = sampleEvent.Price,
+                        isFree = sampleEvent.IsFree
+                    } : null
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Database test failed: {ex.Message}");
+            }
+        }
+
+
     }
 }

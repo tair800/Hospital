@@ -34,7 +34,7 @@ namespace HospitalAPI.Models
         public string? Trainer { get; set; }
         
         [Required]
-        public bool IsFree { get; set; } = true;
+        public bool IsFree { get; set; }
         
         [Column(TypeName = "decimal(10,2)")]
         public decimal? Price { get; set; }
