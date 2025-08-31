@@ -5,7 +5,7 @@ import topImage from '../assets/top.png'
 import homeBgImage from '../assets/home-bg.png'
 import './Header.css'
 
-function Header({ showTopImage = false }) {
+function Header({ showTopImage = false, customTopImage = null }) {
     const [activePage, setActivePage] = useState('home');
     const navigate = useNavigate();
     const location = useLocation();
@@ -17,7 +17,7 @@ function Header({ showTopImage = false }) {
         { label: 'Ana səhifə', href: '/', id: 'home' },
         { label: 'Haqqımızda', href: '/about', id: 'about' },
         { label: 'Tedbirlər', href: '/events', id: 'events' },
-        { label: 'Üzv', href: '/uzv', id: 'uzv' },
+        { label: 'Employee', href: '/employee', id: 'employee' },
         { label: 'Qalereya', href: '/gallery', id: 'gallery' },
         { label: 'Blog', href: '/blog', id: 'blog' },
     ];
@@ -35,8 +35,10 @@ function Header({ showTopImage = false }) {
             setActivePage('about');
         } else if (path === '/contact') {
             setActivePage('contact');
-        } else if (path === '/uzv') {
-            setActivePage('uzv');
+        } else if (path === '/employee') {
+            setActivePage('employee');
+        } else if (path.startsWith('/employee/')) {
+            setActivePage('employee');
         } else if (path === '/events') {
             setActivePage('events');
         } else if (path.startsWith('/event/')) {
@@ -56,7 +58,7 @@ function Header({ showTopImage = false }) {
         <header>
             {showTopImage && (
                 <div className="header-top-image">
-                    <img src={topImage} alt="Top Background" />
+                    <img src={customTopImage || topImage} alt="Top Background" />
                 </div>
             )}
             <div className={`header-container ${isHomePage ? 'home-header' : ''}`}>
@@ -99,7 +101,7 @@ function Header({ showTopImage = false }) {
                         {activePage === 'about' && 'Haqqımızda'}
                         {activePage === 'contact' && 'Əlaqə'}
                         {activePage === 'events' && 'Tədbirlər'}
-                        {activePage === 'uzv' && 'Üzv'}
+                        {activePage === 'employee' && 'Employee'}
                         {activePage === 'gallery' && 'Qalereya'}
                         {activePage === 'blog' && 'Blog'}
                     </>

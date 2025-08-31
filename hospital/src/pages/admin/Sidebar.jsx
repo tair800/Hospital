@@ -5,7 +5,7 @@ import logoHeader from '../../assets/logo-header.png'
 import adminDashboard from '../../assets/admin-dashboard.png'
 import adminHome from '../../assets/admin-home.png'
 import adminAbout from '../../assets/admin-about.png'
-import adminUzv from '../../assets/admin-uzv.png'
+import adminEmployee from '../../assets/admin-uzv.png'
 import adminEvents from '../../assets/admin-events.png'
 import adminSponsor from '../../assets/admin-sponsor.png'
 import adminContact from '../../assets/admin-contact.png'
@@ -47,9 +47,9 @@ function Sidebar() {
                         </Link>
                     </li>
                     <li className="admin-nav-item">
-                        <Link to="/admin/members" className={`admin-nav-link ${location.pathname === '/admin/members' ? 'active' : ''}`}>
-                            <img src={adminUzv} alt="Members" className="admin-nav-icon" />
-                            Üzvlər
+                        <Link to="/admin/employee" className={`admin-nav-link ${location.pathname === '/admin/employee' ? 'active' : ''}`}>
+                            <img src={adminEmployee} alt="Employee" className="admin-nav-icon" />
+                            Employee
                         </Link>
                     </li>
                     <li className="admin-nav-item">

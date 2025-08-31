@@ -6,7 +6,8 @@ import Home from './components/Home'
 import About from './components/About'
 import Contact from './components/Contact'
 import TestPage from './pages/TestPage'
-import Uzv from './components/Uzv'
+import Employee from './components/Employee'
+import EmployeeDetail from './components/EmployeeDetail'
 import Events from './components/Events'
 import EventsDetail from './components/EventsDetail'
 import Gallery from './components/Gallery'
@@ -21,6 +22,7 @@ import AdminEvents from './pages/admin/AdminEvents'
 import AdminSponsors from './pages/admin/AdminSponsors'
 import AdminGallery from './pages/admin/AdminGallery'
 import AdminLayout from './pages/admin/AdminLayout'
+import employeeDetailBg from './assets/employee-detail-bg.png'
 import './App.css'
 
 function App() {
@@ -50,10 +52,17 @@ function App() {
               <Footer />
             </>
           } />
-          <Route path="/uzv" element={
+          <Route path="/employee" element={
             <>
               <Header showTopImage={true} />
-              <Uzv />
+              <Employee />
+              <Footer />
+            </>
+          } />
+          <Route path="/employee/:id" element={
+            <>
+              <Header showTopImage={false} />
+              <EmployeeDetail />
               <Footer />
             </>
           } />

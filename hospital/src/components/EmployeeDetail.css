@@ -1,0 +1,353 @@
+/* Employee Detail Page Styles */
+.employee-detail-page {
+    min-height: 100vh;
+    width: 100%;
+    background: white;
+    position: relative;
+    margin-top: -81px;
+}
+
+/* Background Image Section */
+.employee-detail-bg-section {
+    width: 100%;
+    height: 35rem;
+    position: relative;
+    overflow: hidden;
+    z-index: 9;
+
+
+}
+
+.employee-detail-bg-section .employee-detail-bg-image {
+    background: linear-gradient(68.76deg, #1B1B3F 0%, #000F2E 54.26%, #1243AC 111.21%);
+}
+
+.employee-detail-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0px 0px 50px 50px;
+}
+
+.employee-detail-header-content {
+    max-width: 1200px;
+    margin: 0;
+    margin-left: 7rem;
+    position: absolute;
+    top: 11rem;
+    left: 0;
+    z-index: 10;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: calc(100% - 14rem);
+}
+
+/* Left and Right Sides */
+.employee-detail-left {
+    flex: 1;
+    max-width: 600px;
+}
+
+.employee-detail-right {
+    flex: 0 0 auto;
+    margin-right: 4rem;
+}
+
+/* Employee Detail Image */
+.employee-detail-image {
+    width: 350px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.breadcrumb .separator {
+    color: #81BBE9;
+    font-weight: bold;
+}
+
+/* Employee Info */
+.employee-info {
+    margin-bottom: 2.5rem;
+}
+
+.employee-name {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.employee-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.title-icon {
+    width: 8px;
+    height: 30px;
+    background: radial-gradient(85.71% 82.76% at 50% 50%, #4B84FF 0%, #102A61 100%);
+    border-radius: 4px;
+
+}
+
+.employee-title p {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* Contact Information */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1rem;
+}
+
+.contact-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    background: transparent;
+}
+
+/* Hide page-name-display on employee detail page */
+.page-name-display {
+    display: none !important;
+}
+
+/* Employee About Section */
+.employee-about-section {
+    padding: 4rem 0;
+    min-height: 50vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+}
+
+.employee-about-content {
+    max-width: 800px;
+    margin: 0;
+    margin-left: 7rem;
+    padding: 0 2rem;
+    flex: 1;
+}
+
+.equipment-dna-right {
+    position: absolute;
+    right: 0rem;
+    top: -65%;
+}
+
+.equipment-dna-image {
+    width: 800px;
+    height: 850px;
+    border-radius: 15px;
+}
+
+.about-title-container {
+    margin-bottom: 2rem;
+}
+
+.about-title {
+    background: linear-gradient(135deg, #1B1B3F 0%, #1243AC 100%);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: inline-block;
+    margin: 0;
+}
+
+
+
+.about-paragraph {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+/* Employee Divided Section */
+.employee-divided-section {
+    padding: 4rem 0;
+    background: white;
+    min-height: 40vh;
+    display: flex;
+    gap: 2rem;
+}
+
+.divided-left {
+    flex: 0 0 30%;
+    border-radius: 15px;
+    margin-left: 7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.divided-left-image {
+    width: 100%;
+    height: 311px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.divided-right {
+    flex: 0 0 70%;
+    padding: 0 2rem;
+    padding-right: 4rem;
+    position: relative;
+}
+
+/* Timeline Section */
+.timeline-section {
+    padding: 2rem 0;
+}
+
+.timeline-title-container {
+    margin-bottom: 2rem;
+}
+
+.timeline-title {
+    background: linear-gradient(135deg, #1B1B3F 0%, #1243AC 100%);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: inline-block;
+    margin: 0;
+}
+
+.timeline-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #333;
+    margin-bottom: 3rem;
+    text-align: left;
+}
+
+.timeline-container {
+    position: relative;
+    padding: 2rem 0;
+}
+
+.timeline-line {
+    position: absolute;
+    top: 50%;
+    left: 60px;
+    width: calc(100% - 60px);
+    height: 2px;
+    background: #1243AC;
+    z-index: 1;
+}
+
+.timeline-item {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+    z-index: 2;
+}
+
+.timeline-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1B1B3F;
+    margin-right: 2rem;
+    min-width: 60px;
+    margin-top: -0.5rem;
+}
+
+.timeline-dot {
+    width: 14px;
+    height: 24px;
+    background: radial-gradient(85.71% 82.76% at 50% 50%, #4B84FF 0%, #102A61 100%);
+    border-radius: 10px;
+    margin-right: 2rem;
+    position: absolute;
+    left: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+}
+
+/* Position each dot at different horizontal positions along the timeline line */
+.timeline-item:nth-child(1) .timeline-dot {
+    left: 60px;
+}
+
+.timeline-item:nth-child(2) .timeline-dot {
+    left: calc(60px + 25%);
+}
+
+.timeline-item:nth-child(3) .timeline-dot {
+    left: calc(60px + 50%);
+}
+
+.timeline-item:nth-child(4) .timeline-dot {
+    left: calc(60px + 75%);
+}
+
+/* Individual dot positioning classes */
+.timeline-dot-1 {
+    left: 60px !important;
+}
+
+.timeline-dot-2 {
+    left: calc(60px + 25%) !important;
+}
+
+.timeline-dot-3 {
+    left: calc(60px + 50%) !important;
+}
+
+.timeline-dot-4 {
+    left: calc(60px + 75%) !important;
+}
+
+.timeline-content {
+    flex: 1;
+}
+
+.timeline-item-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 0.5rem 0;
+}
+
+.timeline-item-date {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
