@@ -7,6 +7,13 @@ const LogoCarousel = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Helper function to get correct image path
+    const getImagePath = (imageName) => {
+        if (!imageName) return '';
+        if (imageName.startsWith('/src/assets/')) return imageName;
+        return `/src/assets/${imageName}`;
+    };
+
     // Fetch logo data from API
     useEffect(() => {
         const fetchLogoData = async () => {
@@ -113,7 +120,7 @@ const LogoCarousel = () => {
                         {oddLogos.map((logo, index) => (
                             <div key={`odd-${logo.id}-${index}`} className="logo-carousel-item">
                                 <img
-                                    src={logo.image}
+                                    src={getImagePath(logo.image)}
                                     alt={logo.name}
                                     draggable={false}
                                 />
@@ -126,7 +133,7 @@ const LogoCarousel = () => {
                         {evenLogos.map((logo, index) => (
                             <div key={`even-${logo.id}-${index}`} className="logo-carousel-item">
                                 <img
-                                    src={logo.image}
+                                    src={getImagePath(logo.image)}
                                     alt={logo.name}
                                     draggable={false}
                                 />

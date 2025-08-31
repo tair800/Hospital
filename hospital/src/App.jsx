@@ -18,6 +18,8 @@ import AdminAbout from './pages/admin/AdminAbout'
 import AdminContact from './pages/admin/AdminContact'
 import AdminBlog from './pages/admin/AdminBlog'
 import AdminEvents from './pages/admin/AdminEvents'
+import AdminSponsors from './pages/admin/AdminSponsors'
+import AdminGallery from './pages/admin/AdminGallery'
 import AdminLayout from './pages/admin/AdminLayout'
 import './App.css'
 
@@ -83,6 +85,8 @@ function App() {
             <Route path="contact" element={<AdminContact />} />
             <Route path="blog" element={<AdminBlog />} />
             <Route path="events" element={<AdminEvents />} />
+            <Route path="sponsors" element={<AdminSponsors />} />
+            <Route path="gallery" element={<AdminGallery />} />
           </Route>
           <Route path="/blog" element={
             <>

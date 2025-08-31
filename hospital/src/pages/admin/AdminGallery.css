@@ -1,0 +1,552 @@
+/* Admin Gallery Page Styles */
+.admin-gallery-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 20px;
+}
+
+.admin-gallery-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Header Styles */
+.admin-gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.admin-gallery-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.admin-gallery-header-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.admin-gallery-create-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.admin-gallery-create-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+/* Loading State */
+.admin-gallery-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 1.5rem;
+    color: #6c757d;
+}
+
+/* No Items State */
+.admin-gallery-no-items {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.admin-gallery-no-items h3 {
+    color: #6c757d;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.admin-gallery-no-items p {
+    color: #868e96;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+.admin-gallery-create-first-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-gallery-create-first-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+/* Gallery Cards */
+.admin-gallery-list-section {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.admin-gallery-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.admin-gallery-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.admin-gallery-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.admin-gallery-card-header h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+
+
+/* Form Layout */
+.admin-gallery-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 25px;
+}
+
+.admin-gallery-form-fields-left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.admin-gallery-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-gallery-form-group label {
+    color: #495057;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.admin-gallery-form-input,
+.admin-gallery-form-textarea {
+    padding: 12px 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    color: #000000;
+    font-family: inherit;
+}
+
+.admin-gallery-form-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.admin-gallery-form-input:focus,
+.admin-gallery-form-textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+
+
+
+
+/* Image Section */
+.admin-gallery-image-section-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.admin-gallery-image-section h3 {
+    color: #2c3e50;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.admin-gallery-image-placeholder {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border: 2px dashed #dee2e6;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    overflow: hidden;
+}
+
+.admin-gallery-current-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.admin-gallery-image-placeholder-text {
+    color: #6c757d;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.admin-gallery-image-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+}
+
+.admin-gallery-action-btn {
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.admin-gallery-action-btn:hover {
+    transform: scale(1.1);
+}
+
+.admin-gallery-delete-btn {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+}
+
+.admin-gallery-browse-btn {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+}
+
+.admin-gallery-action-icon {
+    width: 18px;
+    height: 18px;
+    filter: brightness(0) invert(1);
+}
+
+.admin-gallery-image-info {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-style: italic;
+    text-align: center;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* Form Actions */
+.admin-gallery-form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 2px solid #e9ecef;
+}
+
+.admin-gallery-save-btn {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-gallery-save-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+.admin-gallery-save-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.admin-gallery-delete-btn {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-gallery-delete-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+}
+
+/* Modal Styles */
+.admin-gallery-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.admin-gallery-modal {
+    background: white;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.admin-gallery-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.admin-gallery-modal-header h2 {
+    color: #2c3e50;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.admin-gallery-modal-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.admin-gallery-modal-close:hover {
+    background: #f8f9fa;
+    color: #495057;
+}
+
+/* Modal Form */
+.admin-gallery-modal-form {
+    padding: 30px;
+}
+
+.admin-gallery-modal-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.admin-gallery-modal-left,
+.admin-gallery-modal-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.admin-gallery-modal-image-section h3 {
+    color: #2c3e50;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.admin-gallery-image-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-gallery-image-group label {
+    color: #495057;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Modal Actions */
+.admin-gallery-modal-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 2px solid #e9ecef;
+}
+
+.admin-gallery-cancel-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-gallery-cancel-btn:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.admin-gallery-submit-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-gallery-submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.admin-gallery-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .admin-gallery-form {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .admin-gallery-modal-fields {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-gallery-page {
+        padding: 15px;
+    }
+
+    .admin-gallery-header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .admin-gallery-header h1 {
+        font-size: 2rem;
+    }
+
+    .admin-gallery-header-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .admin-gallery-header-actions button {
+        width: 100%;
+    }
+
+    .admin-gallery-form-actions {
+        flex-direction: column;
+    }
+
+    .admin-gallery-form-actions button {
+        width: 100%;
+    }
+
+    .admin-gallery-modal {
+        margin: 10px;
+        max-height: 95vh;
+    }
+
+    .admin-gallery-modal-actions {
+        flex-direction: column;
+    }
+
+    .admin-gallery-modal-actions button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-gallery-card {
+        padding: 20px;
+    }
+
+    .admin-gallery-modal {
+        margin: 5px;
+    }
+
+    .admin-gallery-modal-header,
+    .admin-gallery-modal-form {
+        padding: 20px;
+    }
+}

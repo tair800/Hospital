@@ -84,6 +84,14 @@ const EventsDetail = () => {
         return () => clearInterval(timer);
     }, [event]);
 
+    // Helper function to get correct image path
+    const getImagePath = (imageName) => {
+        if (!imageName) return '';
+        if (imageName === 'event-img.png') return '/src/assets/event-img.png';
+        if (imageName.startsWith('/src/assets/')) return imageName;
+        return `/src/assets/${imageName}`;
+    };
+
     // Form handling functions
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -193,9 +201,9 @@ const EventsDetail = () => {
                     </div>
 
                 </div>
-                <img src={event.detailImageLeft} alt="Event Detail Left" className="left-event-image" />
-                <img src={event.detailImageMain} alt="Event Detail Main" className="main-event-image" />
-                <img src={event.detailImageRight} alt="Event Detail Right" className="right-event-image" />
+                <img src={getImagePath(event.detailImageLeft)} alt="Event Detail Left" className="left-event-image" />
+                <img src={getImagePath(event.detailImageMain)} alt="Event Detail Main" className="main-event-image" />
+                <img src={getImagePath(event.detailImageRight)} alt="Event Detail Right" className="right-event-image" />
                 <button className="muraciet-btn" onClick={() => setShowModal(true)}>Müraciət et</button>
             </div>
 

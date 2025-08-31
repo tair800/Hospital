@@ -17,6 +17,7 @@ namespace HospitalAPI.Data
         public DbSet<About> About { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<HomeSection> HomeSections { get; set; }
+        public DbSet<Gallery> Gallery { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -113,6 +114,18 @@ namespace HospitalAPI.Data
                 entity.Property(h => h.Section4PurposeDescription).HasColumnName("section_4_purpose_description").HasMaxLength(2000).HasColumnType("nvarchar(2000) COLLATE SQL_Latin1_General_CP1254_CI_AS");
                 entity.Property(h => h.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("GETDATE()");
                 entity.Property(h => h.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("GETDATE()");
+            });
+
+            // Configure Gallery table
+            modelBuilder.Entity<Gallery>(entity =>
+            {
+                entity.HasKey(g => g.Id);
+                entity.Property(g => g.Title).IsRequired().HasMaxLength(200).HasColumnType("nvarchar(200)");
+                entity.Property(g => g.Description).HasMaxLength(500).HasColumnType("nvarchar(500)");
+                entity.Property(g => g.Image).IsRequired().HasMaxLength(500).HasColumnType("nvarchar(500)");
+                entity.Property(g => g.IsActive).HasDefaultValue(true);
+                entity.Property(g => g.CreatedAt).HasDefaultValueSql("GETDATE()");
+                entity.Property(g => g.UpdatedAt).HasDefaultValueSql("GETDATE()");
             });
         }
 

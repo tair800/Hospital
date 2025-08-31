@@ -124,6 +124,14 @@ const Home = () => {
         return `${price} ${currency}`;
     };
 
+    // Helper function to get correct image path
+    const getImagePath = (imageName) => {
+        if (!imageName) return '';
+        if (imageName === 'event-img.png') return '/src/assets/event-img.png';
+        if (imageName.startsWith('/src/assets/')) return imageName;
+        return `/src/assets/${imageName}`;
+    };
+
     return (
         <div className="home-page">
             <div className="home-bg-section">
@@ -234,7 +242,7 @@ const Home = () => {
             {/* Home Header Text */}
             <div className="home-header-text">
                 <div className="home-header-left">
-                    <span className="home-header-first">Uzaq Tarixli</span>
+                    <span className="home-header-first">Gözlənilən</span>
                     <span className="home-header-second">
                         <span>Tədbirlər</span>
                     </span>
@@ -288,7 +296,7 @@ const Home = () => {
                                         className="home-event-shadow"
                                     />
                                     <img
-                                        src={event.mainImage}
+                                        src={getImagePath(event.mainImage)}
                                         alt="Event Image"
                                         className="home-event-image"
                                     />

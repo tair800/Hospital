@@ -300,10 +300,10 @@ function AdminAbout() {
                 <button
                     type="button"
                     onClick={() => handleDeleteCarouselItem(item.id)}
-                    className="placeholder-action-btn delete-btn"
+                    className="admin-about-placeholder-action-btn admin-about-delete-btn"
                     title="Delete image"
                 >
-                    <img src={adminDeleteIcon} alt="Delete" className="action-icon" />
+                    <img src={adminDeleteIcon} alt="Delete" className="admin-about-action-icon" />
                 </button>
             </div>
         </div>
@@ -320,7 +320,7 @@ function AdminAbout() {
             <button
                 type="button"
                 onClick={handleAddCarouselItem}
-                className="placeholder-action-btn browse-btn"
+                className="admin-about-placeholder-action-btn admin-about-browse-btn"
                 title="Browse image"
             >
                 📁
@@ -344,51 +344,51 @@ function AdminAbout() {
                         </div>
 
                         <div className="image-section-right">
-                            <div className="image-placeholder">
+                            <div className="admin-about-image-placeholder">
                                 {aboutData.img ? (
                                     <img
                                         src={`/src/assets/${aboutData.img}`}
                                         alt="About page image"
-                                        className="current-image"
+                                        className="admin-about-current-image"
                                     />
                                 ) : (
-                                    <div className="image-placeholder-text">No image uploaded</div>
+                                    <div className="admin-about-image-placeholder-text">No image uploaded</div>
                                 )}
 
-                                <div className="image-bottom-left-content">
-                                    <div className="image-actions">
+                                <div className="admin-about-image-bottom-left-content">
+                                    <div className="admin-about-image-actions">
                                         <button
                                             type="button"
                                             onClick={handleImageDelete}
-                                            className="action-btn delete-btn"
+                                            className="admin-about-action-btn admin-about-delete-btn"
                                             title="Delete image"
                                         >
-                                            <img src={adminDeleteIcon} alt="Delete" className="action-icon" />
+                                            <img src={adminDeleteIcon} alt="Delete" className="admin-about-action-icon" />
                                         </button>
                                         <button
                                             type="button"
                                             onClick={handleImageBrowse}
-                                            className="action-btn refresh-btn"
+                                            className="admin-about-action-btn admin-about-refresh-btn"
                                             title="Browse image"
                                         >
-                                            <img src={adminBrowseIcon} alt="Browse" className="action-icon" />
+                                            <img src={adminBrowseIcon} alt="Browse" className="admin-about-action-icon" />
                                         </button>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="image-info">
+                            <div className="admin-about-image-info">
                                 *Yüklənən şəkil 318 x 387 ölçüsündə olmalıdır
                             </div>
                         </div>
                     </div>
 
-                    <div className="form-actions">
+                    <div className="admin-about-form-actions">
                         <button
                             type="submit"
                             onClick={handleSubmit}
                             disabled={loading}
-                            className="submit-btn"
+                            className="admin-about-submit-btn"
                         >
                             {loading ? 'Saving...' : 'Save Changes'}
                         </button>

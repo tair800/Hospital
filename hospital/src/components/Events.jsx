@@ -39,6 +39,14 @@ const Events = () => {
     // Get days in month
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
+    // Helper function to get correct image path
+    const getImagePath = (imageName) => {
+        if (!imageName) return '';
+        if (imageName === 'event-img.png') return '/src/assets/event-img.png';
+        if (imageName.startsWith('/src/assets/')) return imageName;
+        return `/src/assets/${imageName}`;
+    };
+
     // Get first day of month (0 = Sunday, 1 = Monday, etc.)
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
     // Convert to Monday start
@@ -313,7 +321,7 @@ const Events = () => {
                                                     <span className="event-month">{month}</span>
                                                     <span className="event-venue">{event.venue}</span>
                                                 </div>
-                                                <img src={event.mainImage} alt="Event" className="event-image" />
+                                                <img src={getImagePath(event.mainImage)} alt="Event" className="event-image" />
                                                 <img
                                                     src={cardIcon}
                                                     alt="Card Icon"

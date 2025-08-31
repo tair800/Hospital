@@ -139,7 +139,7 @@
     align-items: center;
 }
 
-.image-placeholder {
+.admin-about-image-placeholder {
     border: 2px dashed #ccc;
     border-radius: 12px;
     padding: 2rem;
@@ -154,7 +154,7 @@
     position: relative;
 }
 
-.image-placeholder::before {
+.admin-about-image-placeholder::before {
     content: '';
     position: absolute;
     top: 0;
@@ -167,19 +167,19 @@
     pointer-events: none;
 }
 
-.image-placeholder-text {
+.admin-about-image-placeholder-text {
     color: #666;
     font-size: 1.1rem;
 }
 
-.current-image {
+.admin-about-current-image {
     max-width: 100%;
     max-height: 200px;
     border-radius: 8px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
-.image-bottom-left-content {
+.admin-about-image-bottom-left-content {
     position: absolute;
     bottom: 1rem;
     left: -3rem;
@@ -189,7 +189,7 @@
     gap: 0.5rem;
 }
 
-.image-info {
+.admin-about-image-info {
     font-size: 0.875rem;
     color: #666;
     text-align: center;
@@ -197,14 +197,14 @@
     margin-left: 7rem;
 }
 
-.image-actions {
+.admin-about-image-actions {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 
 }
 
-.action-btn {
+.admin-about-action-btn {
     width: 36px;
     height: 36px;
     border: none;
@@ -220,24 +220,24 @@
 
 }
 
-.action-icon {
+.admin-about-action-icon {
     width: 20px;
     height: 20px;
     object-fit: contain;
 }
 
-.action-btn:hover {
+.admin-about-action-btn:hover {
     background: #e3f2fd;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.delete-btn:hover {
+.admin-about-delete-btn:hover {
     background: #ffebee;
     color: #d32f2f;
 }
 
-.refresh-btn:hover {
+.admin-about-refresh-btn:hover {
     background: #e8f5e8;
     color: #388e3c;
 }
@@ -264,12 +264,12 @@
     border: 1px solid #ef9a9a;
 }
 
-.form-actions {
+.admin-about-form-actions {
     text-align: center;
     margin-top: 2rem;
 }
 
-.submit-btn {
+.admin-about-submit-btn {
     background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
     color: white;
     border: none;
@@ -282,12 +282,12 @@
     min-width: 200px;
 }
 
-.submit-btn:hover:not(:disabled) {
+.admin-about-submit-btn:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(25, 118, 210, 0.3);
 }
 
-.submit-btn:disabled {
+.admin-about-submit-btn:disabled {
     opacity: 0.7;
     cursor: not-allowed;
     transform: none;
@@ -316,12 +316,12 @@
         grid-template-columns: 1fr;
     }
 
-    .image-actions {
+    .admin-about-image-actions {
         flex-direction: row;
         justify-content: center;
     }
 
-    .submit-btn {
+    .admin-about-submit-btn {
         width: 100%;
         min-width: auto;
     }
@@ -425,7 +425,7 @@
     color: #666;
 }
 
-.placeholder-action-btn {
+.admin-about-placeholder-action-btn {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
@@ -444,22 +444,22 @@
 
 }
 
-.placeholder-action-btn:hover {
+.admin-about-placeholder-action-btn:hover {
     background: #e9ecef;
     transform: scale(1.1);
 }
 
-.placeholder-action-btn.delete-btn:hover {
+.admin-about-placeholder-action-btn.admin-about-delete-btn:hover {
     background: #ffebee;
     color: #d32f2f;
 }
 
-.placeholder-action-btn.browse-btn {
+.admin-about-placeholder-action-btn.admin-about-browse-btn {
     background: #e8f5e8;
     color: #388e3c;
 }
 
-.placeholder-action-btn.browse-btn:hover {
+.admin-about-placeholder-action-btn.admin-about-browse-btn:hover {
     background: #c8e6c9;
     color: #2e7d32;
 }

@@ -405,7 +405,7 @@ function AdminEvents() {
                             </button>
                         </div>
                     ) : (
-                        events.map((event) => {
+                        events.map((event, index) => {
                             const currentData = editingEvents[event.id] || event;
                             // Safely create date object with fallback
                             let eventDate;
@@ -421,7 +421,7 @@ function AdminEvents() {
                             return (
                                 <div key={event.id} className="admin-events-card">
                                     <div className="admin-events-card-header">
-                                        <h2>Event #{event.id}</h2>
+                                        <h2>Event #{index + 1}</h2>
                                         <div className="admin-events-status-buttons">
                                             <button
                                                 className={`admin-events-status-btn ${currentData.isMain ? 'active' : ''}`}

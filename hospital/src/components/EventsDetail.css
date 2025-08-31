@@ -544,7 +544,7 @@
     top: 76%;
     transform: translateY(-50%);
     width: 300px;
-    height: auto;
+    height: 200px;
     object-fit: contain;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
@@ -564,7 +564,7 @@
     top: 20%;
     transform: translateY(-50%);
     width: 300px;
-    height: auto;
+    height: 200px;
     object-fit: contain;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }

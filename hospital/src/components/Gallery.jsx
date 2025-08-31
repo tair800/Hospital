@@ -6,29 +6,58 @@ const Gallery = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
+    const [galleryData, setGalleryData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const sliderRef = useRef(null);
 
-    // Array of 10 images (using gallery1.png for all as placeholder)
-    const originalImages = Array.from({ length: 10 }, (_, index) => ({
-        id: index + 1,
-        src: "/src/assets/gallery1.png",
-        alt: `Gallery ${index + 1}`
-    }));
+    // Fetch gallery data from API
+    useEffect(() => {
+        const fetchGalleryData = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch('http://localhost:5000/api/gallery');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch gallery data');
+                }
+                const data = await response.json();
+                setGalleryData(data);
+            } catch (err) {
+                console.error('Error fetching gallery data:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchGalleryData();
+    }, []);
+
+    // Helper function to get correct image path
+    const getImagePath = (imageName) => {
+        if (!imageName) return '';
+        if (imageName.startsWith('/src/assets/')) return imageName;
+        return `/src/assets/${imageName}`;
+    };
 
     // Create infinite loop by duplicating images multiple times
-    const images = [...originalImages, ...originalImages, ...originalImages, ...originalImages, ...originalImages];
+    const images = galleryData.length > 0
+        ? [...galleryData, ...galleryData, ...galleryData, ...galleryData, ...galleryData]
+        : [];
 
     const handleMouseDown = (e) => {
         e.preventDefault();
-        setIsDragging(true);
-        setStartX(e.pageX);
-        setScrollLeft(sliderRef.current.scrollLeft);
+        if (sliderRef.current) {
+            setIsDragging(true);
+            setStartX(e.pageX);
+            setScrollLeft(sliderRef.current.scrollLeft);
 
-        // Add grabbing cursor and disable smooth scrolling
-        sliderRef.current.style.cursor = 'grabbing';
-        sliderRef.current.style.userSelect = 'none';
-        sliderRef.current.style.scrollBehavior = 'auto';
-        sliderRef.current.classList.add('grabbing');
+            // Add grabbing cursor and disable smooth scrolling
+            sliderRef.current.style.cursor = 'grabbing';
+            sliderRef.current.style.userSelect = 'none';
+            sliderRef.current.style.scrollBehavior = 'auto';
+            sliderRef.current.classList.add('grabbing');
+        }
     };
 
     const handleMouseUp = () => {
@@ -49,17 +78,21 @@ const Gallery = () => {
 
         const x = e.pageX;
         const walk = (x - startX);
-        sliderRef.current.scrollLeft = scrollLeft - walk;
+        if (sliderRef.current) {
+            sliderRef.current.scrollLeft = scrollLeft - walk;
+        }
     };
 
     const handleTouchStart = (e) => {
-        setIsDragging(true);
-        setStartX(e.touches[0].pageX);
-        setScrollLeft(sliderRef.current.scrollLeft);
+        if (sliderRef.current) {
+            setIsDragging(true);
+            setStartX(e.touches[0].pageX);
+            setScrollLeft(sliderRef.current.scrollLeft);
 
-        // Disable smooth scrolling during touch
-        sliderRef.current.style.scrollBehavior = 'auto';
-        sliderRef.current.classList.add('grabbing');
+            // Disable smooth scrolling during touch
+            sliderRef.current.style.scrollBehavior = 'auto';
+            sliderRef.current.classList.add('grabbing');
+        }
     };
 
     const handleTouchMove = (e) => {
@@ -68,7 +101,9 @@ const Gallery = () => {
 
         const x = e.touches[0].pageX;
         const walk = (x - startX);
-        sliderRef.current.scrollLeft = scrollLeft - walk;
+        if (sliderRef.current) {
+            sliderRef.current.scrollLeft = scrollLeft - walk;
+        }
     };
 
     const handleTouchEnd = () => {
@@ -110,7 +145,12 @@ const Gallery = () => {
 
         const handleGlobalMouseMove = (e) => {
             if (!isDragging) return;
-            handleMouseMove(e);
+
+            const x = e.pageX;
+            const walk = (x - startX);
+            if (sliderRef.current) {
+                sliderRef.current.scrollLeft = scrollLeft - walk;
+            }
         };
 
         // Add global event listeners
@@ -124,6 +164,39 @@ const Gallery = () => {
             document.removeEventListener('mouseleave', handleGlobalMouseUp);
         };
     }, [isDragging, startX, scrollLeft]);
+
+    // Show loading state
+    if (loading) {
+        return (
+            <div className="gallery-page">
+                <div className="gallery-loading">
+                    <p>Loading gallery...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Show error state
+    if (error) {
+        return (
+            <div className="gallery-page">
+                <div className="gallery-error">
+                    <p>Error loading gallery: {error}</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Show empty state
+    if (galleryData.length === 0) {
+        return (
+            <div className="gallery-page">
+                <div className="gallery-empty">
+                    <p>No gallery images available.</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="gallery-page">
@@ -146,8 +219,8 @@ const Gallery = () => {
                         {images.map((image, index) => (
                             <div key={`${image.id}-${index}`} className="image-item">
                                 <img
-                                    src={image.src}
-                                    alt={image.alt}
+                                    src={getImagePath(image.image)}
+                                    alt={image.title || `Gallery ${image.id}`}
                                     style={{
                                         width: '100%',
                                         height: '100%',
