@@ -197,11 +197,11 @@
 
 /* Employee Divided Section */
 .employee-divided-section {
-    padding: 4rem 0;
     background: white;
     min-height: 40vh;
     display: flex;
     gap: 2rem;
+    padding-bottom: 4rem;
 }
 
 .divided-left {
@@ -269,6 +269,7 @@
     height: 2px;
     background: #1243AC;
     z-index: 1;
+    width: 43rem;
 }
 
 .timeline-item {
@@ -308,14 +309,18 @@
 
 .timeline-item:nth-child(2) .timeline-dot {
     left: calc(60px + 25%);
+    top: 13rem;
 }
 
 .timeline-item:nth-child(3) .timeline-dot {
     left: calc(60px + 50%);
+    top: 6.6rem;
+
 }
 
 .timeline-item:nth-child(4) .timeline-dot {
     left: calc(60px + 75%);
+    top: 0;
 }
 
 /* Individual dot positioning classes */
@@ -333,6 +338,8 @@
 
 .timeline-dot-4 {
     left: calc(60px + 75%) !important;
+    top: -6.4rem;
+
 }
 
 .timeline-content {
@@ -350,4 +357,504 @@
     font-size: 0.9rem;
     color: #666;
     margin: 0;
+}
+
+/* Certificate Timeline Section */
+.certificate-section {
+    padding: 4rem 0;
+    background: #f8f9fa;
+    min-height: 40vh;
+}
+
+.certificate-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    margin-left: 7rem;
+    padding-right: 4rem;
+}
+
+.certificate-title-container {
+    margin-bottom: 2rem;
+}
+
+.certificate-title {
+    background: linear-gradient(135deg, #1B1B3F 0%, #1243AC 100%);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: inline-block;
+    margin: 0;
+}
+
+.certificate-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #333;
+    margin-bottom: 5rem;
+    text-align: left;
+}
+
+.certificate-timeline-container {
+    position: relative;
+    padding: 2rem 0;
+    width: 75%;
+}
+
+.certificate-timeline-line {
+    position: relative;
+    height: 2px;
+    margin: 2rem 0;
+}
+
+.certificate-timeline-line::before {
+    content: '';
+    position: absolute;
+    height: 2px;
+    background: #1243AC;
+    left: 0%;
+    width: 75%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.certificate-dot {
+    width: 14px;
+    height: 24px;
+    background: radial-gradient(85.71% 82.76% at 50% 50%, #4B84FF 0%, #102A61 100%);
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+}
+
+.certificate-number {
+    position: absolute;
+    top: -70px;
+    color: #1B1B3F;
+    font-size: 3.2rem;
+    font-weight: 700;
+    transform: translateX(37%);
+    z-index: 3;
+}
+
+/* Position numbers above dots */
+.certificate-number-1 {
+    left: 0%;
+}
+
+.certificate-number-2 {
+    left: 25%;
+}
+
+.certificate-number-3 {
+    left: 50%;
+}
+
+.certificate-number-4 {
+    left: 75%;
+}
+
+/* Dynamic positioning for numbers */
+/* 1 Certificate */
+.certificate-timeline-line.certificates-1 .certificate-number-1 {
+    left: 50%;
+}
+
+/* 2 Certificates */
+.certificate-timeline-line.certificates-2 .certificate-number-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-2 .certificate-number-2 {
+    left: 50%;
+}
+
+/* 3 Certificates */
+.certificate-timeline-line.certificates-3 .certificate-number-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-3 .certificate-number-2 {
+    left: 33.33%;
+}
+
+.certificate-timeline-line.certificates-3 .certificate-number-3 {
+    left: 66.66%;
+}
+
+/* 4 Certificates (default) */
+.certificate-timeline-line.certificates-4 .certificate-number-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-4 .certificate-number-2 {
+    left: 25%;
+}
+
+.certificate-timeline-line.certificates-4 .certificate-number-3 {
+    left: 50%;
+}
+
+.certificate-timeline-line.certificates-4 .certificate-number-4 {
+    left: 75%;
+}
+
+.certificate-info {
+    position: absolute;
+    bottom: -90px;
+    text-align: center;
+    width: 120px;
+    transform: translateX(-50%);
+}
+
+.certificate-university {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 0.3rem 0;
+    line-height: 1.2;
+}
+
+.certificate-years {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Position university info between dots */
+.certificate-info-1 {
+    left: 12.5%;
+}
+
+.certificate-info-2 {
+    left: 37.5%;
+}
+
+.certificate-info-3 {
+    left: 62.5%;
+}
+
+.certificate-info-4 {
+    left: 87.5%;
+}
+
+/* Dynamic positioning for university info */
+/* 1 Certificate */
+.certificate-timeline-line.certificates-1 .certificate-info-1 {
+    left: 50%;
+}
+
+/* 2 Certificates */
+.certificate-timeline-line.certificates-2 .certificate-info-1 {
+    left: 25%;
+}
+
+.certificate-timeline-line.certificates-2 .certificate-info-2 {
+    left: 75%;
+}
+
+/* 3 Certificates */
+.certificate-timeline-line.certificates-3 .certificate-info-1 {
+    left: 16.67%;
+}
+
+.certificate-timeline-line.certificates-3 .certificate-info-2 {
+    left: 50%;
+}
+
+.certificate-timeline-line.certificates-3 .certificate-info-3 {
+    left: 83.33%;
+}
+
+/* 4 Certificates (default) */
+.certificate-timeline-line.certificates-4 .certificate-info-1 {
+    left: 12.5%;
+}
+
+.certificate-timeline-line.certificates-4 .certificate-info-2 {
+    left: 37.5%;
+}
+
+.certificate-timeline-line.certificates-4 .certificate-info-3 {
+    left: 62.5%;
+}
+
+.certificate-timeline-line.certificates-4 .certificate-info-4 {
+    left: 87.5%;
+}
+
+/* Position dots at the start of each equal piece (for 4 certificates) */
+.certificate-dot-1 {
+    left: 0%;
+}
+
+.certificate-dot-2 {
+    left: 25%;
+}
+
+.certificate-dot-3 {
+    left: 50%;
+}
+
+.certificate-dot-4 {
+    left: 75%;
+}
+
+/* Dynamic positioning for different numbers of certificates */
+/* 1 Certificate */
+.certificate-timeline-line.certificates-1 .certificate-dot-1 {
+    left: 50%;
+}
+
+.certificate-timeline-line.certificates-1::before {
+    width: 0%;
+}
+
+/* 2 Certificates */
+.certificate-timeline-line.certificates-2 .certificate-dot-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-2 .certificate-dot-2 {
+    left: 50%;
+}
+
+.certificate-timeline-line.certificates-2::before {
+    width: 50%;
+}
+
+/* 3 Certificates */
+.certificate-timeline-line.certificates-3 .certificate-dot-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-3 .certificate-dot-2 {
+    left: 33.33%;
+}
+
+.certificate-timeline-line.certificates-3 .certificate-dot-3 {
+    left: 66.66%;
+}
+
+.certificate-timeline-line.certificates-3::before {
+    width: 66.66%;
+}
+
+/* 4 Certificates (default) */
+.certificate-timeline-line.certificates-4 .certificate-dot-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-4 .certificate-dot-2 {
+    left: 25%;
+}
+
+.certificate-timeline-line.certificates-4 .certificate-dot-3 {
+    left: 50%;
+}
+
+.certificate-timeline-line.certificates-4 .certificate-dot-4 {
+    left: 75%;
+}
+
+.certificate-timeline-line.certificates-4::before {
+    width: 75%;
+}
+
+/* Cards Section */
+.cards-section {
+    padding: 4rem 0;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+}
+
+/* Carousel Container */
+.cards-carousel-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 3rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    justify-content: center;
+}
+
+.cards-container {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.5rem;
+    transition: all 0.5s ease-in-out;
+    transform: translateX(0);
+    opacity: 1;
+    max-width: 1200px;
+}
+
+.cards-container.sliding {
+    transition: all 0.5s ease-in-out;
+}
+
+.cards-container.slide-left {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+.cards-container.slide-right {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+/* Carousel Navigation Buttons */
+.carousel-btn {
+    background: #1B1B3F;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+    flex-shrink: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-btn:hover {
+    background: #1243AC;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-btn:active {
+    transform: scale(0.95);
+}
+
+/* Pagination Dots */
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 2rem;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ccc;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: #1B1B3F;
+    transform: scale(1.3);
+    box-shadow: 0 2px 8px rgba(27, 27, 63, 0.3);
+}
+
+.dot:hover {
+    background: #1243AC;
+    transform: scale(1.1);
+}
+
+.card {
+    height: 200px;
+    background: #1B1B3F;
+    border-radius: 15px 15px 40px 40px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.inner-card {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 90px;
+    background: #183B88;
+    border-radius: 40px 40px 15px 15px;
+    z-index: 4;
+}
+
+.card-image {
+    position: absolute;
+    bottom: 60px;
+    right: 12px;
+    width: 220px;
+    height: 180px;
+    transform: rotate(10deg);
+    z-index: 3;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-image {
+    transform: rotate(5deg) scale(1.05);
+}
+
+.card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* Carousel-specific styles to keep cards connected */
+.cards-container .slick-slide,
+.cards-container .swiper-slide,
+.cards-container .carousel-item {
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+
+.cards-container .slick-track,
+.cards-container .swiper-wrapper,
+.cards-container .carousel-inner {
+    display: flex !important;
+    align-items: stretch;
+}
+
+.cards-container .slick-slide>div,
+.cards-container .swiper-slide>div,
+.cards-container .carousel-item>div {
+    height: 100%;
+    display: flex;
+}
+
+/* Ensure cards maintain their unified appearance in carousel */
+.cards-container .card {
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Override any carousel spacing that might break the design */
+.cards-container .slick-slide,
+.cards-container .swiper-slide,
+.cards-container .carousel-item {
+    margin: 0 !important;
+    padding: 0 0.5rem !important;
+}
+
+/* Ensure inner elements stay positioned correctly */
+.cards-container .card .inner-card {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100% !important;
+    box-sizing: border-box;
 }
