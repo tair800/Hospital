@@ -5,7 +5,7 @@ import topImage from '../assets/top.png'
 import homeBgImage from '../assets/home-bg.png'
 import './Header.css'
 
-function Header({ showTopImage = false, customTopImage = null }) {
+function Header({ showTopImage = false, customTopImage = null, hidePageName = false }) {
     const [activePage, setActivePage] = useState('home');
     const navigate = useNavigate();
     const location = useLocation();
@@ -95,18 +95,20 @@ function Header({ showTopImage = false, customTopImage = null }) {
                 </div>
             </div>
 
-            <div className="page-name-display">
-                {activePage !== 'home' && activePage !== 'none' && (
-                    <>
-                        {activePage === 'about' && 'Haqqımızda'}
-                        {activePage === 'contact' && 'Əlaqə'}
-                        {activePage === 'events' && 'Tədbirlər'}
-                        {activePage === 'employee' && 'Employee'}
-                        {activePage === 'gallery' && 'Qalereya'}
-                        {activePage === 'blog' && 'Blog'}
-                    </>
-                )}
-            </div>
+            {!hidePageName && (
+                <div className="page-name-display">
+                    {activePage !== 'home' && activePage !== 'none' && (
+                        <>
+                            {activePage === 'about' && 'Haqqımızda'}
+                            {activePage === 'contact' && 'Əlaqə'}
+                            {activePage === 'events' && 'Tədbirlər'}
+                            {activePage === 'employee' && 'Employee'}
+                            {activePage === 'gallery' && 'Qalereya'}
+                            {activePage === 'blog' && 'Blog'}
+                        </>
+                    )}
+                </div>
+            )}
         </header>
     )
 }

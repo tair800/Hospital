@@ -135,7 +135,9 @@ const EmployeeDetail = () => {
             <div className="employee-about-section">
                 <div className="employee-about-content">
                     <div className="about-title-container">
-                        <h2 className="about-title">Mən Kiməm?</h2>
+                        <h2 className="about-title">
+                            <span>Mən Kiməm?</span>
+                        </h2>
                     </div>
                     <p className="about-paragraph">
                         Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
@@ -164,7 +166,9 @@ const EmployeeDetail = () => {
                 <div className="divided-right">
                     <div className="certificate-timeline-container">
                         <div className="certificate-title-container">
-                            <h3 className="certificate-title">Tibbə Aparan Yol</h3>
+                            <h3 className="certificate-title">
+                                <span>Tibbə Aparan Yol</span>
+                            </h3>
                         </div>
                         <p className="certificate-description">
                             Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical

@@ -11,6 +11,7 @@ namespace HospitalAPI.Data
 
         public DbSet<Event> Events { get; set; }
         public DbSet<Blog> Blogs { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
         public DbSet<Logo> Logos { get; set; }
         public DbSet<AboutCarousel> AboutCarousel { get; set; }
@@ -126,6 +127,25 @@ namespace HospitalAPI.Data
                 entity.Property(g => g.IsActive).HasDefaultValue(true);
                 entity.Property(g => g.CreatedAt).HasDefaultValueSql("GETDATE()");
                 entity.Property(g => g.UpdatedAt).HasDefaultValueSql("GETDATE()");
+            });
+
+            // Configure Employee table
+            modelBuilder.Entity<Employee>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Fullname).IsRequired().HasMaxLength(255).HasColumnType("nvarchar(255)");
+                entity.Property(e => e.Field).IsRequired().HasMaxLength(255).HasColumnType("nvarchar(255)");
+                entity.Property(e => e.Clinic).IsRequired().HasMaxLength(255).HasColumnType("nvarchar(255)");
+                entity.Property(e => e.Image).HasMaxLength(500).HasColumnType("nvarchar(500)");
+                entity.Property(e => e.DetailImage).HasMaxLength(500).HasColumnType("nvarchar(500)");
+                entity.Property(e => e.Phone).HasMaxLength(50).HasColumnType("nvarchar(50)");
+                entity.Property(e => e.WhatsApp).HasMaxLength(50).HasColumnType("nvarchar(50)");
+                entity.Property(e => e.Email).HasMaxLength(255).HasColumnType("nvarchar(255)");
+                entity.Property(e => e.Location).HasMaxLength(255).HasColumnType("nvarchar(255)");
+                entity.Property(e => e.FirstDesc).HasColumnType("nvarchar(max)");
+                entity.Property(e => e.SecondDesc).HasColumnType("nvarchar(max)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("GETDATE()");
             });
         }
 

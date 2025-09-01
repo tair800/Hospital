@@ -61,7 +61,7 @@ function App() {
           } />
           <Route path="/employee/:id" element={
             <>
-              <Header showTopImage={false} />
+              <Header showTopImage={false} hidePageName={true} />
               <EmployeeDetail />
               <Footer />
             </>
