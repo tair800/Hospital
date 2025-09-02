@@ -12,6 +12,8 @@ namespace HospitalAPI.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<EmployeeDegree> EmployeeDegrees { get; set; }
+        public DbSet<EmployeeCertificate> EmployeeCertificates { get; set; }
 
         public DbSet<Logo> Logos { get; set; }
         public DbSet<AboutCarousel> AboutCarousel { get; set; }
@@ -146,6 +148,23 @@ namespace HospitalAPI.Data
                 entity.Property(e => e.SecondDesc).HasColumnType("nvarchar(max)");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("GETDATE()");
+            });
+
+            // Configure EmployeeDegree table
+            modelBuilder.Entity<EmployeeDegree>(entity =>
+            {
+                entity.ToTable("Employee_degrees");
+                entity.HasKey(ed => ed.Id);
+                entity.Property(ed => ed.UniversityName).IsRequired().HasMaxLength(255).HasColumnType("nvarchar(255)");
+            });
+
+            // Configure EmployeeCertificate table
+            modelBuilder.Entity<EmployeeCertificate>(entity =>
+            {
+                entity.ToTable("Employee_certificates");
+                entity.HasKey(ec => ec.Id);
+                entity.Property(ec => ec.CertificateImage).IsRequired().HasMaxLength(500).HasColumnType("nvarchar(500)");
+                entity.Property(ec => ec.CertificateName).IsRequired().HasMaxLength(255).HasColumnType("nvarchar(255)");
             });
         }
 

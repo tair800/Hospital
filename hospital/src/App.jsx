@@ -21,6 +21,7 @@ import AdminBlog from './pages/admin/AdminBlog'
 import AdminEvents from './pages/admin/AdminEvents'
 import AdminSponsors from './pages/admin/AdminSponsors'
 import AdminGallery from './pages/admin/AdminGallery'
+import AdminEmployee from './pages/admin/AdminEmployee'
 import AdminLayout from './pages/admin/AdminLayout'
 import employeeDetailBg from './assets/employee-detail-bg.png'
 import './App.css'
@@ -61,7 +62,7 @@ function App() {
           } />
           <Route path="/employee/:id" element={
             <>
-              <Header showTopImage={false} hidePageName={true} />
+              <Header showTopImage={false} />
               <EmployeeDetail />
               <Footer />
             </>
@@ -96,6 +97,7 @@ function App() {
             <Route path="events" element={<AdminEvents />} />
             <Route path="sponsors" element={<AdminSponsors />} />
             <Route path="gallery" element={<AdminGallery />} />
+            <Route path="employee" element={<AdminEmployee />} />
           </Route>
           <Route path="/blog" element={
             <>

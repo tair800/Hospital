@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HospitalAPI.Models
 {
@@ -22,6 +23,7 @@ namespace HospitalAPI.Models
         public string Image { get; set; }
         
         [MaxLength(500)]
+        [Column("detail_image")]
         public string DetailImage { get; set; }
         
         [MaxLength(50)]
@@ -36,12 +38,22 @@ namespace HospitalAPI.Models
         [MaxLength(255)]
         public string Location { get; set; }
         
+        [Column("first_desc")]
         public string FirstDesc { get; set; }
         
+        [Column("second_desc")]
         public string SecondDesc { get; set; }
         
+        [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         
+        [Column("updated_at")]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        // Navigation properties (not mapped to database)
+        [NotMapped]
+        public List<EmployeeDegree> Degrees { get; set; } = new List<EmployeeDegree>();
+        [NotMapped]
+        public List<EmployeeCertificate> Certificates { get; set; } = new List<EmployeeCertificate>();
     }
 }

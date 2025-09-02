@@ -28,10 +28,21 @@ namespace HospitalAPI.Controllers
         public async Task<ActionResult<Employee>> GetEmployee(int id)
         {
             var employee = await _context.Employees.FindAsync(id);
+            
             if (employee == null)
             {
                 return NotFound();
             }
+            
+            // Manually fetch related data
+            employee.Degrees = await _context.EmployeeDegrees
+                .Where(ed => ed.EmployeeId == id)
+                .ToListAsync();
+                
+            employee.Certificates = await _context.EmployeeCertificates
+                .Where(ec => ec.EmployeeId == id)
+                .ToListAsync();
+            
             return employee;
         }
 

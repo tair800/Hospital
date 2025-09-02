@@ -1,51 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Employee.css';
 import employeeBg from '../assets/employee-bg.png';
 import employee1 from '../assets/employee1.png';
 
 const Employee = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const cardsPerPage = 9;
+    const [employees, setEmployees] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
-    // All employee data
-    const allEmployees = [
-        { name: "Əli Məmmədov", specialty: "Ürək-damar cərrahı" },
-        { name: "Dr. Leyla Əliyeva", specialty: "Nevrolog" },
-        { name: "Prof. Rəşad Həsənov", specialty: "Ortoped" },
-        { name: "Dr. Aysel Məmmədova", specialty: "Pediatr" },
-        { name: "Dr. Elvin Quliyev", specialty: "Kardioloq" },
-        { name: "Dr. Nigar Rəhimova", specialty: "Ginekoloq" },
-        { name: "Prof. Tural Əliyev", specialty: "Onkoloq" },
-        { name: "Dr. Səbinə Hüseynova", specialty: "Dermatoloq" },
-        { name: "Dr. Rəvan Məlikov", specialty: "Urolog" },
-        { name: "Dr. Günel Vəliyeva", specialty: "Endokrinoloq" },
-        { name: "Dr. Orxan Əliyev", specialty: "Psixiatr" },
-        { name: "Dr. Aynur Məmmədova", specialty: "Anesteziolog" }
-    ];
+    // Fetch employees from API
+    useEffect(() => {
+        const fetchEmployees = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch('http://localhost:5000/api/employees');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch employees');
+                }
+                const data = await response.json();
+                setEmployees(data);
+            } catch (err) {
+                console.error('Error fetching employees:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    // Calculate total pages dynamically
-    const totalPages = Math.ceil(allEmployees.length / cardsPerPage);
+        fetchEmployees();
+    }, []);
 
-    // Calculate which cards to show
-    const startIndex = (currentPage - 1) * cardsPerPage;
-    const endIndex = startIndex + cardsPerPage;
-    const currentEmployees = allEmployees.slice(startIndex, endIndex);
-
-    const handlePreviousPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
+    const handleEmployeeClick = (employeeId) => {
+        navigate(`/employee/${employeeId}`);
     };
 
-    const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
+    if (loading) {
+        return (
+            <div className="employee-page">
+                <h1>Employee Page</h1>
+                <div className="loading-container">
+                    <p>Loading employees...</p>
+                </div>
+            </div>
+        );
+    }
 
-    const handlePageClick = (page) => {
-        setCurrentPage(page);
-    };
+    if (error) {
+        return (
+            <div className="employee-page">
+                <h1>Employee Page</h1>
+                <div className="error-container">
+                    <p>Error loading employees: {error}</p>
+                    <button onClick={() => window.location.reload()}>Retry</button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="employee-page">
@@ -53,8 +65,13 @@ const Employee = () => {
             <p>This page is currently empty.</p>
 
             <div className="employee-cards-container">
-                {currentEmployees.map((employee, index) => (
-                    <div key={index} className="employee-unified-card">
+                {employees.map((employee) => (
+                    <div
+                        key={employee.id}
+                        className="employee-unified-card"
+                        onClick={() => handleEmployeeClick(employee.id)}
+                        style={{ cursor: 'pointer' }}
+                    >
                         <img
                             src={employeeBg}
                             alt="Employee Background"
@@ -66,44 +83,16 @@ const Employee = () => {
                             className="employee-photo"
                         />
                         <div className="employee-fullname">
-                            {employee.name}
+                            {employee.fullname}
                         </div>
                         <div className="employee-field-section">
                             <div className="employee-field">
                                 <div className="employee-field-dot"></div>
-                                {employee.specialty}
+                                {employee.field}
                             </div>
                         </div>
                     </div>
                 ))}
-            </div>
-
-            <div className="pagination-container">
-                <button
-                    className="pagination-arrow"
-                    onClick={handlePreviousPage}
-                    disabled={currentPage === 1}
-                >
-                    &lt;
-                </button>
-
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <button
-                        key={page}
-                        className={`pagination-number ${currentPage === page ? 'active' : ''}`}
-                        onClick={() => handlePageClick(page)}
-                    >
-                        {page}
-                    </button>
-                ))}
-
-                <button
-                    className="pagination-arrow"
-                    onClick={handleNextPage}
-                    disabled={currentPage === totalPages}
-                >
-                    &gt;
-                </button>
             </div>
         </div>
     );

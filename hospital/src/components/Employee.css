@@ -102,64 +102,40 @@
     background: radial-gradient(85.71% 82.76% at 50% 50%, #4B84FF 0%, #102A61 100%);
 }
 
-/* Pagination Styles */
-.pagination-container {
+/* Loading and Error States */
+.loading-container,
+.error-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    gap: 1rem;
-    margin: 3rem auto 0;
-    padding: 1rem;
-    width: 100%;
+    justify-content: center;
+    padding: 4rem;
     text-align: center;
 }
 
-.pagination-arrow {
-    background: none;
-    border: none;
-    color: #1B1B3F;
+.loading-container p {
     font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 0.5rem;
-    transition: color 0.3s ease;
-}
-
-.pagination-arrow:hover:not(:disabled) {
-    color: #4B84FF;
-}
-
-.pagination-arrow:disabled {
-    color: #ccc;
-    cursor: not-allowed;
-}
-
-.pagination-number {
-    background: none;
-    border: none;
     color: #1B1B3F;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 0.5rem 0.75rem;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
+    margin: 0;
 }
 
-.pagination-number:hover {
-    color: #4B84FF;
+.error-container p {
+    font-size: 1.2rem;
+    color: #e74c3c;
+    margin: 0 0 1rem 0;
 }
 
-.pagination-number.active {
+.error-container button {
     background: #1B1B3F;
     color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
 
-.pagination-number.active:hover {
-    color: white;
+.error-container button:hover {
+    background: #4B84FF;
 }
