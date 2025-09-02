@@ -5,7 +5,7 @@ import Footer from './components/Footer'
 import Home from './components/Home'
 import About from './components/About'
 import Contact from './components/Contact'
-import TestPage from './pages/TestPage'
+
 import Employee from './components/Employee'
 import EmployeeDetail from './components/EmployeeDetail'
 import Events from './components/Events'
@@ -23,7 +23,7 @@ import AdminSponsors from './pages/admin/AdminSponsors'
 import AdminGallery from './pages/admin/AdminGallery'
 import AdminEmployee from './pages/admin/AdminEmployee'
 import AdminLayout from './pages/admin/AdminLayout'
-import employeeDetailBg from './assets/employee-detail-bg.png'
+
 import './App.css'
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/test" element={<TestPage />} />
+
           <Route path="/" element={
             <>
               <Header showTopImage={false} />

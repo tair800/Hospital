@@ -35,37 +35,12 @@ function AdminBlog() {
             if (response.ok) {
                 const data = await response.json();
 
-                console.log('=== ADMIN BLOG DEBUG INFO ===');
-                console.log('Raw API response:', data);
-                console.log('Total blogs received:', data.length);
-
-                // Log each blog with its details
-                data.forEach((blog, index) => {
-                    console.log(`Blog ${index + 1}: ID=${blog.id}, Number='${blog.number}', Title='${blog.title}'`);
-                });
-
                 // Sort blogs by Number field numerically
                 const sortedData = data.sort((a, b) => {
                     const numA = parseInt(a.number);
                     const numB = parseInt(b.number);
                     return numA - numB;
                 });
-
-                console.log('=== AFTER ADMIN BLOG SORTING ===');
-                sortedData.forEach((blog, index) => {
-                    console.log(`Sorted Blog ${index + 1}: ID=${blog.id}, Number='${blog.number}', Title='${blog.title}'`);
-                });
-
-                // Check if data is now sorted
-                const numbers = sortedData.map(b => b.number);
-                console.log('Blog numbers after sorting:', numbers);
-
-                // Verify if it's numerically sorted
-                const isNumericallySorted = numbers.every((num, index) => {
-                    if (index === 0) return true;
-                    return parseInt(num) >= parseInt(numbers[index - 1]);
-                });
-                console.log('Is numerically sorted after admin blog sort:', isNumericallySorted);
 
                 setBlogs(sortedData);
                 // Initialize editing state for all blogs
@@ -107,8 +82,7 @@ function AdminBlog() {
                 dataToSend.date = formatDateToLetters(editedData.date);
             }
 
-            console.log('Saving blog with ID:', blogId);
-            console.log('Data being sent to API:', dataToSend);
+
 
             const response = await fetch(`http://localhost:5000/api/blogs/${blogId}`, {
                 method: 'PUT',
@@ -118,25 +92,24 @@ function AdminBlog() {
                 body: JSON.stringify(dataToSend),
             });
 
-            console.log('Response status:', response.status);
-            console.log('Response headers:', response.headers);
+
 
             if (response.ok) {
                 // Check if response has content
                 const responseText = await response.text();
-                console.log('Raw response text:', responseText);
+
 
                 let responseData;
                 if (responseText.trim()) {
                     try {
                         responseData = JSON.parse(responseText);
-                        console.log('Parsed API Response:', responseData);
+
                     } catch (parseError) {
                         console.error('Failed to parse JSON response:', parseError);
                         responseData = dataToSend; // Use the data we sent as fallback
                     }
                 } else {
-                    console.log('Empty response from API, using sent data as fallback');
+
                     responseData = dataToSend;
                 }
 
@@ -240,9 +213,9 @@ function AdminBlog() {
         fileInput.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                console.log('Image selected for blog:', blogId, 'File name:', file.name);
+
                 handleInlineInputChange(blogId, 'image', file.name);
-                console.log('Updated editingBlogs state for image:', editingBlogs[blogId]);
+
                 showAlert('success', 'Image Selected!', `Image "${file.name}" selected. Don't forget to save changes!`);
             }
         };
@@ -303,7 +276,7 @@ function AdminBlog() {
                 image: blogData.image || null // Ensure image field is included
             };
 
-            console.log('Creating blog with data:', blogDataToSend);
+
 
             const response = await fetch('http://localhost:5000/api/blogs', {
                 method: 'POST',
@@ -315,7 +288,7 @@ function AdminBlog() {
 
             if (response.ok) {
                 const createdBlog = await response.json();
-                console.log('Blog created successfully:', createdBlog);
+
                 showAlert('success', 'Success!', 'Blog created successfully!');
                 closeModal();
                 fetchBlogs();
@@ -528,7 +501,7 @@ function AdminBlog() {
                                                         alt="Blog image"
                                                         className="current-image"
                                                         onError={(e) => {
-                                                            console.log('Image failed to load in admin:', currentData.image);
+
                                                             e.target.style.display = 'none';
                                                         }}
                                                     />
@@ -733,7 +706,7 @@ function AdminBlog() {
                                                     alt="Blog image"
                                                     className="admin-blog-current-image"
                                                     onError={(e) => {
-                                                        console.log('Modal image failed to load:', blogData.image);
+
                                                         e.target.style.display = 'none';
                                                     }}
                                                 />

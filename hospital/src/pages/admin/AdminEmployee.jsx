@@ -53,9 +53,7 @@ function AdminEmployee() {
             if (response.ok) {
                 const employees = await response.json();
 
-                console.log('=== ADMIN EMPLOYEE DEBUG INFO ===');
-                console.log('Raw API response:', employees);
-                console.log('Total employees received:', employees.length);
+
 
                 // Fetch full employee data (including certificates and degrees) for each employee
                 const employeesWithCredentials = await Promise.all(
@@ -65,10 +63,7 @@ function AdminEmployee() {
                             const employeeResponse = await fetch(`http://localhost:5000/api/employees/${employee.id}`);
                             if (employeeResponse.ok) {
                                 const fullEmployeeData = await employeeResponse.json();
-                                console.log(`Employee ${employee.id} (${employee.fullname}):`, {
-                                    certificates: fullEmployeeData.certificates?.length || 0,
-                                    degrees: fullEmployeeData.degrees?.length || 0
-                                });
+
                                 return fullEmployeeData;
                             } else {
                                 console.error(`Failed to fetch full data for employee ${employee.id}`);
@@ -123,8 +118,7 @@ function AdminEmployee() {
             setLoading(true);
             const editedData = editingEmployees[employeeId];
 
-            console.log('Saving employee with ID:', employeeId);
-            console.log('Data being sent to API:', editedData);
+
 
             const response = await fetch(`http://localhost:5000/api/employees/${employeeId}`, {
                 method: 'PUT',
@@ -134,24 +128,24 @@ function AdminEmployee() {
                 body: JSON.stringify(editedData),
             });
 
-            console.log('Response status:', response.status);
+
 
             if (response.ok) {
                 // Check if response has content
                 const responseText = await response.text();
-                console.log('Raw response text:', responseText);
+
 
                 let responseData;
                 if (responseText.trim()) {
                     try {
                         responseData = JSON.parse(responseText);
-                        console.log('Parsed API Response:', responseData);
+
                     } catch (parseError) {
                         console.error('Failed to parse JSON response:', parseError);
                         responseData = editedData; // Use the data we sent as fallback
                     }
                 } else {
-                    console.log('Empty response from API, using sent data as fallback');
+
                     responseData = editedData;
                 }
 
@@ -282,9 +276,9 @@ function AdminEmployee() {
         fileInput.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                console.log('Image selected for employee:', employeeId, 'File name:', file.name);
+
                 handleInlineInputChange(employeeId, imageType, file.name);
-                console.log('Updated editingEmployees state for image:', editingEmployees[employeeId]);
+
                 showAlert('success', 'Image Selected!', `Image "${file.name}" selected. Don't forget to save changes!`);
             }
         };
@@ -374,7 +368,7 @@ function AdminEmployee() {
                 detailImage: employeeData.detailImage || null
             };
 
-            console.log('Creating employee with data:', employeeDataToSend);
+
 
             const response = await fetch('http://localhost:5000/api/employees', {
                 method: 'POST',
@@ -386,7 +380,7 @@ function AdminEmployee() {
 
             if (response.ok) {
                 const createdEmployee = await response.json();
-                console.log('Employee created successfully:', createdEmployee);
+
                 showAlert('success', 'Success!', 'Employee created successfully!');
                 closeModal();
                 fetchEmployees();
@@ -652,11 +646,11 @@ function AdminEmployee() {
         const certificateIds = Object.keys(certificateEditData);
 
         if (certificateIds.length === 0) {
-            console.log('No certificate changes to save');
+
             return;
         }
 
-        console.log('Saving certificate changes for:', certificateIds);
+
 
         for (const certificateId of certificateIds) {
             try {
@@ -668,7 +662,7 @@ function AdminEmployee() {
                     .find(cert => cert.id === parseInt(certificateId));
 
                 if (!originalCertificate) {
-                    console.log(`Certificate ${certificateId} not found, skipping`);
+
                     continue;
                 }
 
@@ -686,11 +680,11 @@ function AdminEmployee() {
                 }
 
                 if (!hasChanges) {
-                    console.log(`No changes for certificate ${certificateId}, skipping`);
+
                     continue;
                 }
 
-                console.log(`Saving certificate ${certificateId} with data:`, dataToSend);
+
 
                 const response = await fetch(`http://localhost:5000/api/employee-certificates/${certificateId}`, {
                     method: 'PUT',
@@ -701,7 +695,7 @@ function AdminEmployee() {
                 });
 
                 if (response.ok) {
-                    console.log(`Certificate ${certificateId} updated successfully`);
+
                 } else {
                     const errorText = await response.text();
                     console.error(`Failed to update certificate ${certificateId}:`, response.status, errorText);
@@ -726,11 +720,11 @@ function AdminEmployee() {
     const saveAllDegreeChanges = async () => {
         const degreeIds = Object.keys(degreeEditData);
         if (degreeIds.length === 0) {
-            console.log('No degree changes to save');
+
             return;
         }
 
-        console.log('Saving degree changes for:', degreeIds);
+
 
         for (const degreeIdStr of degreeIds) {
             try {
@@ -742,7 +736,7 @@ function AdminEmployee() {
                     .find(d => d.id === degreeId);
 
                 if (!original) {
-                    console.log(`Degree ${degreeId} not found, skipping`);
+
                     continue;
                 }
 
@@ -771,11 +765,11 @@ function AdminEmployee() {
                 }
 
                 if (!hasChanges) {
-                    console.log(`No changes for degree ${degreeId}, skipping`);
+
                     continue;
                 }
 
-                console.log(`Saving degree ${degreeId} with data:`, payload);
+
 
                 const response = await fetch(`http://localhost:5000/api/employee-degrees/${degreeId}`, {
                     method: 'PUT',
@@ -801,21 +795,13 @@ function AdminEmployee() {
             setLoading(true);
             const editData = certificateEditData[certificateId];
 
-            console.log('=== SAVE CERTIFICATE DEBUG ===');
-            console.log('Certificate ID:', certificateId);
-            console.log('Edit data:', editData);
-            console.log('All certificate edit data:', certificateEditData);
-
             // Get the original certificate data for comparison
             const originalCertificate = employees
                 .flatMap(emp => emp.certificates || [])
                 .find(cert => cert.id === certificateId);
 
-            console.log('Original certificate:', originalCertificate);
-
             // If no edit data, try to get current values from the form
             if (!editData) {
-                console.log('No edit data found, checking if there are changes to save...');
                 showAlert('info', 'Info', 'No changes detected to save.');
                 return;
             }
@@ -833,8 +819,7 @@ function AdminEmployee() {
                 hasChanges = true;
             }
 
-            console.log('Data to send:', dataToSend);
-            console.log('Has changes:', hasChanges);
+
 
             if (!hasChanges) {
                 showAlert('info', 'Info', 'No changes detected to save.');
@@ -849,7 +834,7 @@ function AdminEmployee() {
                 body: JSON.stringify(dataToSend),
             });
 
-            console.log('Response status:', response.status);
+
 
             if (response.ok) {
                 showAlert('success', 'Success!', 'Certificate updated successfully!');
@@ -1156,7 +1141,7 @@ function AdminEmployee() {
                                                                     e.target.dataset.triedUploads = 'true';
                                                                     e.target.src = `/src/assets/${file}`;
                                                                 } else {
-                                                                    console.log('Image failed to load in admin:', currentData.image);
+
                                                                     e.target.style.display = 'none';
                                                                 }
                                                             }}
@@ -1209,7 +1194,7 @@ function AdminEmployee() {
                                                                     e.target.dataset.triedUploads = 'true';
                                                                     e.target.src = `/src/assets/${file}`;
                                                                 } else {
-                                                                    console.log('Detail image failed to load in admin:', currentData.detailImage);
+
                                                                     e.target.style.display = 'none';
                                                                 }
                                                             }}
@@ -1609,7 +1594,7 @@ function AdminEmployee() {
                                                         alt="Employee profile"
                                                         className="admin-employee-current-image"
                                                         onError={(e) => {
-                                                            console.log('Modal image failed to load:', employeeData.image);
+
                                                             e.target.style.display = 'none';
                                                         }}
                                                     />
@@ -1651,7 +1636,7 @@ function AdminEmployee() {
                                                         alt="Employee detail"
                                                         className="admin-employee-current-image"
                                                         onError={(e) => {
-                                                            console.log('Modal detail image failed to load:', employeeData.detailImage);
+
                                                             e.target.style.display = 'none';
                                                         }}
                                                     />
@@ -1771,7 +1756,7 @@ function AdminEmployee() {
                                             alt="Certificate preview"
                                             className="certificate-preview-image"
                                             onError={(e) => {
-                                                console.log('Certificate preview image failed to load:', certificateData.certificateImage);
+
                                                 e.target.style.display = 'none';
                                             }}
                                         />

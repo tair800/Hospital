@@ -55,23 +55,14 @@ const EventsDetail = () => {
             const eventTime = new Date(event.eventDate).getTime();
             const difference = eventTime - now;
 
-            console.log('Timer Debug:', {
-                now: new Date(now),
-                eventTime: new Date(eventTime),
-                difference,
-                eventDate: event.eventDate
-            });
-
             if (difference > 0) {
                 const days = Math.floor(difference / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
 
                 setTimeLeft({ days, hours, minutes });
-                console.log('Time Left:', { days, hours, minutes });
             } else {
                 setTimeLeft({ days: 0, hours: 0, minutes: 0 });
-                console.log('Event has passed');
             }
         };
 
@@ -103,7 +94,6 @@ const EventsDetail = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
         // Here you can add API call or other logic
         setShowModal(false);
         setFormData({

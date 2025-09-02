@@ -40,7 +40,7 @@ function AdminEvents() {
             const response = await fetch('http://localhost:5000/api/events');
             if (response.ok) {
                 const data = await response.json();
-                console.log('Events fetched:', data);
+
 
                 // Sort events by event date (newest first)
                 const sortedData = data.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
@@ -87,7 +87,7 @@ function AdminEvents() {
 
     // Handle input changes for inline editing
     const handleInlineInputChange = (eventId, field, value) => {
-        console.log(`Updating field ${field} for event ${eventId}:`, value);
+
         setEditingEvents(prev => ({
             ...prev,
             [eventId]: {
@@ -118,8 +118,7 @@ function AdminEvents() {
                 }
             }
 
-            console.log('Saving event with ID:', eventId);
-            console.log('Data being sent to API:', dataToSend);
+
 
             const response = await fetch(`http://localhost:5000/api/events/${eventId}`, {
                 method: 'PUT',
@@ -285,7 +284,7 @@ function AdminEvents() {
                 eventDate: eventDateToSend
             };
 
-            console.log('Creating event with data:', eventDataToSend);
+
 
             const response = await fetch('http://localhost:5000/api/events', {
                 method: 'POST',
@@ -297,7 +296,7 @@ function AdminEvents() {
 
             if (response.ok) {
                 const createdEvent = await response.json();
-                console.log('Event created successfully:', createdEvent);
+
                 showAlert('success', 'Success!', 'Event created successfully!');
                 closeModal();
                 fetchEvents();
@@ -475,10 +474,10 @@ function AdminEvents() {
                                                         return '';
                                                     })()}
                                                     onChange={(e) => {
-                                                        console.log('Date input changed:', e.target.value);
+
                                                         const currentTime = currentData.time || '00:00';
                                                         const newDateTime = `${e.target.value}T${currentTime}`;
-                                                        console.log('Setting new date time:', newDateTime);
+
                                                         handleInlineInputChange(event.id, 'eventDate', newDateTime);
                                                     }}
                                                     required

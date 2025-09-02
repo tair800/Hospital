@@ -23,15 +23,6 @@ const BlogDetail = () => {
                 }
                 const data = await response.json();
 
-                // Debug: Log the raw API response
-                console.log('=== BLOG DETAIL DEBUG INFO ===');
-                console.log('Raw API response:', data);
-                console.log('Total blogs received:', data.length);
-
-                data.forEach((blog, index) => {
-                    console.log(`Blog ${index + 1}: ID=${blog.id}, Number='${blog.number}', Title='${blog.title}'`);
-                });
-
                 setBlogData(data);
 
                 // Find the specific blog
@@ -170,7 +161,6 @@ const BlogDetail = () => {
                                 alt="Blog Image"
                                 className="blog-detail-image"
                                 onError={(e) => {
-                                    console.log('Image failed to load:', blog.image);
                                     e.target.style.display = 'none';
                                 }}
                             />
@@ -213,15 +203,7 @@ const BlogDetail = () => {
                                     // Take only first 5 blogs
                                     finalBlogs = finalBlogs.slice(0, 5);
 
-                                    // Debug: Log the circular navigation logic
-                                    console.log('=== MORE BLOG POSTS CIRCULAR NAVIGATION DEBUG ===');
-                                    console.log('Current blog number:', currentBlogNumber);
-                                    console.log('Total available blogs:', totalBlogs);
-                                    console.log('Next blogs found:', nextBlogs.length);
-                                    console.log('Final blogs selected:', finalBlogs.length);
-                                    finalBlogs.forEach((blogItem, index) => {
-                                        console.log(`Final Blog ${index + 1}: ID=${blogItem.id}, Number='${blogItem.number}', Title='${blogItem.title}'`);
-                                    });
+
 
                                     return finalBlogs.map((blogItem) => (
                                         <div

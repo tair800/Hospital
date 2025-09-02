@@ -34,8 +34,6 @@ const Contact = () => {
                     throw new Error('Failed to fetch contact data');
                 }
                 const data = await response.json();
-                console.log('Fetched contact data:', data);
-
                 // Separate contact info and social media based on type
                 const contactInfo = data.filter(item =>
                     ['phone', 'whatsapp', 'email', 'location'].includes(item.type)
@@ -44,9 +42,6 @@ const Contact = () => {
                 const socialMedia = data.filter(item =>
                     ['facebook', 'instagram', 'linkedin', 'youtube', 'telegram'].includes(item.type)
                 );
-
-                console.log('Filtered contact info:', contactInfo);
-                console.log('Filtered social media:', socialMedia);
 
                 setContactData({
                     contactInfo: contactInfo,
@@ -67,8 +62,7 @@ const Contact = () => {
         // Add a small delay to ensure the canvas is rendered
         const timer = setTimeout(() => {
             if (canvasRef.current) {
-                console.log('Canvas ref found, initializing Spline...');
-                console.log('Canvas dimensions:', canvasRef.current.width, 'x', canvasRef.current.height);
+
 
                 // Show fallback while loading
                 const fallback = document.querySelector('.spline-fallback');
@@ -78,7 +72,7 @@ const Contact = () => {
 
                 try {
                     const app = new Application(canvasRef.current);
-                    console.log('Spline Application created successfully');
+
 
                     // Set up mouse tracking for the Spline scene
                     const canvas = canvasRef.current;
@@ -165,7 +159,7 @@ const Contact = () => {
 
                     // Set a timeout for loading
                     const timeout = setTimeout(() => {
-                        console.log('Spline loading timeout, showing fallback');
+
                         if (fallback) {
                             fallback.style.display = 'block';
                         }
@@ -174,7 +168,7 @@ const Contact = () => {
 
                     app.load('https://prod.spline.design/kCfMTbwclFSOycz6/scene.splinecode')
                         .then(() => {
-                            console.log('Spline scene loaded successfully');
+
                             clearTimeout(timeout);
                             if (fallback) {
                                 fallback.style.display = 'none';
@@ -203,7 +197,7 @@ const Contact = () => {
                     }
                 }
             } else {
-                console.log('Canvas ref still not found after delay');
+
             }
         }, 100); // 100ms delay
 
@@ -304,7 +298,7 @@ const Contact = () => {
                             <div className="contact-details">
                                 {contactData.contactInfo && contactData.contactInfo.length > 0 ? (
                                     contactData.contactInfo.map((item, index) => {
-                                        console.log(`Rendering contact item ${index}:`, item);
+
                                         return (
                                             <div key={`${item.type}-${item.value}-${index}`} className="contact-item">
                                                 <img
@@ -327,7 +321,7 @@ const Contact = () => {
                             <div className="social-media-icons">
                                 {contactData.socialMedia && contactData.socialMedia.length > 0 ? (
                                     contactData.socialMedia.map((social, index) => {
-                                        console.log(`Rendering social media item ${index}:`, social);
+
                                         return (
                                             <a
                                                 key={`${social.type}-${social.value}-${index}`}

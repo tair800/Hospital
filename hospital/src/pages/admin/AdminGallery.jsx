@@ -27,7 +27,7 @@ function AdminGallery() {
             const response = await fetch('http://localhost:5000/api/gallery');
             if (response.ok) {
                 const data = await response.json();
-                console.log('Gallery data fetched:', data);
+
 
                 // Sort by ID
                 const sortedData = data.sort((a, b) => a.id - b.id);
@@ -61,7 +61,7 @@ function AdminGallery() {
 
     // Handle input changes for inline editing
     const handleInlineInputChange = (itemId, field, value) => {
-        console.log(`Updating field ${field} for gallery item ${itemId}:`, value);
+
 
         setEditingGallery(prev => ({
             ...prev,
@@ -78,8 +78,7 @@ function AdminGallery() {
             setLoading(true);
             const editedData = editingGallery[itemId];
 
-            console.log('Saving gallery item with ID:', itemId);
-            console.log('Data being sent to API:', editedData);
+
 
             const response = await fetch(`http://localhost:5000/api/gallery/${itemId}`, {
                 method: 'PUT',
@@ -214,7 +213,7 @@ function AdminGallery() {
         try {
             setLoading(true);
 
-            console.log('Creating gallery item with data:', formData);
+
 
             const response = await fetch('http://localhost:5000/api/gallery', {
                 method: 'POST',
@@ -226,7 +225,7 @@ function AdminGallery() {
 
             if (response.ok) {
                 const createdItem = await response.json();
-                console.log('Gallery item created successfully:', createdItem);
+
                 showAlert('success', 'Success!', 'Gallery item created successfully!');
                 closeModal();
                 fetchGalleryData();

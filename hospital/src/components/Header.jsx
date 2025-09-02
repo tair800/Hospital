@@ -25,7 +25,6 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
     const handleItemClick = (item) => {
         setActivePage(item.id);
         navigate(item.href);
-        console.log('Navigation clicked:', item);
     };
 
     // Set initial active page based on current path

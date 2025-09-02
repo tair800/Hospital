@@ -22,37 +22,12 @@ const Blog = () => {
                 }
                 const data = await response.json();
 
-                console.log('=== FRONTEND DEBUG INFO ===');
-                console.log('Raw API response:', data);
-                console.log('Total blogs received:', data.length);
-
-                // Log each blog with its details
-                data.forEach((blog, index) => {
-                    console.log(`Blog ${index + 1}: ID=${blog.id}, Number='${blog.number}', Title='${blog.title}'`);
-                });
-
                 // Sort blogs by Number field numerically
                 const sortedData = data.sort((a, b) => {
                     const numA = parseInt(a.number);
                     const numB = parseInt(b.number);
                     return numA - numB;
                 });
-
-                console.log('=== AFTER FRONTEND SORTING ===');
-                sortedData.forEach((blog, index) => {
-                    console.log(`Sorted Blog ${index + 1}: ID=${blog.id}, Number='${blog.number}', Title='${blog.title}'`);
-                });
-
-                // Check if data is now sorted
-                const numbers = sortedData.map(b => b.number);
-                console.log('Blog numbers after sorting:', numbers);
-
-                // Verify if it's numerically sorted
-                const isNumericallySorted = numbers.every((num, index) => {
-                    if (index === 0) return true;
-                    return parseInt(num) >= parseInt(numbers[index - 1]);
-                });
-                console.log('Is numerically sorted after frontend sort:', isNumericallySorted);
 
                 setBlogData(sortedData);
             } catch (err) {
@@ -82,13 +57,7 @@ const Blog = () => {
         const startIndex = currentSlide * cardsPerScreen;
         const visibleBlogs = blogData.slice(startIndex, startIndex + cardsPerScreen);
 
-        console.log('=== SLIDE DEBUG INFO ===');
-        console.log('Current slide:', currentSlide);
-        console.log('Cards per screen:', cardsPerScreen);
-        console.log('Start index:', startIndex);
-        console.log('End index:', startIndex + cardsPerScreen);
-        console.log('Total blogs:', blogData.length);
-        console.log('Visible blogs:', visibleBlogs.map(b => ({ id: b.id, number: b.number, title: b.title })));
+
 
         return visibleBlogs;
     };
@@ -183,7 +152,6 @@ const Blog = () => {
                                             borderRadius: '8px'
                                         }}
                                         onError={(e) => {
-                                            console.log('Image failed to load:', blog.image);
                                             e.target.style.display = 'none';
                                         }}
                                     />

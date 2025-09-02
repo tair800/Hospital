@@ -26,7 +26,7 @@ function AdminSponsors() {
             const response = await fetch('http://localhost:5000/api/logos');
             if (response.ok) {
                 const data = await response.json();
-                console.log('Logos fetched:', data);
+
 
                 // Sort logos by ID
                 const sortedData = data.sort((a, b) => a.id - b.id);
@@ -58,7 +58,7 @@ function AdminSponsors() {
 
     // Handle input changes for inline editing
     const handleInlineInputChange = (logoId, field, value) => {
-        console.log(`Updating field ${field} for logo ${logoId}:`, value);
+
         setEditingLogos(prev => ({
             ...prev,
             [logoId]: {
@@ -74,8 +74,7 @@ function AdminSponsors() {
             setLoading(true);
             const editedData = editingLogos[logoId];
 
-            console.log('Saving logo with ID:', logoId);
-            console.log('Data being sent to API:', editedData);
+
 
             const response = await fetch(`http://localhost:5000/api/logos/${logoId}`, {
                 method: 'PUT',
@@ -209,7 +208,7 @@ function AdminSponsors() {
         try {
             setLoading(true);
 
-            console.log('Creating logo with data:', logoData);
+
 
             const response = await fetch('http://localhost:5000/api/logos', {
                 method: 'POST',
@@ -221,7 +220,7 @@ function AdminSponsors() {
 
             if (response.ok) {
                 const createdLogo = await response.json();
-                console.log('Logo created successfully:', createdLogo);
+
                 showAlert('success', 'Success!', 'Logo created successfully!');
                 closeModal();
                 fetchLogos();
