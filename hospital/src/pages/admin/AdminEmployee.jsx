@@ -506,6 +506,19 @@ function AdminEmployee() {
 
     // Degree CRUD Functions
     const openDegreeModal = (employeeId) => {
+        // Check if employee already has 8 degrees
+        const employee = employees.find(emp => emp.id === employeeId);
+        if (employee && employee.degrees && employee.degrees.length >= 8) {
+            Swal.fire({
+                title: 'Maximum Degrees Reached',
+                text: 'An employee can have a maximum of 8 degrees.',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#1243AC'
+            });
+            return;
+        }
+
         setSelectedEmployeeId(employeeId);
         setDegreeData({ universityName: '', startYear: '', endYear: '' });
         setShowDegreeModal(true);
@@ -519,6 +532,20 @@ function AdminEmployee() {
 
     const handleDegreeSubmit = async (e) => {
         e.preventDefault();
+
+        // Check if employee already has 8 degrees before submitting
+        const employee = employees.find(emp => emp.id === selectedEmployeeId);
+        if (employee && employee.degrees && employee.degrees.length >= 8) {
+            Swal.fire({
+                title: 'Maximum Degrees Reached',
+                text: 'An employee can have a maximum of 8 degrees.',
+                icon: 'warning',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#1243AC'
+            });
+            return;
+        }
+
         try {
             setLoading(true);
             const response = await fetch('http://localhost:5000/api/employee-degrees', {
@@ -1239,7 +1266,8 @@ function AdminEmployee() {
                                                     type="button"
                                                     className="add-item-btn degree-btn"
                                                     onClick={() => openDegreeModal(employee.id)}
-                                                    title="Add degree"
+                                                    title={employee.degrees && employee.degrees.length >= 8 ? "Maximum 8 degrees allowed" : "Add degree"}
+                                                    disabled={employee.degrees && employee.degrees.length >= 8}
                                                 >
                                                     + Degree
                                                 </button>

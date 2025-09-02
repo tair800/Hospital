@@ -576,13 +576,11 @@
     left: 75%;
 }
 
-/* Dynamic positioning for numbers */
-/* 1 Certificate */
+/* Dynamic positioning for numbers - supports up to 8 degrees */
 .certificate-timeline-line.certificates-1 .certificate-number-1 {
     left: 50%;
 }
 
-/* 2 Certificates */
 .certificate-timeline-line.certificates-2 .certificate-number-1 {
     left: 0%;
 }
@@ -591,7 +589,6 @@
     left: 50%;
 }
 
-/* 3 Certificates */
 .certificate-timeline-line.certificates-3 .certificate-number-1 {
     left: 0%;
 }
@@ -604,7 +601,6 @@
     left: 66.66%;
 }
 
-/* 4 Certificates (default) */
 .certificate-timeline-line.certificates-4 .certificate-number-1 {
     left: 0%;
 }
@@ -619,6 +615,110 @@
 
 .certificate-timeline-line.certificates-4 .certificate-number-4 {
     left: 75%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-number-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-number-2 {
+    left: 20%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-number-3 {
+    left: 40%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-number-4 {
+    left: 60%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-number-5 {
+    left: 80%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-number-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-number-2 {
+    left: 16.67%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-number-3 {
+    left: 33.33%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-number-4 {
+    left: 50%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-number-5 {
+    left: 66.67%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-number-6 {
+    left: 83.33%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-number-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-number-2 {
+    left: 14.29%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-number-3 {
+    left: 28.57%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-number-4 {
+    left: 42.86%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-number-5 {
+    left: 57.14%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-number-6 {
+    left: 71.43%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-number-7 {
+    left: 85.71%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-number-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-number-2 {
+    left: 12.5%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-number-3 {
+    left: 25%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-number-4 {
+    left: 37.5%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-number-5 {
+    left: 50%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-number-6 {
+    left: 62.5%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-number-7 {
+    left: 75%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-number-8 {
+    left: 87.5%;
 }
 
 .certificate-info {
@@ -660,13 +760,11 @@
     left: 87.5%;
 }
 
-/* Dynamic positioning for university info */
-/* 1 Certificate */
+/* Dynamic positioning for university info - supports up to 8 degrees */
 .certificate-timeline-line.certificates-1 .certificate-info-1 {
     left: 50%;
 }
 
-/* 2 Certificates */
 .certificate-timeline-line.certificates-2 .certificate-info-1 {
     left: 25%;
 }
@@ -675,7 +773,6 @@
     left: 75%;
 }
 
-/* 3 Certificates */
 .certificate-timeline-line.certificates-3 .certificate-info-1 {
     left: 16.67%;
 }
@@ -688,7 +785,6 @@
     left: 83.33%;
 }
 
-/* 4 Certificates (default) */
 .certificate-timeline-line.certificates-4 .certificate-info-1 {
     left: 12.5%;
 }
@@ -703,6 +799,110 @@
 
 .certificate-timeline-line.certificates-4 .certificate-info-4 {
     left: 87.5%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-info-1 {
+    left: 10%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-info-2 {
+    left: 30%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-info-3 {
+    left: 50%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-info-4 {
+    left: 70%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-info-5 {
+    left: 90%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-info-1 {
+    left: 8.33%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-info-2 {
+    left: 25%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-info-3 {
+    left: 41.67%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-info-4 {
+    left: 58.33%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-info-5 {
+    left: 75%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-info-6 {
+    left: 91.67%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-info-1 {
+    left: 7.14%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-info-2 {
+    left: 21.43%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-info-3 {
+    left: 35.71%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-info-4 {
+    left: 50%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-info-5 {
+    left: 64.29%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-info-6 {
+    left: 78.57%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-info-7 {
+    left: 92.86%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-info-1 {
+    left: 6.25%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-info-2 {
+    left: 18.75%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-info-3 {
+    left: 31.25%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-info-4 {
+    left: 43.75%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-info-5 {
+    left: 56.25%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-info-6 {
+    left: 68.75%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-info-7 {
+    left: 81.25%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-info-8 {
+    left: 93.75%;
 }
 
 /* Position dots at the start of each equal piece (for 4 certificates) */
@@ -722,8 +922,7 @@
     left: 75%;
 }
 
-/* Dynamic positioning for different numbers of certificates */
-/* 1 Certificate */
+/* Dynamic positioning for different numbers of certificates - supports up to 8 degrees */
 .certificate-timeline-line.certificates-1 .certificate-dot-1 {
     left: 50%;
 }
@@ -732,7 +931,6 @@
     width: 0%;
 }
 
-/* 2 Certificates */
 .certificate-timeline-line.certificates-2 .certificate-dot-1 {
     left: 0%;
 }
@@ -745,7 +943,6 @@
     width: 50%;
 }
 
-/* 3 Certificates */
 .certificate-timeline-line.certificates-3 .certificate-dot-1 {
     left: 0%;
 }
@@ -762,7 +959,6 @@
     width: 66.66%;
 }
 
-/* 4 Certificates (default) */
 .certificate-timeline-line.certificates-4 .certificate-dot-1 {
     left: 0%;
 }
@@ -781,6 +977,126 @@
 
 .certificate-timeline-line.certificates-4::before {
     width: 75%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-dot-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-dot-2 {
+    left: 20%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-dot-3 {
+    left: 40%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-dot-4 {
+    left: 60%;
+}
+
+.certificate-timeline-line.certificates-5 .certificate-dot-5 {
+    left: 80%;
+}
+
+.certificate-timeline-line.certificates-5::before {
+    width: 80%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-dot-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-dot-2 {
+    left: 16.67%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-dot-3 {
+    left: 33.33%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-dot-4 {
+    left: 50%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-dot-5 {
+    left: 66.67%;
+}
+
+.certificate-timeline-line.certificates-6 .certificate-dot-6 {
+    left: 83.33%;
+}
+
+.certificate-timeline-line.certificates-6::before {
+    width: 83.33%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-dot-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-dot-2 {
+    left: 14.29%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-dot-3 {
+    left: 28.57%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-dot-4 {
+    left: 42.86%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-dot-5 {
+    left: 57.14%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-dot-6 {
+    left: 71.43%;
+}
+
+.certificate-timeline-line.certificates-7 .certificate-dot-7 {
+    left: 85.71%;
+}
+
+.certificate-timeline-line.certificates-7::before {
+    width: 85.71%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-dot-1 {
+    left: 0%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-dot-2 {
+    left: 12.5%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-dot-3 {
+    left: 25%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-dot-4 {
+    left: 37.5%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-dot-5 {
+    left: 50%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-dot-6 {
+    left: 62.5%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-dot-7 {
+    left: 75%;
+}
+
+.certificate-timeline-line.certificates-8 .certificate-dot-8 {
+    left: 87.5%;
+}
+
+.certificate-timeline-line.certificates-8::before {
+    width: 87.5%;
 }
 
 /* Cards Section */
@@ -812,6 +1128,8 @@
     opacity: 1;
     max-width: 1200px;
 }
+
+
 
 .cards-container.sliding {
     transition: all 0.5s ease-in-out;

@@ -238,8 +238,8 @@ const EmployeeDetail = () => {
                             {employee.secondDesc}
                         </p>
 
-                        <div className={`certificate-timeline-line certificates-${employee.degrees ? employee.degrees.length : 0}`}>
-                            {employee.degrees && employee.degrees.map((degree, index) => (
+                        <div className={`certificate-timeline-line certificates-${employee.degrees ? Math.min(employee.degrees.length, 8) : 0}`}>
+                            {employee.degrees && employee.degrees.slice(0, 8).map((degree, index) => (
                                 <React.Fragment key={degree.id}>
                                     <div className={`certificate-dot certificate-dot-${index + 1}`}></div>
                                     <div className={`certificate-number certificate-number-${index + 1}`}>
@@ -273,7 +273,7 @@ const EmployeeDetail = () => {
                         {getCurrentPageCards().map((card, index) => (
                             <div key={card.id} className={`card card-${index + 1}`}>
                                 <div className="inner-card"></div>
-                                <img src={card.image} alt="Employee Certificate" className="card-image" />
+                                <img src={card.image.startsWith('/src/assets/') ? card.image : `/src/assets/${card.image}`} alt="Employee Certificate" className="card-image" />
                             </div>
                         ))}
                     </div>
