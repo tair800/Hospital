@@ -276,8 +276,12 @@ function AdminEmployee() {
         fileInput.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
+                // Create a preview URL for the selected file
+                const previewUrl = URL.createObjectURL(file);
 
+                // Update both the filename and preview URL
                 handleInlineInputChange(employeeId, imageType, file.name);
+                handleInlineInputChange(employeeId, `${imageType}Preview`, previewUrl);
 
                 showAlert('success', 'Image Selected!', `Image "${file.name}" selected. Don't forget to save changes!`);
             }
@@ -1123,34 +1127,51 @@ function AdminEmployee() {
                                             <div className="image-section">
                                                 <h4>Profile Image</h4>
                                                 <div className="image-placeholder">
-                                                    {currentData.image ? (
-                                                        <img
-                                                            src={
-                                                                currentData.image === 'employee1.png'
-                                                                    ? employee1Image
-                                                                    : currentData.image?.startsWith('http') || currentData.image?.startsWith('/')
-                                                                        ? currentData.image
-                                                                        : `/uploads/${currentData.image}`
-                                                            }
-                                                            alt="Employee profile"
-                                                            className="current-image"
-                                                            onError={(e) => {
-                                                                const file = currentData.image || '';
-                                                                const triedUploads = e.target.dataset.triedUploads === 'true';
-                                                                if (!triedUploads && file && !file.startsWith('http') && !file.startsWith('/')) {
-                                                                    e.target.dataset.triedUploads = 'true';
-                                                                    e.target.src = `/src/assets/${file}`;
-                                                                } else {
+                                                    {(() => {
+                                                        // Use preview image if available (newly selected), otherwise use original data
+                                                        const previewImage = currentData.imagePreview;
+                                                        const currentImage = currentData.image;
 
-                                                                    e.target.style.display = 'none';
+                                                        // If we have a preview image (newly selected file), use it
+                                                        if (previewImage) {
+                                                            return (
+                                                                <img
+                                                                    src={previewImage}
+                                                                    alt="Employee profile"
+                                                                    className="current-image"
+                                                                />
+                                                            );
+                                                        }
+
+                                                        // Otherwise, use the original image logic
+                                                        return currentImage ? (
+                                                            <img
+                                                                src={
+                                                                    currentImage === 'employee1.png'
+                                                                        ? employee1Image
+                                                                        : currentImage?.startsWith('http') || currentImage?.startsWith('/')
+                                                                            ? currentImage
+                                                                            : `/uploads/${currentImage}`
                                                                 }
-                                                            }}
-                                                        />
-                                                    ) : (
-                                                        <div className="image-placeholder-text">
-                                                            No profile image
-                                                        </div>
-                                                    )}
+                                                                alt="Employee profile"
+                                                                className="current-image"
+                                                                onError={(e) => {
+                                                                    const file = currentImage || '';
+                                                                    const triedUploads = e.target.dataset.triedUploads === 'true';
+                                                                    if (!triedUploads && file && !file.startsWith('http') && !file.startsWith('/')) {
+                                                                        e.target.dataset.triedUploads = 'true';
+                                                                        e.target.src = `/src/assets/${file}`;
+                                                                    } else {
+                                                                        e.target.style.display = 'none';
+                                                                    }
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <div className="image-placeholder-text">
+                                                                No profile image
+                                                            </div>
+                                                        );
+                                                    })()}
 
                                                     <div className="admin-employee-image-bottom-left-content">
                                                         <div className="image-actions">
@@ -1178,32 +1199,49 @@ function AdminEmployee() {
                                             <div className="image-section">
                                                 <h4>Detail Image</h4>
                                                 <div className="image-placeholder">
-                                                    {currentData.detailImage ? (
-                                                        <img
-                                                            src={
-                                                                currentData.detailImage?.startsWith('http') || currentData.detailImage?.startsWith('/')
-                                                                    ? currentData.detailImage
-                                                                    : `/uploads/${currentData.detailImage}`
-                                                            }
-                                                            alt="Employee detail"
-                                                            className="current-image"
-                                                            onError={(e) => {
-                                                                const file = currentData.detailImage || '';
-                                                                const triedUploads = e.target.dataset.triedUploads === 'true';
-                                                                if (!triedUploads && file && !file.startsWith('http') && !file.startsWith('/')) {
-                                                                    e.target.dataset.triedUploads = 'true';
-                                                                    e.target.src = `/src/assets/${file}`;
-                                                                } else {
+                                                    {(() => {
+                                                        // Use preview image if available (newly selected), otherwise use original data
+                                                        const previewImage = currentData.detailImagePreview;
+                                                        const currentImage = currentData.detailImage;
 
-                                                                    e.target.style.display = 'none';
+                                                        // If we have a preview image (newly selected file), use it
+                                                        if (previewImage) {
+                                                            return (
+                                                                <img
+                                                                    src={previewImage}
+                                                                    alt="Employee detail"
+                                                                    className="current-image"
+                                                                />
+                                                            );
+                                                        }
+
+                                                        // Otherwise, use the original image logic
+                                                        return currentImage ? (
+                                                            <img
+                                                                src={
+                                                                    currentImage?.startsWith('http') || currentImage?.startsWith('/')
+                                                                        ? currentImage
+                                                                        : `/uploads/${currentImage}`
                                                                 }
-                                                            }}
-                                                        />
-                                                    ) : (
-                                                        <div className="image-placeholder-text">
-                                                            No detail image
-                                                        </div>
-                                                    )}
+                                                                alt="Employee detail"
+                                                                className="current-image"
+                                                                onError={(e) => {
+                                                                    const file = currentImage || '';
+                                                                    const triedUploads = e.target.dataset.triedUploads === 'true';
+                                                                    if (!triedUploads && file && !file.startsWith('http') && !file.startsWith('/')) {
+                                                                        e.target.dataset.triedUploads = 'true';
+                                                                        e.target.src = `/src/assets/${file}`;
+                                                                    } else {
+                                                                        e.target.style.display = 'none';
+                                                                    }
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <div className="image-placeholder-text">
+                                                                No detail image
+                                                            </div>
+                                                        );
+                                                    })()}
 
                                                     <div className="admin-employee-image-bottom-left-content">
                                                         <div className="image-actions">

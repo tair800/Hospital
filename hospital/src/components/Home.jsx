@@ -3,11 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import './InfoCard.css';
 import InfoCard from './InfoCard';
+import EmployeeSlider from './EmployeeSlider';
+import LogoCarousel from './LogoCarousel';
 
 const Home = () => {
     const navigate = useNavigate();
     const [latestEvents, setLatestEvents] = useState([]);
     const [pastEvents, setPastEvents] = useState([]);
+    const [employees, setEmployees] = useState([]);
     const [homeData, setHomeData] = useState({
         section1Description: '',
         section2Image: '',
@@ -81,6 +84,26 @@ const Home = () => {
         fetchEvents();
     }, []);
 
+    // Fetch employees from API
+    useEffect(() => {
+        const fetchEmployees = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/employees');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch employees');
+                }
+                const data = await response.json();
+                console.log('Fetched employees:', data);
+                // Fetch all employees - let the slider handle pagination
+                setEmployees(data);
+            } catch (err) {
+                console.error('Error fetching employees:', err);
+            }
+        };
+
+        fetchEmployees();
+    }, []);
+
     // Function to truncate text to a specific length and add "..." if needed
     const truncateText = (text, maxLength) => {
         if (text.length <= maxLength) return text;
@@ -90,13 +113,7 @@ const Home = () => {
     // Helper function to format section 1 text with proper line breaks
     const formatSection1Text = (text) => {
         if (!text) {
-            return (
-                <>
-                    Azərbaycan<br />
-                    Hepato-Pankreato-Biliar<br />
-                    Cərrahlar İctimai Birliyi
-                </>
-            );
+            return '';
         }
 
         // If the text contains the expected structure, format it with line breaks
@@ -208,11 +225,13 @@ const Home = () => {
                     </div>
                     <div className="section-content">
                         <div className="section-2-image">
-                            <img
-                                src={homeData.section2Image ? `/src/assets/${homeData.section2Image}` : "/src/assets/home1.png"}
-                                alt="Hospital Services"
-                                className="section-2-main-image"
-                            />
+                            {homeData.section2Image && (
+                                <img
+                                    src={`/src/assets/${homeData.section2Image}`}
+                                    alt="Hospital Services"
+                                    className="section-2-main-image"
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
@@ -226,28 +245,70 @@ const Home = () => {
                     </div>
                     <div className="section-content">
                         <div className="section-3-image">
-                            <img
-                                src={homeData.section3Image ? `/src/assets/${homeData.section3Image}` : "/src/assets/home2.png"}
-                                alt="Hospital Services"
-                                className="section-3-main-image"
-                            />
+                            {homeData.section3Image && (
+                                <img
+                                    src={`/src/assets/${homeData.section3Image}`}
+                                    alt="Hospital Services"
+                                    className="section-3-main-image"
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
                 <div className="section section-4">
                     <div className="section-content">
                         <div className="section-4-text">
-                            <h1>{homeData.section4Title || 'Azərbaycan Hepato-Pankreato-Biliar Cərrahlar İctimai Birliyi'}</h1>
+                            <h1>{homeData.section4Title}</h1>
                             <div className="section-4-description">
-                                <p>{homeData.section4Description || 'qaraciyər, öd yolları və mədəaltı vəzi xəstəliklərinin cərrahiyyəsi sahəsində çalışan mütəxəssisləri bir araya gətirən elmi-ictimai təşkilatdır.'}</p>
+                                <p>{homeData.section4Description}</p>
                             </div>
                             <div className="section-4-purpose">
-                                <h3>{homeData.section4PurposeTitle || 'Birliyin məqsədi'}</h3>
-                                <p>{homeData.section4PurposeDescription || 'bu sahədə bilik və təcrübə mübadiləsini təşviq etmək, gənc həkimlərin inkişafını dəstəkləmək və beynəlxalq əməkdaşlıq vasitəsilə ölkəmizdə müasir tibbi yanaşmaların tətbiqinə töhfə verməkdir.'}</p>
+                                <h3>{homeData.section4PurposeTitle}</h3>
+                                <p>{homeData.section4PurposeDescription}</p>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Home Header Text 2 */}
+            <div className="home-header-text-2">
+                <div className="home-header-left-2">
+                    <span className="home-header-first-2">Ən son</span>
+                    <span className="home-header-second-2">
+                        <span>Tədbirlər</span>
+                    </span>
+                </div>
+                <button className="home-header-btn-2" onClick={() => {
+                    navigate('/events');
+                    window.scrollTo(0, 0);
+                }}>Hamsına bax</button>
+            </div>
+
+            {/* Additional Info Cards in one row */}
+            <div className="info-card-row">
+                {loading ? (
+                    <div className="loading-message">Yüklənir...</div>
+                ) : error ? (
+                    <div className="error-message">Xəta: {error}</div>
+                ) : pastEvents.length === 0 ? (
+                    <div className="no-events-message">Keçmiş tədbir tapılmadı</div>
+                ) : pastEvents.slice(0, 3).map((event, index) => {
+                    const { day, month } = formatEventDate(event.eventDate);
+                    const truncatedDescription = truncateText(event.description, 100);
+
+                    return (
+                        <InfoCard
+                            key={event.id}
+                            imageSrc={getImagePath(event.mainImage)}
+                            title={event.title}
+                            description={truncatedDescription}
+                            date={day.toString()}
+                            month={month}
+                            onReadMoreClick={() => navigate(`/event/${event.id}`)}
+                        />
+                    );
+                })}
             </div>
 
             {/* Home Header Text */}
@@ -332,45 +393,25 @@ const Home = () => {
                 )}
             </div>
 
-            {/* Home Header Text 2 */}
-            <div className="home-header-text-2">
-                <div className="home-header-left-2">
-                    <span className="home-header-first-2">Ən son</span>
-                    <span className="home-header-second-2">
-                        <span>Tədbirlər</span>
+            {/* Home Header Text 3 */}
+            <div className="home-header-text-3">
+                <div className="home-header-left-3">
+                    <span className="home-header-first-3">Bizim</span>
+                    <span className="home-header-second-3">
+                        <span>Üzvlərimiz</span>
                     </span>
                 </div>
-                <button className="home-header-btn-2" onClick={() => {
-                    navigate('/events');
+                <button className="home-header-btn-3" onClick={() => {
+                    navigate('/employee');
                     window.scrollTo(0, 0);
                 }}>Hamsına bax</button>
             </div>
 
-            {/* Additional Info Cards in one row */}
-            <div className="info-card-row">
-                {loading ? (
-                    <div className="loading-message">Yüklənir...</div>
-                ) : error ? (
-                    <div className="error-message">Xəta: {error}</div>
-                ) : pastEvents.length === 0 ? (
-                    <div className="no-events-message">Keçmiş tədbir tapılmadı</div>
-                ) : pastEvents.slice(0, 3).map((event, index) => {
-                    const { day, month } = formatEventDate(event.eventDate);
-                    const truncatedDescription = truncateText(event.description, 100);
+            {/* Employee Cards Slider */}
+            <EmployeeSlider employees={employees} />
 
-                    return (
-                        <InfoCard
-                            key={event.id}
-                            imageSrc={getImagePath(event.mainImage)}
-                            title={event.title}
-                            description={truncatedDescription}
-                            date={day.toString()}
-                            month={month}
-                            onReadMoreClick={() => navigate(`/event/${event.id}`)}
-                        />
-                    );
-                })}
-            </div>
+            {/* Logo Carousel */}
+            <LogoCarousel />
         </div>
     );
 };

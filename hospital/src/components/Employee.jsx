@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Employee.css';
 import employeeBg from '../assets/employee-bg.png';
-import employee1 from '../assets/employee1.png';
 
 const Employee = () => {
     const [employees, setEmployees] = useState([]);
@@ -78,7 +77,7 @@ const Employee = () => {
                             className="employee-bg-image"
                         />
                         <img
-                            src={employee1}
+                            src={employee.image ? (employee.image.startsWith('/src/assets/') ? employee.image : `/src/assets/${employee.image}`) : "/src/assets/employee1.png"}
                             alt="Employee"
                             className="employee-photo"
                         />
