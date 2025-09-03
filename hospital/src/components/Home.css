@@ -839,3 +839,218 @@
 .home-events-container {
     margin-bottom: 40px;
 }
+
+/* Home Header Text 2 - Same styling as home-header-text */
+.home-header-text-2 {
+    margin-top: 200px;
+    margin-left: 7rem;
+    margin-right: 7rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.home-header-left-2 {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.home-header-first-2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.home-header-second-2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    padding: 0rem 2rem;
+    border-radius: 8px;
+    background: linear-gradient(#1243AC 97.59%);
+    position: relative;
+    overflow: hidden;
+    transform: skewX(-15deg);
+    transform-origin: center;
+}
+
+.home-header-second-2 span {
+    display: inline-block;
+    transform: skewX(15deg);
+    transform-origin: center;
+}
+
+.home-header-second-2::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+            rgba(255, 255, 255, 0.25) 0%,
+            rgba(255, 255, 255, 0.15) 20%,
+            rgba(255, 255, 255, 0.05) 50%,
+            transparent 80%);
+    pointer-events: none;
+    border-radius: 4px;
+}
+
+.home-header-second-2::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(225deg,
+            transparent 0%,
+            rgba(0, 0, 0, 0.1) 50%,
+            rgba(0, 0, 0, 0.2) 100%);
+    pointer-events: none;
+    border-radius: 4px;
+}
+
+.home-header-btn-2 {
+    background: white;
+    border: 1px solid #1243AC;
+    color: black;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.home-header-btn-2:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 42, 97, 0.3);
+}
+
+/* Additional Info Card */
+.home-additional-card {
+    width: 330px;
+    height: 250px;
+    margin: 1rem auto 0;
+    background: white;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.home-additional-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Blue cover overlay above the image, below triangles */
+.blue-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/src/assets/blue-cover.png') center center no-repeat;
+    z-index: 1;
+}
+
+/* Bottom-left text overlay */
+.card-bottom-text {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: 'Arial', sans-serif;
+    z-index: 3;
+    max-width: 149px;
+    line-height: 1.3;
+}
+
+/* Top-right text overlay */
+.card-top-text {
+    position: absolute;
+    top: 8px;
+    right: 29px;
+    color: white;
+    font-size: 10px;
+    font-weight: 100;
+    font-family: 'Arial', sans-serif;
+    z-index: 3;
+    max-width: 180px;
+    line-height: 1.4;
+    text-align: right;
+    opacity: 0.7;
+}
+
+/* Triangle Shape */
+.card-triangle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    z-index: 2;
+}
+
+/* SVG wrapper for triangle so we can get real rounded corners */
+.card-triangle svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* White triangle underneath - slightly bigger */
+.card-triangle-white {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    width: 125px;
+    height: 125px;
+    z-index: 1;
+}
+
+.card-triangle-white svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Top-left white triangle */
+.card-triangle-white-top {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 125px;
+    height: 125px;
+    z-index: 1;
+}
+
+.card-triangle-white-top svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* .card-triangle::before {
+    content: '';
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 141px;
+    height: 5px;
+    background: blue;
+    transform: rotate(-45deg);
+    transform-origin: top left;
+} */

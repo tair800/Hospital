@@ -1,0 +1,120 @@
+/* Info Card Component */
+.info-card {
+    width: 330px;
+    height: 250px;
+    background: white;
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom:5rem;
+}
+
+.info-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Blue cover overlay above the image, below triangles */
+.blue-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/src/assets/blue-cover.png') center center no-repeat;
+    z-index: 1;
+}
+
+/* Bottom-left text overlay */
+.card-bottom-text {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: 'Arial', sans-serif;
+    z-index: 3;
+    max-width: 149px;
+    line-height: 1.3;
+}
+
+/* Top-right text overlay */
+.card-top-text {
+    position: absolute;
+    top: 8px;
+    right: 29px;
+    color: white;
+    font-size: 10px;
+    font-weight: 100;
+    font-family: 'Arial', sans-serif;
+    z-index: 3;
+    max-width: 180px;
+    line-height: 1.4;
+    text-align: right;
+    opacity: 0.7;
+}
+
+/* Triangle Shape */
+.card-triangle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    z-index: 2;
+    cursor: pointer;
+}
+
+/* SVG wrapper for triangle so we can get real rounded corners */
+.card-triangle svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* White triangle underneath - slightly bigger */
+.card-triangle-white {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    width: 125px;
+    height: 125px;
+    z-index: 1;
+}
+
+.card-triangle-white svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Top-left white triangle */
+.card-triangle-white-top {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 125px;
+    height: 125px;
+    z-index: 1;
+}
+
+.card-triangle-white-top svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Row container for multiple cards */
+.info-card-row {
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+}

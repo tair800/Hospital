@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
+import './InfoCard.css';
+import InfoCard from './InfoCard';
 
 const Home = () => {
     const navigate = useNavigate();
     const [latestEvents, setLatestEvents] = useState([]);
+    const [pastEvents, setPastEvents] = useState([]);
     const [homeData, setHomeData] = useState({
         section1Description: '',
         section2Image: '',
@@ -44,30 +47,38 @@ const Home = () => {
 
     // Fetch latest events from API
     useEffect(() => {
-        const fetchLatestEvents = async () => {
+        const fetchEvents = async () => {
             try {
                 setLoading(true);
                 const response = await fetch('http://localhost:5000/api/events');
                 if (!response.ok) {
-                    throw new Error('Failed to fetch latest events');
+                    throw new Error('Failed to fetch events');
                 }
                 const data = await response.json();
-                // Sort by date (longest waiting period first - furthest in the future) and take the first 3
                 const now = new Date();
-                const sortedEvents = data
+
+                // Get upcoming events (for existing cards)
+                const upcomingEvents = data
                     .filter(event => new Date(event.eventDate) > now) // Only upcoming events
                     .sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate)) // Furthest date first (longest waiting)
                     .slice(0, 3);
-                setLatestEvents(sortedEvents);
+                setLatestEvents(upcomingEvents);
+
+                // Get past events (for InfoCard components)
+                const pastEventsData = data
+                    .filter(event => new Date(event.eventDate) < now) // Only past events
+                    .sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate)) // Most recent first
+                    .slice(0, 3);
+                setPastEvents(pastEventsData);
             } catch (err) {
-                console.error('Error fetching latest events:', err);
+                console.error('Error fetching events:', err);
                 setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchLatestEvents();
+        fetchEvents();
     }, []);
 
     // Function to truncate text to a specific length and add "..." if needed
@@ -247,7 +258,10 @@ const Home = () => {
                         <span>Tədbirlər</span>
                     </span>
                 </div>
-                <button className="home-header-btn" onClick={() => navigate('/events')}>Hamısına bax</button>
+                <button className="home-header-btn" onClick={() => {
+                    navigate('/events');
+                    window.scrollTo(0, 0);
+                }}>Hamısına bax</button>
             </div>
 
             {/* Event Cards */}
@@ -316,6 +330,46 @@ const Home = () => {
                         );
                     })
                 )}
+            </div>
+
+            {/* Home Header Text 2 */}
+            <div className="home-header-text-2">
+                <div className="home-header-left-2">
+                    <span className="home-header-first-2">Ən son</span>
+                    <span className="home-header-second-2">
+                        <span>Tədbirlər</span>
+                    </span>
+                </div>
+                <button className="home-header-btn-2" onClick={() => {
+                    navigate('/events');
+                    window.scrollTo(0, 0);
+                }}>Hamsına bax</button>
+            </div>
+
+            {/* Additional Info Cards in one row */}
+            <div className="info-card-row">
+                {loading ? (
+                    <div className="loading-message">Yüklənir...</div>
+                ) : error ? (
+                    <div className="error-message">Xəta: {error}</div>
+                ) : pastEvents.length === 0 ? (
+                    <div className="no-events-message">Keçmiş tədbir tapılmadı</div>
+                ) : pastEvents.slice(0, 3).map((event, index) => {
+                    const { day, month } = formatEventDate(event.eventDate);
+                    const truncatedDescription = truncateText(event.description, 100);
+
+                    return (
+                        <InfoCard
+                            key={event.id}
+                            imageSrc={getImagePath(event.mainImage)}
+                            title={event.title}
+                            description={truncatedDescription}
+                            date={day.toString()}
+                            month={month}
+                            onReadMoreClick={() => navigate(`/event/${event.id}`)}
+                        />
+                    );
+                })}
             </div>
         </div>
     );
