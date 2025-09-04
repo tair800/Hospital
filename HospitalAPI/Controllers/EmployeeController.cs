@@ -23,6 +23,18 @@ namespace HospitalAPI.Controllers
             return await _context.Employees.ToListAsync();
         }
 
+        // GET: api/employees/recent - Get recent employees (last 5)
+        [HttpGet("recent")]
+        public async Task<ActionResult<IEnumerable<Employee>>> GetRecentEmployees()
+        {
+            var recentEmployees = await _context.Employees
+                .OrderByDescending(e => e.CreatedAt)
+                .Take(5)
+                .ToListAsync();
+            
+            return Ok(recentEmployees);
+        }
+
         // GET: api/employees/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Employee>> GetEmployee(int id)

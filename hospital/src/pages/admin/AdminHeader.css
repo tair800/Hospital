@@ -72,6 +72,29 @@
     height: 20px;
 }
 
+.logout-btn {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+    color: white !important;
+    padding: 10px 16px !important;
+    border-radius: 8px !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    min-width: 80px;
+    justify-content: center;
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3) !important;
+}
+
+.logout-text {
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .admin-header {
@@ -94,5 +117,11 @@
 
     .admin-header-icon-btn.profile {
         padding: 10px;
+    }
+
+    .logout-btn {
+        padding: 8px 12px !important;
+        font-size: 0.8rem;
+        min-width: 70px;
     }
 }

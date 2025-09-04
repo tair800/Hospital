@@ -1,10 +1,17 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import './AdminHeader.css'
 import adminGlobe from '../../assets/admin-globe.png'
 import adminSettings from '../../assets/admin-settings.png'
 import adminUser from '../../assets/admin-user.png'
 
 function AdminHeader({ title = "Dashboard" }) {
+    const navigate = useNavigate()
+
+    const handleLogout = () => {
+        localStorage.removeItem('adminAuthenticated')
+        navigate('/admin/login')
+    }
     return (
         <div className="admin-header">
             <div className="admin-header-left">
@@ -18,8 +25,8 @@ function AdminHeader({ title = "Dashboard" }) {
                     <button className="admin-header-icon-btn">
                         <img src={adminSettings} alt="Settings" className="admin-icon" />
                     </button>
-                    <button className="admin-header-icon-btn profile">
-                        <img src={adminUser} alt="User" className="admin-icon" />
+                    <button className="admin-header-icon-btn profile logout-btn" onClick={handleLogout} title="Logout">
+                        <span className="logout-text">Logout</span>
                     </button>
                 </div>
             </div>

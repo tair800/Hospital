@@ -24,6 +24,9 @@ import AdminSponsors from './pages/admin/AdminSponsors'
 import AdminGallery from './pages/admin/AdminGallery'
 import AdminEmployee from './pages/admin/AdminEmployee'
 import AdminLayout from './pages/admin/AdminLayout'
+import AdminLogin from './pages/admin/AdminLogin'
+import ProtectedRoute from './components/ProtectedRoute'
+import Error404 from './pages/Error404'
 
 import './App.css'
 
@@ -90,7 +93,12 @@ function App() {
               <Footer />
             </>
           } />
-          <Route path="/admin" element={<AdminLayout />}>
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }>
             <Route index element={<Dashboard />} />
             <Route path="home" element={<AdminHome />} />
             <Route path="about" element={<AdminAbout />} />
@@ -115,6 +123,7 @@ function App() {
               <Footer />
             </>
           } />
+          <Route path="*" element={<Error404 />} />
         </Routes>
       </div>
     </Router>

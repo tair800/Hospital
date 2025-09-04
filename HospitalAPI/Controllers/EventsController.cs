@@ -94,6 +94,24 @@ namespace HospitalAPI.Controllers
             }
         }
 
+        // GET: api/events/upcoming/count - Get count of upcoming events
+        [HttpGet("upcoming/count")]
+        public async Task<ActionResult<int>> GetUpcomingEventsCount()
+        {
+            try
+            {
+                var upcomingEventsCount = await _context.Events
+                    .Where(e => e.EventDate > DateTime.UtcNow)
+                    .CountAsync();
+                
+                return Ok(upcomingEventsCount);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         // GET: api/events/search?q={searchTerm} - Search events
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<Event>>> SearchEvents([FromQuery] string q)
