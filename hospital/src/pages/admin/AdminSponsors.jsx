@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import adminDeleteIcon from '../../assets/admin-delete.png'
 import adminBrowseIcon from '../../assets/admin-browse.png'
+import Pagination from '../../components/Pagination'
+import usePagination from '../../hooks/usePagination'
 import './AdminSponsors.css'
 
 function AdminSponsors() {
@@ -14,10 +16,28 @@ function AdminSponsors() {
     const [editingLogos, setEditingLogos] = useState({});
     const [showModal, setShowModal] = useState(false);
 
+    // Pagination hook
+    const {
+        currentPage,
+        totalPages,
+        currentItems: currentLogos,
+        startIndex,
+        endIndex,
+        handlePageChange,
+        handlePreviousPage,
+        handleNextPage,
+        resetPagination
+    } = usePagination(logos, 1);
+
     // Fetch all logos on component mount
     useEffect(() => {
         fetchLogos();
     }, []);
+
+    // Reset pagination when logos change
+    useEffect(() => {
+        resetPagination();
+    }, [logos, resetPagination]);
 
     // Fetch all logos from API
     const fetchLogos = async () => {
@@ -300,7 +320,7 @@ function AdminSponsors() {
                             </button>
                         </div>
                     ) : (
-                        logos.map((logo, index) => {
+                        currentLogos.map((logo, index) => {
                             const currentData = editingLogos[logo.id] || logo;
 
                             return (
@@ -386,6 +406,23 @@ function AdminSponsors() {
                         })
                     )}
                 </div>
+
+                {/* Pagination */}
+                {logos.length > 0 && (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                        onPreviousPage={handlePreviousPage}
+                        onNextPage={handleNextPage}
+                        startIndex={startIndex}
+                        endIndex={endIndex}
+                        totalItems={logos.length}
+                        itemsPerPage={1}
+                        showInfo={true}
+                        className="admin-sponsors-pagination"
+                    />
+                )}
             </div>
 
             {/* Create Modal */}

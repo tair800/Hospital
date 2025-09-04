@@ -9,25 +9,296 @@
     margin-top: 0;
 }
 
-/* Home Background Image Section */
+/* Home Background Video Section */
 .home-bg-section {
     width: 100%;
     position: relative;
     overflow: hidden;
     z-index: 9;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.home-bg-image {
+.home-bg-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Hero Event Slider */
+.home-hero-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-hero-slider-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-hero-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.5s ease-in-out;
+}
+
+.home-hero-slide.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Event Date and Time - Above Card */
+.home-hero-event-datetime {
+    font-size: 3rem;
+    color: white;
+    font-weight: 600;
+    font-family: 'Questrial:Regular', sans-serif;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 11;
+    position: relative;
+    opacity: 0.7;
+}
+
+/* White Card with 70/30 Split - Centered on Video */
+.home-white-card {
+    width: 100%;
+    max-width: 1000px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: visible;
+    display: flex;
+    min-height: 300px;
+    position: relative;
+    z-index: 10;
+    margin: 0 2rem;
+}
+
+/* Hero Card Sections - Specific to avoid conflicts */
+.home-hero-card-left-section {
+    width: 70%;
+    padding: 2rem;
+    background: white;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-hero-card-right-section {
+    width: 30%;
+    padding: 2rem;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-hero-event-image {
+    width: 100%;
+    height: 38vh;
+    max-width: 100%;
+}
+
+/* object-fit: contain; */
+/* border-radius: 8px;
+}
+
+/* Event Info Styles */
+.home-hero-event-info {
+    text-align: left;
+    width: 100%;
+    margin-top: 16px;
+}
+
+.home-hero-event-date-location {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.6rem;
+    font-family: 'Questrial:Regular', sans-serif;
+}
+
+.home-hero-event-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1E3874;
+    margin-bottom: 1rem;
+    line-height: 1.25;
+    font-family: 'Questrial:Regular', sans-serif;
+}
+
+.home-hero-event-description {
+    margin-bottom: 1rem;
+}
+
+.home-hero-event-description p {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.45;
+    margin-bottom: 0.5rem;
+    font-family: 'Questrial:Regular', sans-serif;
+}
+
+.home-hero-event-description p:last-child {
+    margin-bottom: 0;
+}
+
+.home-hero-event-trainer {
+    font-size: 0.9rem;
+    color: #4A90E2;
+    margin-bottom: 0.4rem;
+    font-family: 'Questrial:Regular', sans-serif;
+}
+
+.home-hero-event-price {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+    font-family: 'Questrial:Regular', sans-serif;
+}
+
+/* Event Buttons */
+.home-hero-event-buttons {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.home-hero-btn-primary {
+    background: #1E3874;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: 'Questrial:Regular', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(30, 56, 116, 0.3);
+}
+
+.home-hero-btn-primary:hover {
+    background: #2a4a8a;
+    box-shadow: 0 4px 12px rgba(30, 56, 116, 0.4);
+    transform: translateY(-1px);
+}
+
+.home-hero-btn-secondary {
+    background: transparent;
+    color: black;
+    border: 1px solid #8a9bb5;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: 'Questrial:Regular', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.home-hero-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #a8b5c7;
+    transform: translateY(-1px);
+}
+
+/* Side Navigation Buttons - Stable positioning */
+.home-hero-side-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(30, 56, 116, 0.9);
+    border: none;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.5rem;
+    font-weight: 600;
+    z-index: 15;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.home-hero-side-nav:hover {
+    background: rgba(30, 56, 116, 1);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.home-hero-side-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: translateY(-50%);
+}
+
+.home-hero-side-nav-left {
+    left: 50px;
+    top: 55%;
+}
+
+.home-hero-side-nav-right {
+    right: 50px;
+    top: 55%;
+}
+
+/* Hero Slider Loading and Error States */
+.home-hero-loading,
+.home-hero-error,
+.home-hero-no-events {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    font-family: 'Questrial:Regular', sans-serif;
+    z-index: 11;
+    position: relative;
+}
+
+.home-hero-error {
+    color: #ff6b6b;
+}
+
+.home-hero-no-events {
+    color: #ffd93d;
 }
 
 /* Home Circle Right Decorative Element */
 .home-circle-right {
     position: absolute;
-    top: 24%;
+    top: 17%;
     right: 1%;
     z-index: 1;
     pointer-events: none;
@@ -43,7 +314,7 @@
 /* Home Circle Left Decorative Element */
 .home-circle-left {
     position: absolute;
-    top: 22%;
+    top: 15%;
     left: 0%;
     z-index: 1;
     pointer-events: none;
@@ -60,7 +331,7 @@
 .home-circle-left2 {
     position: absolute;
     position: absolute;
-    top: 35%;
+    top: 26%;
     left: 0%;
     z-index: 1;
     pointer-events: none;
@@ -76,7 +347,7 @@
 /* Home Circle Left 3 Decorative Element */
 .home-circle-left3 {
     position: absolute;
-    top: 50%;
+    top: 30%;
     left: 0%;
     z-index: 1;
     pointer-events: none;
@@ -680,6 +951,28 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .home-white-card {
+        flex-direction: column;
+        margin: 0 1rem;
+        max-width: 95%;
+    }
+
+    .home-hero-card-left-section {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 1.5rem;
+    }
+
+    .home-hero-card-right-section {
+        width: 100%;
+        padding: 1.5rem;
+    }
+
+    .home-hero-event-title {
+        font-size: 1.35rem;
+    }
+
     .home-left-right-section {
         flex-direction: column;
         min-height: auto;
@@ -749,6 +1042,78 @@
 }
 
 @media (max-width: 480px) {
+    .home-white-card {
+        margin: 0 0.5rem;
+        border-radius: 10px;
+    }
+
+    .home-hero-card-left-section,
+    .home-hero-card-right-section {
+        padding: 1rem;
+    }
+
+    .home-hero-event-title {
+        font-size: 1.2rem;
+    }
+
+    .home-hero-event-description p {
+        font-size: 0.85rem;
+    }
+
+    .home-hero-event-datetime {
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .home-hero-side-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+
+    .home-hero-side-nav-left {
+        left: -20px;
+    }
+
+    .home-hero-side-nav-right {
+        right: -20px;
+    }
+
+    .home-hero-event-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .home-hero-btn-primary,
+    .home-hero-btn-secondary {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+    }
+
+    .home-hero-event-image {
+        max-width: 200px;
+        height: auto;
+    }
+
+    .home-hero-event-datetime {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .home-hero-side-nav {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+
+    .home-hero-side-nav-left {
+        left: -22px;
+    }
+
+    .home-hero-side-nav-right {
+        right: -22px;
+    }
+
     .home-left-right-section {
         margin-top: 50px;
     }
@@ -1339,5 +1704,3 @@
     transform: rotate(-45deg);
     transform-origin: top left;
 } */
-
-

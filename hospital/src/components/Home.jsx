@@ -11,6 +11,8 @@ const Home = () => {
     const [latestEvents, setLatestEvents] = useState([]);
     const [pastEvents, setPastEvents] = useState([]);
     const [employees, setEmployees] = useState([]);
+    const [heroEvents, setHeroEvents] = useState([]);
+    const [currentSlide, setCurrentSlide] = useState(0);
     const [homeData, setHomeData] = useState({
         section1Description: '',
         section2Image: '',
@@ -73,6 +75,13 @@ const Home = () => {
                     .sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate)) // Most recent first
                     .slice(0, 3);
                 setPastEvents(pastEventsData);
+
+                // Get hero events (upcoming events for slider - take first 3)
+                const heroEventsData = data
+                    .filter(event => new Date(event.eventDate) > now) // Only upcoming events
+                    .sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate)) // Closest date first
+                    .slice(0, 3);
+                setHeroEvents(heroEventsData);
             } catch (err) {
                 console.error('Error fetching events:', err);
                 setError(err.message);
@@ -160,14 +169,127 @@ const Home = () => {
         return `/src/assets/${imageName}`;
     };
 
+    // Slider navigation functions
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev + 1) % heroEvents.length);
+    };
+
+    const prevSlide = () => {
+        setCurrentSlide((prev) => (prev - 1 + heroEvents.length) % heroEvents.length);
+    };
+
+    const goToSlide = (index) => {
+        setCurrentSlide(index);
+    };
+
     return (
         <div className="home-page">
             <div className="home-bg-section">
-                <img
-                    src="/src/assets/home-bg.png"
-                    alt="Home Background"
-                    className="home-bg-image"
+                <video
+                    src="/src/assets/home-video.mp4"
+                    className="home-bg-video"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
                 />
+
+                {/* Hero Event Slider */}
+                <div className="home-hero-slider">
+                    <div className="home-hero-slider-container">
+                        {loading ? (
+                            <div className="home-hero-loading">Yüklənir...</div>
+                        ) : error ? (
+                            <div className="home-hero-error">Xəta: {error}</div>
+                        ) : heroEvents.length === 0 ? (
+                            <div className="home-hero-no-events">Heç bir tədbir tapılmadı</div>
+                        ) : (
+                            heroEvents.map((event, index) => {
+                                const { day, month } = formatEventDate(event.eventDate);
+                                const formattedPrice = formatPrice(event.price, event.currency);
+                                const eventDate = new Date(event.eventDate);
+                                const timeString = eventDate.toLocaleTimeString('az-AZ', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    hour12: false
+                                });
+
+                                return (
+                                    <div
+                                        key={event.id}
+                                        className={`home-hero-slide ${index === currentSlide ? 'active' : ''}`}
+                                    >
+                                        {/* Event Date and Time - Above Card */}
+                                        <div className="home-hero-event-datetime">
+                                            {day} {month} {eventDate.getFullYear()}, {timeString}
+                                        </div>
+
+                                        {/* White Card with 70/30 Split - Centered on Video */}
+                                        <div className="home-white-card">
+                                            <div className="home-hero-card-left-section">
+                                                <div className="home-hero-event-info">
+                                                    <div className="home-hero-event-date-location">
+                                                        {day} {month}, {event.venue}
+                                                    </div>
+                                                    <div className="home-hero-event-title">
+                                                        {event.title}
+                                                    </div>
+                                                    <div className="home-hero-event-description">
+                                                        <p>{event.description}</p>
+                                                    </div>
+                                                    <div className="home-hero-event-trainer">
+                                                        Təlimçi: {event.trainer}
+                                                    </div>
+                                                    <div className="home-hero-event-price">
+                                                        Qiymət: {formattedPrice}
+                                                    </div>
+                                                    <div className="home-hero-event-buttons">
+                                                        <button className="home-hero-btn-primary">Bilet al</button>
+                                                        <button
+                                                            className="home-hero-btn-secondary"
+                                                            onClick={() => navigate(`/event/${event.id}`)}
+                                                        >
+                                                            Detaillı bax
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="home-hero-card-right-section">
+                                                <img
+                                                    src={getImagePath(event.detailImageMain)}
+                                                    alt="Event Main Image"
+                                                    className="home-hero-event-image"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        )}
+                    </div>
+
+                    {/* Stable Navigation Buttons - Outside slider container */}
+                    {heroEvents.length > 1 && (
+                        <>
+                            <button
+                                className="home-hero-side-nav home-hero-side-nav-left"
+                                onClick={prevSlide}
+                                disabled={currentSlide === 0}
+                                aria-label="Previous slide"
+                            >
+                                <span>&lt;</span>
+                            </button>
+                            <button
+                                className="home-hero-side-nav home-hero-side-nav-right"
+                                onClick={nextSlide}
+                                disabled={currentSlide === heroEvents.length - 1}
+                                aria-label="Next slide"
+                            >
+                                <span>&gt;</span>
+                            </button>
+                        </>
+                    )}
+                </div>
             </div>
 
             {/* Home Circle Right Decorative Element */}

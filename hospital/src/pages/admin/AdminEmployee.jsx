@@ -3,6 +3,8 @@ import Swal from 'sweetalert2'
 import adminDeleteIcon from '../../assets/admin-delete.png'
 import adminBrowseIcon from '../../assets/admin-browse.png'
 import employee1Image from '../../assets/employee1.png'
+import Pagination from '../../components/Pagination'
+import usePagination from '../../hooks/usePagination'
 import './AdminEmployee.css'
 
 function AdminEmployee() {
@@ -40,10 +42,28 @@ function AdminEmployee() {
     const [editingEmployees, setEditingEmployees] = useState({});
     const [showModal, setShowModal] = useState(false);
 
+    // Pagination hook
+    const {
+        currentPage,
+        totalPages,
+        currentItems: currentEmployees,
+        startIndex,
+        endIndex,
+        handlePageChange,
+        handlePreviousPage,
+        handleNextPage,
+        resetPagination
+    } = usePagination(employees, 1);
+
     // Fetch all employees on component mount
     useEffect(() => {
         fetchEmployees();
     }, []);
+
+    // Reset pagination when employees change
+    useEffect(() => {
+        resetPagination();
+    }, [employees, resetPagination]);
 
     // Fetch all employees from API with their certificates and degrees
     const fetchEmployees = async () => {
@@ -981,7 +1001,7 @@ function AdminEmployee() {
                             </button>
                         </div>
                     ) : (
-                        employees.map((employee) => {
+                        currentEmployees.map((employee) => {
                             const currentData = editingEmployees[employee.id] || employee;
 
                             return (
@@ -1470,6 +1490,23 @@ function AdminEmployee() {
                         })
                     )}
                 </div>
+
+                {/* Pagination */}
+                {employees.length > 0 && (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                        onPreviousPage={handlePreviousPage}
+                        onNextPage={handleNextPage}
+                        startIndex={startIndex}
+                        endIndex={endIndex}
+                        totalItems={employees.length}
+                        itemsPerPage={1}
+                        showInfo={true}
+                        className="admin-employee-pagination"
+                    />
+                )}
             </div>
 
             {/* Create Modal */}

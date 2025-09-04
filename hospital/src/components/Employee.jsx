@@ -2,12 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Employee.css';
 import employeeBg from '../assets/employee-bg.png';
+import Pagination from './Pagination';
+import usePagination from '../hooks/usePagination';
 
 const Employee = () => {
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+
+    const {
+        currentPage,
+        totalPages,
+        currentItems: currentEmployees,
+        startIndex,
+        endIndex,
+        handlePageChange,
+        handlePreviousPage,
+        handleNextPage
+    } = usePagination(employees, 9);
 
     // Fetch employees from API
     useEffect(() => {
@@ -60,11 +73,9 @@ const Employee = () => {
 
     return (
         <div className="employee-page">
-            <h1>Employee Page</h1>
-            <p>This page is currently empty.</p>
 
             <div className="employee-cards-container">
-                {employees.map((employee) => (
+                {currentEmployees.map((employee) => (
                     <div
                         key={employee.id}
                         className="employee-unified-card"
@@ -93,6 +104,21 @@ const Employee = () => {
                     </div>
                 ))}
             </div>
+
+            {/* Pagination Component */}
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                onPreviousPage={handlePreviousPage}
+                onNextPage={handleNextPage}
+                startIndex={startIndex}
+                endIndex={endIndex}
+                totalItems={employees.length}
+                itemsPerPage={9}
+                showInfo={true}
+                className="employee-pagination"
+            />
         </div>
     );
 };

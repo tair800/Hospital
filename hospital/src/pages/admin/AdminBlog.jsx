@@ -3,6 +3,8 @@ import Swal from 'sweetalert2'
 import adminDeleteIcon from '../../assets/admin-delete.png'
 import adminBrowseIcon from '../../assets/admin-browse.png'
 import blog1Image from '../../assets/blog1.png'
+import Pagination from '../../components/Pagination'
+import usePagination from '../../hooks/usePagination'
 import './AdminBlog.css'
 
 function AdminBlog() {
@@ -22,10 +24,28 @@ function AdminBlog() {
     const [editingBlogs, setEditingBlogs] = useState({});
     const [showModal, setShowModal] = useState(false);
 
+    // Pagination hook
+    const {
+        currentPage,
+        totalPages,
+        currentItems: currentBlogs,
+        startIndex,
+        endIndex,
+        handlePageChange,
+        handlePreviousPage,
+        handleNextPage,
+        resetPagination
+    } = usePagination(blogs, 1);
+
     // Fetch all blogs on component mount
     useEffect(() => {
         fetchBlogs();
     }, []);
+
+    // Reset pagination when blogs change
+    useEffect(() => {
+        resetPagination();
+    }, [blogs, resetPagination]);
 
     // Fetch all blogs from API
     const fetchBlogs = async () => {
@@ -368,7 +388,7 @@ function AdminBlog() {
                             </button>
                         </div>
                     ) : (
-                        blogs.map((blog) => {
+                        currentBlogs.map((blog) => {
                             const currentData = editingBlogs[blog.id] || blog;
 
                             return (
@@ -561,6 +581,23 @@ function AdminBlog() {
                         })
                     )}
                 </div>
+
+                {/* Pagination */}
+                {blogs.length > 0 && (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                        onPreviousPage={handlePreviousPage}
+                        onNextPage={handleNextPage}
+                        startIndex={startIndex}
+                        endIndex={endIndex}
+                        totalItems={blogs.length}
+                        itemsPerPage={1}
+                        showInfo={true}
+                        className="admin-blog-pagination"
+                    />
+                )}
             </div>
 
             {/* Create Modal */}

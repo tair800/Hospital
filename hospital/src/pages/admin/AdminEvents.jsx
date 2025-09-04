@@ -3,6 +3,8 @@ import Swal from 'sweetalert2'
 import adminDeleteIcon from '../../assets/admin-delete.png'
 import adminBrowseIcon from '../../assets/admin-browse.png'
 import eventImg from '../../assets/event-img.png'
+import Pagination from '../../components/Pagination'
+import usePagination from '../../hooks/usePagination'
 import './AdminEvents.css'
 
 function AdminEvents() {
@@ -28,10 +30,28 @@ function AdminEvents() {
     const [editingEvents, setEditingEvents] = useState({});
     const [showModal, setShowModal] = useState(false);
 
+    // Pagination hook
+    const {
+        currentPage,
+        totalPages,
+        currentItems: currentEvents,
+        startIndex,
+        endIndex,
+        handlePageChange,
+        handlePreviousPage,
+        handleNextPage,
+        resetPagination
+    } = usePagination(events, 1);
+
     // Fetch all events on component mount
     useEffect(() => {
         fetchEvents();
     }, []);
+
+    // Reset pagination when events change
+    useEffect(() => {
+        resetPagination();
+    }, [events, resetPagination]);
 
     // Fetch all events from API
     const fetchEvents = async () => {
@@ -404,7 +424,7 @@ function AdminEvents() {
                             </button>
                         </div>
                     ) : (
-                        events.map((event, index) => {
+                        currentEvents.map((event, index) => {
                             const currentData = editingEvents[event.id] || event;
                             // Safely create date object with fallback
                             let eventDate;
@@ -733,6 +753,23 @@ function AdminEvents() {
                         })
                     )}
                 </div>
+
+                {/* Pagination */}
+                {events.length > 0 && (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                        onPreviousPage={handlePreviousPage}
+                        onNextPage={handleNextPage}
+                        startIndex={startIndex}
+                        endIndex={endIndex}
+                        totalItems={events.length}
+                        itemsPerPage={1}
+                        showInfo={true}
+                        className="admin-events-pagination"
+                    />
+                )}
             </div>
 
             {/* Create Modal */}

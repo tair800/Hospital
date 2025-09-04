@@ -1,0 +1,162 @@
+/* Reusable Pagination Component Styles */
+.pagination-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 2rem 0;
+    margin: 2rem auto 0;
+    width: 100%;
+    max-width: 1400px;
+    text-align: center;
+}
+
+.pagination-info {
+    font-size: 1rem;
+    color: #666;
+    font-family: 'Questrial:Regular', sans-serif;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.pagination-arrow {
+    background: none;
+    color: #1E3874;
+    border: none;
+    padding: 0.75rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: none;
+    font-family: 'Questrial:Regular', sans-serif;
+    min-width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+}
+
+.pagination-arrow:hover:not(:disabled) {
+    background: none;
+    color: #1E3874;
+    transform: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.pagination-arrow:focus {
+    outline: none;
+    border: none;
+}
+
+.pagination-arrow:active {
+    outline: none;
+    border: none;
+}
+
+.pagination-arrow:disabled {
+    background: none;
+    color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.pagination-pages {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.pagination-page {
+    background: white;
+    color: #1B1B3F;
+    border: 2px solid #e0e0e0;
+    padding: 0.75rem;
+    border-radius: 50%;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Questrial:Regular', sans-serif;
+}
+
+.pagination-page:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.pagination-page.pagination-active {
+    background: #4B84FF;
+    color: white;
+    border-color: #4B84FF;
+    box-shadow: 0 4px 12px rgba(75, 132, 255, 0.3);
+}
+
+.pagination-page.pagination-active:hover {
+    background: #3a6bcc;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design for Pagination */
+@media (max-width: 768px) {
+    .pagination-controls {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .pagination-pages {
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .pagination-page {
+        width: 40px;
+        height: 40px;
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .pagination-pages {
+        gap: 0.25rem;
+    }
+
+    .pagination-page {
+        width: 35px;
+        height: 35px;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .pagination-arrow {
+        background: none;
+        color: #1E3874;
+        padding: 0.6rem;
+        font-size: 1rem;
+        min-width: 40px;
+        height: 40px;
+    }
+}

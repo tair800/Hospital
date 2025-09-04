@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FvEC1/2CDC8=",
+  "dgSpecHash": "tCmzcg4ooeA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\taira\\OneDrive\\Desktop\\hospitalApp\\hospitalapi\\HospitalAPI.csproj",
+  "projectFilePath": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\HospitalAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\taira\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\taira\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

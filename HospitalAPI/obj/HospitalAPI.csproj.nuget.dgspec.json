@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\taira\\OneDrive\\Desktop\\hospitalApp\\hospitalapi\\HospitalAPI.csproj": {}
+    "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\HospitalAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\taira\\OneDrive\\Desktop\\hospitalApp\\hospitalapi\\HospitalAPI.csproj": {
+    "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\HospitalAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\taira\\OneDrive\\Desktop\\hospitalApp\\hospitalapi\\HospitalAPI.csproj",
+        "projectUniqueName": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\HospitalAPI.csproj",
         "projectName": "HospitalAPI",
-        "projectPath": "C:\\Users\\taira\\OneDrive\\Desktop\\hospitalApp\\hospitalapi\\HospitalAPI.csproj",
+        "projectPath": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\HospitalAPI.csproj",
         "packagesPath": "C:\\Users\\taira\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\taira\\OneDrive\\Desktop\\hospitalApp\\hospitalapi\\obj\\",
+        "outputPath": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\taira\\AppData\\Roaming\\NuGet\\NuGet.Config",
