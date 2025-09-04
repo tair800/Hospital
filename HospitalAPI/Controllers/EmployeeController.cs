@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using HospitalAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using HospitalAPI.Data;
+using HospitalAPI.Services;
 
 namespace HospitalAPI.Controllers
 {
@@ -20,7 +21,16 @@ namespace HospitalAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees()
         {
-            return await _context.Employees.ToListAsync();
+            var employees = await _context.Employees.ToListAsync();
+            
+            // Format image paths for frontend
+            foreach (var employee in employees)
+            {
+                employee.Image = ImagePathService.FormatContextualImagePath(employee.Image, "employee");
+                employee.DetailImage = ImagePathService.FormatContextualImagePath(employee.DetailImage, "employee");
+            }
+            
+            return Ok(employees);
         }
 
         // GET: api/employees/recent - Get recent employees (last 5)
@@ -31,6 +41,13 @@ namespace HospitalAPI.Controllers
                 .OrderByDescending(e => e.CreatedAt)
                 .Take(5)
                 .ToListAsync();
+            
+            // Format image paths for frontend
+            foreach (var employee in recentEmployees)
+            {
+                employee.Image = ImagePathService.FormatContextualImagePath(employee.Image, "employee");
+                employee.DetailImage = ImagePathService.FormatContextualImagePath(employee.DetailImage, "employee");
+            }
             
             return Ok(recentEmployees);
         }
@@ -54,6 +71,10 @@ namespace HospitalAPI.Controllers
             employee.Certificates = await _context.EmployeeCertificates
                 .Where(ec => ec.EmployeeId == id)
                 .ToListAsync();
+            
+            // Format image paths for frontend
+            employee.Image = ImagePathService.FormatContextualImagePath(employee.Image, "employee");
+            employee.DetailImage = ImagePathService.FormatContextualImagePath(employee.DetailImage, "employee");
             
             return employee;
         }
@@ -115,7 +136,7 @@ namespace HospitalAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(existingEmployee);
         }
 
         // DELETE: api/employees/{id}

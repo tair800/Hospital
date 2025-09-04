@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getImagePath } from '../../../utils/imageUtils';
 import blog1Image from '../../../assets/blog1.png';
 import './Blog.css';
 import LogoCarousel from '../../ui/LogoCarousel';
@@ -143,7 +144,7 @@ const Blog = () => {
                             <div className="blog-card-image">
                                 {blog.image ? (
                                     <img
-                                        src={blog.image === 'blog1.png' ? blog1Image : `/src/assets/${blog.image}`}
+                                        src={getImagePath(blog.image)}
                                         alt="Blog Image"
                                         style={{
                                             width: '100%',
@@ -152,6 +153,7 @@ const Blog = () => {
                                             borderRadius: '8px'
                                         }}
                                         onError={(e) => {
+                                            console.log('Blog image load error:', blog.image);
                                             e.target.style.display = 'none';
                                         }}
                                     />

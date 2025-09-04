@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HospitalAPI.Data;
 using HospitalAPI.Models;
+using HospitalAPI.Services;
 
 namespace HospitalAPI.Controllers
 {
@@ -27,6 +28,12 @@ namespace HospitalAPI.Controllers
                     .OrderBy(g => g.Id)
                     .ToListAsync();
 
+                // Format image paths for frontend
+                foreach (var item in gallery)
+                {
+                    item.Image = ImagePathService.FormatContextualImagePath(item.Image, "gallery");
+                }
+
                 return Ok(gallery);
             }
             catch (Exception ex)
@@ -48,6 +55,9 @@ namespace HospitalAPI.Controllers
                 {
                     return NotFound();
                 }
+
+                // Format image path for frontend
+                galleryItem.Image = ImagePathService.FormatContextualImagePath(galleryItem.Image, "gallery");
 
                 return Ok(galleryItem);
             }

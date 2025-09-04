@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\HospitalAPI.csproj": {}
+    "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\HospitalAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\HospitalAPI.csproj": {
+    "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\HospitalAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\HospitalAPI.csproj",
+        "projectUniqueName": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\HospitalAPI.csproj",
         "projectName": "HospitalAPI",
-        "projectPath": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\HospitalAPI.csproj",
+        "projectPath": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\HospitalAPI.csproj",
         "packagesPath": "C:\\Users\\taira\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\obj\\",
+        "outputPath": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\taira\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -66,10 +66,6 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
-              "target": "Package",
-              "version": "[8.0.0, )"
-            },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -81,10 +77,6 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
-            },
-            "System.Data.SqlClient": {
-              "target": "Package",
-              "version": "[4.8.6, )"
             }
           },
           "imports": [

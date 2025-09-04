@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
+import { getImagePath } from '../../utils/imageUtils'
 import adminDeleteIcon from '../../assets/admin-delete.png'
 import adminBrowseIcon from '../../assets/admin-browse.png'
 import eventImg from '../../assets/event-img.png'
@@ -97,13 +98,8 @@ function AdminEvents() {
         }
     };
 
-    // Helper function to get correct image path
-    const getImagePath = (imageName) => {
-        if (!imageName) return '';
-        if (imageName === 'event-img.png') return eventImg;
-        if (imageName.startsWith('/src/assets/')) return imageName;
-        return `/src/assets/${imageName}`;
-    };
+    // Use the centralized image utility
+    // getImagePath is now imported from utils/imageUtils
 
     // Handle input changes for inline editing
     const handleInlineInputChange = (eventId, field, value) => {

@@ -148,6 +148,17 @@ namespace HospitalAPI.Data
                 entity.Property(e => e.SecondDesc);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
                 entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                
+                // Configure relationships
+                entity.HasMany<EmployeeDegree>()
+                    .WithOne()
+                    .HasForeignKey(ed => ed.EmployeeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasMany<EmployeeCertificate>()
+                    .WithOne()
+                    .HasForeignKey(ec => ec.EmployeeId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Configure EmployeeDegree table for SQLite
@@ -172,7 +183,7 @@ namespace HospitalAPI.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // This will be configured in Program.cs, but we can add fallback here
+                optionsBuilder.UseSqlite("Data Source=HospitalAPI.db");
             }
         }
     }

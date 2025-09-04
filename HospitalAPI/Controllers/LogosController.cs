@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HospitalAPI.Data;
 using HospitalAPI.Models;
+using HospitalAPI.Services;
 
 namespace HospitalAPI.Controllers
 {
@@ -25,6 +26,12 @@ namespace HospitalAPI.Controllers
                 var logos = await _context.Logos
                     .OrderBy(l => l.Id)
                     .ToListAsync();
+                
+                // Format image paths for frontend
+                foreach (var logo in logos)
+                {
+                    logo.Image = ImagePathService.FormatContextualImagePath(logo.Image, "admin");
+                }
                 
                 return Ok(logos);
             }

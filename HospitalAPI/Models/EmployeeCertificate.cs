@@ -11,12 +11,14 @@ namespace HospitalAPI.Models
         [Column("employee_id")]
         public int EmployeeId { get; set; }
         
+        [Required]
         [MaxLength(500)]
         [Column("certificate_image")]
-        public string CertificateImage { get; set; }
+        public string CertificateImage { get; set; } = string.Empty;
         
+        [Required]
         [MaxLength(255)]
         [Column("certificate_name")]
-        public string CertificateName { get; set; }
+        public string CertificateName { get; set; } = string.Empty;
     }
 }

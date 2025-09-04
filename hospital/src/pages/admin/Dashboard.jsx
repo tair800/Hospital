@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { getImagePath } from '../../utils/imageUtils'
 import './Dashboard.css'
 
 function Dashboard() {
@@ -275,8 +276,12 @@ function Dashboard() {
                                 <div key={employee.id || index} className="member-item">
                                     <div className="member-avatar">
                                         <img
-                                            src={employee.image || "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=60&h=60&fit=crop&crop=face"}
+                                            src={getImagePath(employee.image) || "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=60&h=60&fit=crop&crop=face"}
                                             alt={employee.fullname}
+                                            onError={(e) => {
+                                                // Fallback to Unsplash if the image fails to load
+                                                e.target.src = "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=60&h=60&fit=crop&crop=face";
+                                            }}
                                         />
                                     </div>
                                     <div className="member-info">

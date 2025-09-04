@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HospitalAPI.Data;
 using HospitalAPI.Models;
+using HospitalAPI.Services;
 
 namespace HospitalAPI.Controllers
 {
@@ -35,6 +36,12 @@ namespace HospitalAPI.Controllers
                     .Where(b => !string.IsNullOrEmpty(b.Number) && int.TryParse(b.Number, out _))
                     .OrderBy(b => int.Parse(b.Number))
                     .ToList();
+                
+                // Format image paths for frontend
+                foreach (var blog in sortedBlogs)
+                {
+                    blog.Image = ImagePathService.FormatContextualImagePath(blog.Image, "blog");
+                }
                 
                 Console.WriteLine("=== AFTER NUMERIC SORTING ===");
                 foreach (var blog in sortedBlogs)

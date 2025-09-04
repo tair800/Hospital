@@ -9,40 +9,40 @@ namespace HospitalAPI.Models
         
         [Required]
         [MaxLength(255)]
-        public string Fullname { get; set; }
+        public string Fullname { get; set; } = string.Empty;
         
         [Required]
         [MaxLength(255)]
-        public string Field { get; set; }
+        public string Field { get; set; } = string.Empty;
         
         [Required]
         [MaxLength(255)]
-        public string Clinic { get; set; }
+        public string Clinic { get; set; } = string.Empty;
         
         [MaxLength(500)]
-        public string Image { get; set; }
+        public string? Image { get; set; }
         
         [MaxLength(500)]
         [Column("detail_image")]
-        public string DetailImage { get; set; }
+        public string? DetailImage { get; set; }
         
         [MaxLength(50)]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
         
         [MaxLength(50)]
-        public string WhatsApp { get; set; }
+        public string? WhatsApp { get; set; }
         
         [MaxLength(255)]
-        public string Email { get; set; }
+        public string? Email { get; set; }
         
         [MaxLength(255)]
-        public string Location { get; set; }
+        public string? Location { get; set; }
         
         [Column("first_desc")]
-        public string FirstDesc { get; set; }
+        public string? FirstDesc { get; set; }
         
         [Column("second_desc")]
-        public string SecondDesc { get; set; }
+        public string? SecondDesc { get; set; }
         
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

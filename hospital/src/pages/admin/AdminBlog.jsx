@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
+import { getImagePath } from '../../utils/imageUtils'
 import adminDeleteIcon from '../../assets/admin-delete.png'
 import adminBrowseIcon from '../../assets/admin-browse.png'
 import blog1Image from '../../assets/blog1.png'
@@ -517,11 +518,11 @@ function AdminBlog() {
                                             <div className="image-placeholder">
                                                 {currentData.image ? (
                                                     <img
-                                                        src={currentData.image === 'blog1.png' ? blog1Image : `/src/assets/${currentData.image}`}
+                                                        src={getImagePath(currentData.image)}
                                                         alt="Blog image"
                                                         className="current-image"
                                                         onError={(e) => {
-
+                                                            console.log('Image load error:', currentData.image);
                                                             e.target.style.display = 'none';
                                                         }}
                                                     />
@@ -739,11 +740,11 @@ function AdminBlog() {
                                         <div className="admin-blog-image-placeholder">
                                             {blogData.image ? (
                                                 <img
-                                                    src={blogData.image === 'blog1.png' ? blog1Image : `/src/assets/${blogData.image}`}
+                                                    src={getImagePath(blogData.image)}
                                                     alt="Blog image"
                                                     className="admin-blog-current-image"
                                                     onError={(e) => {
-
+                                                        console.log('Modal image load error:', blogData.image);
                                                         e.target.style.display = 'none';
                                                     }}
                                                 />

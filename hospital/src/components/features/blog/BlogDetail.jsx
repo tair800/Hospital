@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { getImagePath } from '../../../utils/imageUtils';
 import blog1Image from '../../../assets/blog1.png';
 import './BlogDetail.css';
 import LogoCarousel from '../../ui/LogoCarousel';
@@ -157,10 +158,11 @@ const BlogDetail = () => {
                     <div className="blog-detail-right">
                         {blog.image ? (
                             <img
-                                src={blog.image === 'blog1.png' ? blog1Image : `/src/assets/${blog.image}`}
+                                src={getImagePath(blog.image)}
                                 alt="Blog Image"
                                 className="blog-detail-image"
                                 onError={(e) => {
+                                    console.log('BlogDetail image load error:', blog.image);
                                     e.target.style.display = 'none';
                                 }}
                             />

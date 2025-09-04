@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
+import { getImagePath } from '../../utils/imageUtils'
 import adminDeleteIcon from '../../assets/admin-delete.png'
 import adminBrowseIcon from '../../assets/admin-browse.png'
 import './AdminGallery.css'
@@ -50,12 +51,8 @@ function AdminGallery() {
         }
     };
 
-    // Helper function to get correct image path
-    const getImagePath = (imageName) => {
-        if (!imageName) return '';
-        if (imageName.startsWith('/src/assets/')) return imageName;
-        return `/src/assets/${imageName}`;
-    };
+    // Import the centralized image utility
+    // getImagePath is now imported from utils/imageUtils
 
 
 
