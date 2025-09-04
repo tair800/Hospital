@@ -3,7 +3,7 @@ import Swal from 'sweetalert2'
 import adminDeleteIcon from '../../assets/admin-delete.png'
 import adminBrowseIcon from '../../assets/admin-browse.png'
 import blog1Image from '../../assets/blog1.png'
-import Pagination from '../../components/Pagination'
+import Pagination from '../../components/ui/Pagination'
 import usePagination from '../../hooks/usePagination'
 import './AdminBlog.css'
 

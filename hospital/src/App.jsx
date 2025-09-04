@@ -1,19 +1,24 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Header from './components/Header'
-import ScrollToTop from './components/ScrollToTop'
-import Footer from './components/Footer'
-import Home from './components/Home'
-import About from './components/About'
-import Contact from './components/Contact'
-
-import Employee from './components/Employee'
-import EmployeeDetail from './components/EmployeeDetail'
-import Events from './components/Events'
-import EventsDetail from './components/EventsDetail'
-import Gallery from './components/Gallery'
-import Blog from './components/Blog'
-import BlogDetail from './components/BlogDetail'
+import { 
+  Header, 
+  Footer, 
+  ScrollToTop,
+  ProtectedRoute,
+  EmployeeDetail,
+  EventsDetail,
+  BlogDetail
+} from './components'
+import { 
+  HomePage,
+  AboutPage,
+  EventsPage,
+  GalleryPage,
+  BlogPage,
+  EmployeePage,
+  ContactPage,
+  Error404
+} from './pages'
 import Dashboard from './pages/admin/Dashboard'
 import AdminHome from './pages/admin/AdminHome'
 import AdminAbout from './pages/admin/AdminAbout'
@@ -25,8 +30,6 @@ import AdminGallery from './pages/admin/AdminGallery'
 import AdminEmployee from './pages/admin/AdminEmployee'
 import AdminLayout from './pages/admin/AdminLayout'
 import AdminLogin from './pages/admin/AdminLogin'
-import ProtectedRoute from './components/ProtectedRoute'
-import Error404 from './pages/Error404'
 
 import './App.css'
 
@@ -40,28 +43,28 @@ function App() {
           <Route path="/" element={
             <>
               <Header showTopImage={false} />
-              <Home />
+              <HomePage />
               <Footer />
             </>
           } />
           <Route path="/about" element={
             <>
               <Header showTopImage={true} />
-              <About />
+              <AboutPage />
               <Footer />
             </>
           } />
           <Route path="/contact" element={
             <>
               <Header showTopImage={true} />
-              <Contact />
+              <ContactPage />
               <Footer />
             </>
           } />
           <Route path="/employee" element={
             <>
               <Header showTopImage={true} />
-              <Employee />
+              <EmployeePage />
               <Footer />
             </>
           } />
@@ -75,7 +78,7 @@ function App() {
           <Route path="/events" element={
             <>
               <Header showTopImage={true} />
-              <Events />
+              <EventsPage />
               <Footer />
             </>
           } />
@@ -89,7 +92,7 @@ function App() {
           <Route path="/gallery" element={
             <>
               <Header showTopImage={true} />
-              <Gallery />
+              <GalleryPage />
               <Footer />
             </>
           } />
@@ -112,7 +115,7 @@ function App() {
           <Route path="/blog" element={
             <>
               <Header showTopImage={true} />
-              <Blog />
+              <BlogPage />
               <Footer />
             </>
           } />

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import adminDeleteIcon from '../../assets/admin-delete.png'
 import adminBrowseIcon from '../../assets/admin-browse.png'
-import Pagination from '../../components/Pagination'
+import Pagination from '../../components/ui/Pagination'
 import usePagination from '../../hooks/usePagination'
 import './AdminSponsors.css'
 

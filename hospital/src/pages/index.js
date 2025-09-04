@@ -1,0 +1,8 @@
+export { default as HomePage } from './Home'
+export { default as AboutPage } from './About'
+export { default as EventsPage } from './Events'
+export { default as GalleryPage } from './Gallery'
+export { default as BlogPage } from './Blog'
+export { default as EmployeePage } from './Employee'
+export { default as ContactPage } from './Contact'
+export { default as Error404 } from './Error404/Error404'
