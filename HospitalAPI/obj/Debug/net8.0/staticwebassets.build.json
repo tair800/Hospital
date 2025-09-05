@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Q/w7Aooono/TZoMS015IkoijFcZ4OR1hhH+og0IbSY4=",
+  "Hash": "uWAK/lYjwgh790kK8nR+etLMS4UfM9BxytZn3G1uNDU=",
   "Source": "HospitalAPI",
   "BasePath": "_content/HospitalAPI",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "HospitalAPI\\wwwroot",
       "Source": "HospitalAPI",
-      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\wwwroot\\",
       "BasePath": "_content/HospitalAPI",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\wwwroot\\uploads\\493c6ce9-69fd-4660-91d3-1f54ca0a862a.png",
+      "Identity": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\wwwroot\\uploads\\493c6ce9-69fd-4660-91d3-1f54ca0a862a.png",
       "SourceId": "HospitalAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\wwwroot\\",
       "BasePath": "_content/HospitalAPI",
       "RelativePath": "uploads/493c6ce9-69fd-4660-91d3-1f54ca0a862a.png",
       "AssetKind": "All",
@@ -36,10 +36,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\493c6ce9-69fd-4660-91d3-1f54ca0a862a.png"
     },
     {
-      "Identity": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\wwwroot\\uploads\\80758811-e542-4970-8547-aa4501a98628.png",
+      "Identity": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\wwwroot\\uploads\\80758811-e542-4970-8547-aa4501a98628.png",
       "SourceId": "HospitalAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\wwwroot\\",
       "BasePath": "_content/HospitalAPI",
       "RelativePath": "uploads/80758811-e542-4970-8547-aa4501a98628.png",
       "AssetKind": "All",
@@ -55,10 +55,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\80758811-e542-4970-8547-aa4501a98628.png"
     },
     {
-      "Identity": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\wwwroot\\uploads\\aa15a9ca-9f76-441f-93f8-561f53e4ffec.png",
+      "Identity": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\wwwroot\\uploads\\aa15a9ca-9f76-441f-93f8-561f53e4ffec.png",
       "SourceId": "HospitalAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\wwwroot\\",
       "BasePath": "_content/HospitalAPI",
       "RelativePath": "uploads/aa15a9ca-9f76-441f-93f8-561f53e4ffec.png",
       "AssetKind": "All",
@@ -74,10 +74,10 @@
       "OriginalItemSpec": "wwwroot\\uploads\\aa15a9ca-9f76-441f-93f8-561f53e4ffec.png"
     },
     {
-      "Identity": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\wwwroot\\uploads\\dd4f61e3-f6cf-49e1-b7dd-ebbb73fc9d1a.png",
+      "Identity": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\wwwroot\\uploads\\dd4f61e3-f6cf-49e1-b7dd-ebbb73fc9d1a.png",
       "SourceId": "HospitalAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\hospitalapi\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\taira\\OneDrive\\Desktop\\Projects\\hospitalApp\\HospitalAPI\\wwwroot\\",
       "BasePath": "_content/HospitalAPI",
       "RelativePath": "uploads/dd4f61e3-f6cf-49e1-b7dd-ebbb73fc9d1a.png",
       "AssetKind": "All",

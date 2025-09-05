@@ -44,7 +44,6 @@ function AdminGallery() {
                 showAlert('error', 'Error!', 'Failed to fetch gallery data.');
             }
         } catch (error) {
-            console.error('Fetch gallery error:', error);
             showAlert('error', 'Error!', 'Failed to fetch gallery data.');
         } finally {
             setLoading(false);
@@ -89,12 +88,9 @@ function AdminGallery() {
                 showAlert('success', 'Success!', 'Gallery item updated successfully!');
                 fetchGalleryData(); // Refresh the list
             } else {
-                const errorText = await response.text();
-                console.error('API Error:', response.status, errorText);
                 showAlert('error', 'Error!', `Failed to update gallery item. Status: ${response.status}`);
             }
         } catch (error) {
-            console.error('Save error:', error);
             showAlert('error', 'Error!', 'Failed to save gallery item data.');
         } finally {
             setLoading(false);
@@ -227,12 +223,9 @@ function AdminGallery() {
                 closeModal();
                 fetchGalleryData();
             } else {
-                const errorText = await response.text();
-                console.error('Create gallery item error:', errorText);
                 showAlert('error', 'Error!', 'Failed to create gallery item.');
             }
         } catch (error) {
-            console.error('Create gallery item error:', error);
             showAlert('error', 'Error!', 'Failed to save gallery item data.');
         } finally {
             setLoading(false);

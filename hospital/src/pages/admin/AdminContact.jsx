@@ -60,7 +60,7 @@ const AdminContact = () => {
                 setSocialMediaData(mappedSocialMediaData);
             }
         } catch (error) {
-            console.error('Error fetching contact data:', error);
+            // Error fetching contact data
         } finally {
             setLoading(false);
         }
@@ -129,7 +129,6 @@ const AdminContact = () => {
                 });
             }
         } catch (error) {
-            console.error('Error updating data:', error);
             Swal.fire({
                 icon: 'error',
                 title: 'Error!',

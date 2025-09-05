@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import LogoCarousel from '../../ui/LogoCarousel';
+import { RequestModal } from '../../ui';
 import './EventsDetail.css';
 
 const EventsDetail = () => {
@@ -12,15 +13,7 @@ const EventsDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
-    const [showModal, setShowModal] = useState(false);
-    const [formData, setFormData] = useState({
-        name: '',
-        surname: '',
-        email: '',
-        phone: '',
-        position: '',
-        finCode: ''
-    });
+    const [showRequestModal, setShowRequestModal] = useState(false);
 
     // Fetch event data from API
     useEffect(() => {
@@ -83,27 +76,10 @@ const EventsDetail = () => {
         return `/src/assets/${imageName}`;
     };
 
-    // Form handling functions
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Here you can add API call or other logic
-        setShowModal(false);
-        setFormData({
-            name: '',
-            surname: '',
-            email: '',
-            phone: '',
-            position: '',
-            finCode: ''
-        });
+    // Handle request modal success
+    const handleRequestSuccess = () => {
+        console.log('Request submitted successfully from event detail page');
+        setShowRequestModal(false);
     };
 
     // Show loading state
@@ -194,112 +170,19 @@ const EventsDetail = () => {
                 <img src={getImagePath(event.detailImageLeft)} alt="Event Detail Left" className="left-event-image" />
                 <img src={getImagePath(event.detailImageMain)} alt="Event Detail Main" className="main-event-image" />
                 <img src={getImagePath(event.detailImageRight)} alt="Event Detail Right" className="right-event-image" />
-                <button className="muraciet-btn" onClick={() => setShowModal(true)}>Müraciət et</button>
+                <button className="muraciet-btn" onClick={() => setShowRequestModal(true)}>Müraciət et</button>
             </div>
 
             <div className="logo-carousel-section events-detail-logo-carousel">
                 <LogoCarousel />
             </div>
 
-            {/* Application Modal */}
-            {showModal && (
-                <div className="modal-overlay" onClick={() => setShowModal(false)}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <div className="modal-header">
-                            <h2>Müraciət göndər</h2>
-                            <button className="modal-close" onClick={() => setShowModal(false)}>×</button>
-                        </div>
-
-                        <form onSubmit={handleSubmit} className="modal-form">
-                            <div className="form-columns">
-                                <div className="form-left-column">
-                                    <div className="form-group">
-                                        <label htmlFor="name">Ad</label>
-                                        <input
-                                            type="text"
-                                            id="name"
-                                            name="name"
-                                            value={formData.name}
-                                            onChange={handleInputChange}
-                                            placeholder="Adınızı daxil edin"
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="email">Email</label>
-                                        <input
-                                            type="email"
-                                            id="email"
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={handleInputChange}
-                                            placeholder="Emailinizi daxil edin"
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="position">Vəzifəsi</label>
-                                        <input
-                                            type="text"
-                                            id="position"
-                                            name="position"
-                                            value={formData.position}
-                                            onChange={handleInputChange}
-                                            placeholder="Vəzifənizi daxil edin"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="form-right-column">
-                                    <div className="form-group">
-                                        <label htmlFor="surname">Soyad</label>
-                                        <input
-                                            type="text"
-                                            id="surname"
-                                            name="surname"
-                                            value={formData.surname}
-                                            onChange={handleInputChange}
-                                            placeholder="Soyadınızı daxil edin"
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="phone">Telefon</label>
-                                        <input
-                                            type="tel"
-                                            id="phone"
-                                            name="phone"
-                                            value={formData.phone}
-                                            onChange={handleInputChange}
-                                            placeholder="Telefon nömrənizi daxil edin"
-                                            required
-                                        />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="finCode">FİN kodu</label>
-                                        <input
-                                            type="text"
-                                            id="finCode"
-                                            name="finCode"
-                                            value={formData.finCode}
-                                            onChange={handleInputChange}
-                                            placeholder="FİN kodunuzu daxil edin"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button type="submit" className="submit-btn">Müraciət et</button>
-                        </form>
-                    </div>
-                </div>
-            )}
+            {/* Request Modal */}
+            <RequestModal
+                isOpen={showRequestModal}
+                onClose={() => setShowRequestModal(false)}
+                onSuccess={handleRequestSuccess}
+            />
         </div>
     );
 };

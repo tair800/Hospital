@@ -4,6 +4,7 @@ import './Home.css';
 import InfoCard from '../../ui/InfoCard';
 import EmployeeSlider from '../employee/EmployeeSlider';
 import LogoCarousel from '../../ui/LogoCarousel';
+import { RequestModal } from '../../ui';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -23,6 +24,8 @@ const Home = () => {
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showRequestModal, setShowRequestModal] = useState(false);
+    const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
 
     // Fetch home sections data from API
     useEffect(() => {
@@ -111,6 +114,38 @@ const Home = () => {
 
         fetchEmployees();
     }, []);
+
+    // Countdown timer effect for current hero event
+    useEffect(() => {
+        if (!heroEvents.length || currentSlide >= heroEvents.length) return;
+
+        const currentEvent = heroEvents[currentSlide];
+        if (!currentEvent) return;
+
+        const calculateTimeLeft = () => {
+            const now = new Date().getTime();
+            const eventTime = new Date(currentEvent.eventDate).getTime();
+            const difference = eventTime - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+
+                setTimeLeft({ days, hours, minutes });
+            } else {
+                setTimeLeft({ days: 0, hours: 0, minutes: 0 });
+            }
+        };
+
+        // Calculate immediately
+        calculateTimeLeft();
+
+        // Update every second for real-time countdown
+        const timer = setInterval(calculateTimeLeft, 1000);
+
+        return () => clearInterval(timer);
+    }, [heroEvents, currentSlide]);
 
     // Function to truncate text to a specific length and add "..." if needed
     const truncateText = (text, maxLength) => {
@@ -243,7 +278,12 @@ const Home = () => {
                                                         Qiymət: {formattedPrice}
                                                     </div>
                                                     <div className="home-hero-event-buttons">
-                                                        <button className="home-hero-btn-primary">Bilet al</button>
+                                                        <button
+                                                            className="home-hero-btn-primary"
+                                                            onClick={() => setShowRequestModal(true)}
+                                                        >
+                                                            Bilet al
+                                                        </button>
                                                         <button
                                                             className="home-hero-btn-secondary"
                                                             onClick={() => navigate(`/event/${event.id}`)}
@@ -254,11 +294,28 @@ const Home = () => {
                                                 </div>
                                             </div>
                                             <div className="home-hero-card-right-section">
-                                                <img
-                                                    src={getImagePath(event.detailImageMain)}
-                                                    alt="Event Main Image"
-                                                    className="home-hero-event-image"
-                                                />
+                                                <div className="home-hero-event-image-container">
+                                                    <img
+                                                        src={getImagePath(event.detailImageMain)}
+                                                        alt="Event Main Image"
+                                                        className="home-hero-event-image"
+                                                    />
+                                                    <div className="home-hero-countdown-timer">
+                                                        <div className="home-hero-timer-display">
+                                                            <div className="home-hero-timer-unit">
+                                                                <span className="home-hero-timer-number">{timeLeft.days.toString().padStart(2, '0')}</span>
+                                                            </div>
+                                                            <span className="home-hero-timer-separator">:</span>
+                                                            <div className="home-hero-timer-unit">
+                                                                <span className="home-hero-timer-number">{timeLeft.hours.toString().padStart(2, '0')}</span>
+                                                            </div>
+                                                            <span className="home-hero-timer-separator">:</span>
+                                                            <div className="home-hero-timer-unit">
+                                                                <span className="home-hero-timer-number">{timeLeft.minutes.toString().padStart(2, '0')}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -533,6 +590,15 @@ const Home = () => {
 
             {/* Logo Carousel */}
             <LogoCarousel />
+
+            {/* Request Modal */}
+            <RequestModal
+                isOpen={showRequestModal}
+                onClose={() => setShowRequestModal(false)}
+                onSuccess={() => {
+                    console.log('Request submitted successfully');
+                }}
+            />
         </div>
     );
 };

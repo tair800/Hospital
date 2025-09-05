@@ -20,7 +20,28 @@ export const apiRequest = async (endpoint, options = {}) => {
             throw new Error(`HTTP error! status: ${response.status}`)
         }
 
-        return await response.json()
+        // Handle different response types
+        const contentType = response.headers.get('content-type')
+
+        // If response is empty (like DELETE requests with NoContent), return null
+        if (response.status === 204) {
+            return null
+        }
+
+        // Check if response has content
+        const contentLength = response.headers.get('content-length')
+        if (contentLength === '0' || !response.body) {
+            return null
+        }
+
+        // If response is JSON, parse it
+        if (contentType && contentType.includes('application/json')) {
+            const text = await response.text()
+            return text ? JSON.parse(text) : null
+        }
+
+        // For other content types, return the response text
+        return await response.text()
     } catch (error) {
         console.error('API request failed:', error)
         throw error
@@ -36,6 +57,10 @@ export const api = {
     }),
     put: (endpoint, data) => apiRequest(endpoint, {
         method: 'PUT',
+        body: JSON.stringify(data),
+    }),
+    patch: (endpoint, data) => apiRequest(endpoint, {
+        method: 'PATCH',
         body: JSON.stringify(data),
     }),
     delete: (endpoint) => apiRequest(endpoint, { method: 'DELETE' }),

@@ -55,8 +55,8 @@
     box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
 }
 
-.admin-events-refresh-btn {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+.admin-events-requests-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -65,13 +65,18 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
-.admin-events-refresh-btn:hover {
-    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+.admin-events-requests-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 123, 255, 0.4);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+    color: white;
+    text-decoration: none;
 }
 
 /* Events List Section */

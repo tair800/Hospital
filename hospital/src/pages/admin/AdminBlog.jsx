@@ -3,7 +3,6 @@ import Swal from 'sweetalert2'
 import { getImagePath } from '../../utils/imageUtils'
 import adminDeleteIcon from '../../assets/admin-delete.png'
 import adminBrowseIcon from '../../assets/admin-browse.png'
-import blog1Image from '../../assets/blog1.png'
 import Pagination from '../../components/ui/Pagination'
 import usePagination from '../../hooks/usePagination'
 import './AdminBlog.css'
@@ -31,7 +30,6 @@ function AdminBlog() {
         totalPages,
         currentItems: currentBlogs,
         startIndex,
-        endIndex,
         handlePageChange,
         handlePreviousPage,
         handleNextPage,
@@ -126,7 +124,6 @@ function AdminBlog() {
                         responseData = JSON.parse(responseText);
 
                     } catch (parseError) {
-                        console.error('Failed to parse JSON response:', parseError);
                         responseData = dataToSend; // Use the data we sent as fallback
                     }
                 } else {
@@ -146,13 +143,9 @@ function AdminBlog() {
                     [blogId]: responseData
                 }));
             } else {
-                const errorText = await response.text();
-                console.error('API Error Status:', response.status);
-                console.error('API Error Response:', errorText);
                 showAlert('error', 'Error!', `Failed to update blog. Status: ${response.status}`);
             }
         } catch (error) {
-            console.error('Save error:', error);
             showAlert('error', 'Error!', 'Failed to save blog data.');
         } finally {
             setLoading(false);
@@ -314,12 +307,9 @@ function AdminBlog() {
                 closeModal();
                 fetchBlogs();
             } else {
-                const errorText = await response.text();
-                console.error('Create blog error:', errorText);
                 showAlert('error', 'Error!', 'Failed to create blog.');
             }
         } catch (error) {
-            console.error('Create blog error:', error);
             showAlert('error', 'Error!', 'Failed to save blog data.');
         } finally {
             setLoading(false);
@@ -522,7 +512,6 @@ function AdminBlog() {
                                                         alt="Blog image"
                                                         className="current-image"
                                                         onError={(e) => {
-                                                            console.log('Image load error:', currentData.image);
                                                             e.target.style.display = 'none';
                                                         }}
                                                     />
@@ -744,7 +733,6 @@ function AdminBlog() {
                                                     alt="Blog image"
                                                     className="admin-blog-current-image"
                                                     onError={(e) => {
-                                                        console.log('Modal image load error:', blogData.image);
                                                         e.target.style.display = 'none';
                                                     }}
                                                 />

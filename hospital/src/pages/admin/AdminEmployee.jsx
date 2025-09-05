@@ -49,7 +49,6 @@ function AdminEmployee() {
         totalPages,
         currentItems: currentEmployees,
         startIndex,
-        endIndex,
         handlePageChange,
         handlePreviousPage,
         handleNextPage,
@@ -87,7 +86,6 @@ function AdminEmployee() {
 
                                 return fullEmployeeData;
                             } else {
-                                console.error(`Failed to fetch full data for employee ${employee.id}`);
                                 return {
                                     ...employee,
                                     certificates: [],
@@ -95,7 +93,6 @@ function AdminEmployee() {
                                 };
                             }
                         } catch (error) {
-                            console.error(`Error fetching full data for employee ${employee.id}:`, error);
                             return {
                                 ...employee,
                                 certificates: [],
@@ -162,7 +159,6 @@ function AdminEmployee() {
                         responseData = JSON.parse(responseText);
 
                     } catch (parseError) {
-                        console.error('Failed to parse JSON response:', parseError);
                         responseData = editedData; // Use the data we sent as fallback
                     }
                 } else {
@@ -187,13 +183,9 @@ function AdminEmployee() {
                     [employeeId]: responseData
                 }));
             } else {
-                const errorText = await response.text();
-                console.error('API Error Status:', response.status);
-                console.error('API Error Response:', errorText);
                 showAlert('error', 'Error!', `Failed to update employee. Status: ${response.status}`);
             }
         } catch (error) {
-            console.error('Save error:', error);
             showAlert('error', 'Error!', 'Failed to save employee data.');
         } finally {
             setLoading(false);
@@ -410,12 +402,9 @@ function AdminEmployee() {
                 closeModal();
                 fetchEmployees();
             } else {
-                const errorText = await response.text();
-                console.error('Create employee error:', errorText);
                 showAlert('error', 'Error!', 'Failed to create employee.');
             }
         } catch (error) {
-            console.error('Create employee error:', error);
             showAlert('error', 'Error!', 'Failed to save employee data.');
         } finally {
             setLoading(false);
@@ -722,11 +711,10 @@ function AdminEmployee() {
                 if (response.ok) {
 
                 } else {
-                    const errorText = await response.text();
-                    console.error(`Failed to update certificate ${certificateId}:`, response.status, errorText);
+                    // Certificate update failed
                 }
             } catch (error) {
-                console.error(`Error saving certificate ${certificateId}:`, error);
+                // Certificate save error
             }
         }
 
@@ -803,11 +791,10 @@ function AdminEmployee() {
                 });
 
                 if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error(`Failed to update degree ${degreeId}:`, response.status, errorText);
+                    // Degree update failed
                 }
             } catch (error) {
-                console.error(`Error saving degree ${degreeIdStr}:`, error);
+                // Degree save error
             }
         }
 
@@ -871,13 +858,10 @@ function AdminEmployee() {
                 });
                 fetchEmployees();
             } else {
-                const errorText = await response.text();
-                console.error('Certificate update error:', response.status, errorText);
-                showAlert('error', 'Error!', `Failed to update certificate. Status: ${response.status}. Check console for details.`);
+                showAlert('error', 'Error!', `Failed to update certificate. Status: ${response.status}`);
             }
         } catch (error) {
-            console.error('Certificate save error:', error);
-            showAlert('error', 'Error!', 'Failed to update certificate. Check console for details.');
+            showAlert('error', 'Error!', 'Failed to update certificate.');
         } finally {
             setLoading(false);
         }
@@ -958,8 +942,6 @@ function AdminEmployee() {
                 });
                 fetchEmployees();
             } else {
-                const errorText = await response.text();
-                console.error('Degree update error:', response.status, errorText);
                 showAlert('error', 'Error!', `Failed to update degree. Status: ${response.status}`);
             }
         } catch (error) {

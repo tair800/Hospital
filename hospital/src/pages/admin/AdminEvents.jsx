@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { getImagePath } from '../../utils/imageUtils'
 import adminDeleteIcon from '../../assets/admin-delete.png'
 import adminBrowseIcon from '../../assets/admin-browse.png'
-import eventImg from '../../assets/event-img.png'
 import Pagination from '../../components/ui/Pagination'
 import usePagination from '../../hooks/usePagination'
 import './AdminEvents.css'
@@ -37,7 +37,6 @@ function AdminEvents() {
         totalPages,
         currentItems: currentEvents,
         startIndex,
-        endIndex,
         handlePageChange,
         handlePreviousPage,
         handleNextPage,
@@ -77,7 +76,6 @@ function AdminEvents() {
                 showAlert('error', 'Error!', 'Failed to fetch events.');
             }
         } catch (error) {
-            console.error('Fetch events error:', error);
             showAlert('error', 'Error!', 'Failed to fetch events.');
         } finally {
             setLoading(false);
@@ -93,13 +91,10 @@ function AdminEvents() {
             if (isNaN(date.getTime())) return '';
             return date.toISOString().split('T')[0];
         } catch (error) {
-            console.error('Date formatting error:', error);
             return '';
         }
     };
 
-    // Use the centralized image utility
-    // getImagePath is now imported from utils/imageUtils
 
     // Handle input changes for inline editing
     const handleInlineInputChange = (eventId, field, value) => {
@@ -129,7 +124,6 @@ function AdminEvents() {
                         dataToSend.eventDate = formattedDate.toISOString();
                     }
                 } catch (error) {
-                    console.error('Date formatting error:', error);
                     // Keep original date if formatting fails
                 }
             }
@@ -146,15 +140,10 @@ function AdminEvents() {
 
             if (response.ok) {
                 showAlert('success', 'Success!', 'Event updated successfully!');
-                // Don't refresh the list immediately to avoid disrupting user input
-                // The user can manually refresh if needed
             } else {
-                const errorText = await response.text();
-                console.error('API Error:', response.status, errorText);
                 showAlert('error', 'Error!', `Failed to update event. Status: ${response.status}`);
             }
         } catch (error) {
-            console.error('Save error:', error);
             showAlert('error', 'Error!', 'Failed to save event data.');
         } finally {
             setLoading(false);
@@ -292,7 +281,7 @@ function AdminEvents() {
                     }
                 }
             } catch (error) {
-                console.error('Date formatting error:', error);
+                // Date formatting failed, keep original
             }
 
             const eventDataToSend = {
@@ -317,12 +306,9 @@ function AdminEvents() {
                 closeModal();
                 fetchEvents();
             } else {
-                const errorText = await response.text();
-                console.error('Create event error:', errorText);
                 showAlert('error', 'Error!', 'Failed to create event.');
             }
         } catch (error) {
-            console.error('Create event error:', error);
             showAlert('error', 'Error!', 'Failed to save event data.');
         } finally {
             setLoading(false);
@@ -389,13 +375,13 @@ function AdminEvents() {
                 <div className="admin-events-header">
                     <h1>Event Management</h1>
                     <div className="admin-events-header-actions">
-                        <button
-                            className="admin-events-refresh-btn"
-                            onClick={fetchEvents}
-                            title="Refresh events list"
+                        <Link
+                            to="/admin/requests"
+                            className="admin-events-requests-btn"
+                            title="View requests"
                         >
-                            Refresh
-                        </button>
+                            View Requests
+                        </Link>
                         <button
                             className="admin-events-create-btn"
                             onClick={openCreateModal}

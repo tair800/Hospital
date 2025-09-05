@@ -1,15 +1,15 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { 
-  Header, 
-  Footer, 
+import {
+  Header,
+  Footer,
   ScrollToTop,
   ProtectedRoute,
   EmployeeDetail,
   EventsDetail,
   BlogDetail
 } from './components'
-import { 
+import {
   HomePage,
   AboutPage,
   EventsPage,
@@ -28,6 +28,7 @@ import AdminEvents from './pages/admin/AdminEvents'
 import AdminSponsors from './pages/admin/AdminSponsors'
 import AdminGallery from './pages/admin/AdminGallery'
 import AdminEmployee from './pages/admin/AdminEmployee'
+import AdminRequests from './pages/admin/AdminRequests'
 import AdminLayout from './pages/admin/AdminLayout'
 import AdminLogin from './pages/admin/AdminLogin'
 
@@ -111,6 +112,7 @@ function App() {
             <Route path="sponsors" element={<AdminSponsors />} />
             <Route path="gallery" element={<AdminGallery />} />
             <Route path="employee" element={<AdminEmployee />} />
+            <Route path="requests" element={<AdminRequests />} />
           </Route>
           <Route path="/blog" element={
             <>

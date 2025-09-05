@@ -21,6 +21,7 @@ namespace HospitalAPI.Data
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<HomeSection> HomeSections { get; set; }
         public DbSet<Gallery> Gallery { get; set; }
+        public DbSet<Request> Requests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -176,6 +177,21 @@ namespace HospitalAPI.Data
                 entity.HasKey(ec => ec.Id);
                 entity.Property(ec => ec.CertificateImage).IsRequired().HasMaxLength(500);
                 entity.Property(ec => ec.CertificateName).IsRequired().HasMaxLength(255);
+            });
+
+            // Configure Request table for SQLite
+            modelBuilder.Entity<Request>(entity =>
+            {
+                entity.HasKey(r => r.Id);
+                entity.Property(r => r.Name).IsRequired().HasMaxLength(100);
+                entity.Property(r => r.Surname).IsRequired().HasMaxLength(100);
+                entity.Property(r => r.Email).IsRequired().HasMaxLength(255);
+                entity.Property(r => r.Phone).IsRequired().HasMaxLength(20);
+                entity.Property(r => r.FinCode).IsRequired().HasMaxLength(20);
+                entity.Property(r => r.Vezife).IsRequired().HasMaxLength(200);
+                entity.Property(r => r.Status).IsRequired().HasMaxLength(20).HasDefaultValue("pending");
+                entity.Property(r => r.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(r => r.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
             });
         }
 
