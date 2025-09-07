@@ -36,6 +36,31 @@
     align-items: center;
 }
 
+.admin-events-search-container {
+    position: relative;
+}
+
+.admin-events-search-input {
+    padding: 10px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 300px;
+    background: white;
+    color: #000;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.admin-events-search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.admin-events-search-input::placeholder {
+    color: #999;
+}
+
 .admin-events-create-btn {
     background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
     color: white;
@@ -760,6 +785,17 @@
         flex-direction: column;
         gap: 1rem;
         text-align: center;
+    }
+
+    .admin-events-header-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .admin-events-search-input {
+        width: 100%;
+        max-width: 400px;
     }
 
     .admin-events-card-header {

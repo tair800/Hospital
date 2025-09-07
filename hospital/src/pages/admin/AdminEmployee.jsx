@@ -42,6 +42,8 @@ function AdminEmployee() {
     const [loading, setLoading] = useState(false);
     const [editingEmployees, setEditingEmployees] = useState({});
     const [showModal, setShowModal] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredEmployees, setFilteredEmployees] = useState([]);
 
     // Pagination hook
     const {
@@ -49,21 +51,60 @@ function AdminEmployee() {
         totalPages,
         currentItems: currentEmployees,
         startIndex,
+        endIndex,
         handlePageChange,
         handlePreviousPage,
         handleNextPage,
         resetPagination
-    } = usePagination(employees, 1);
+    } = usePagination(filteredEmployees, 1);
 
     // Fetch all employees on component mount
     useEffect(() => {
         fetchEmployees();
     }, []);
 
-    // Reset pagination when employees change
+    // Filter employees based on search term
+    useEffect(() => {
+        if (!searchTerm.trim()) {
+            setFilteredEmployees(employees);
+        } else {
+            const searchLower = searchTerm.toLowerCase();
+
+            // First, get employees whose names start with the search term
+            const startsWithName = employees.filter(employee =>
+                employee.fullname?.toLowerCase().startsWith(searchLower)
+            );
+
+            // Then, get employees whose names contain the search term (but don't start with it)
+            const containsName = employees.filter(employee =>
+                employee.fullname?.toLowerCase().includes(searchLower) &&
+                !employee.fullname?.toLowerCase().startsWith(searchLower)
+            );
+
+            // Finally, get employees where other fields contain the search term
+            const otherFields = employees.filter(employee =>
+                !employee.fullname?.toLowerCase().includes(searchLower) && (
+                    employee.field?.toLowerCase().includes(searchLower) ||
+                    employee.clinic?.toLowerCase().includes(searchLower) ||
+                    employee.phone?.toLowerCase().includes(searchLower) ||
+                    employee.whatsApp?.toLowerCase().includes(searchLower) ||
+                    employee.email?.toLowerCase().includes(searchLower) ||
+                    employee.location?.toLowerCase().includes(searchLower) ||
+                    employee.firstDesc?.toLowerCase().includes(searchLower) ||
+                    employee.secondDesc?.toLowerCase().includes(searchLower)
+                )
+            );
+
+            // Combine results in priority order: starts with name, contains name, other fields
+            const filtered = [...startsWithName, ...containsName, ...otherFields];
+            setFilteredEmployees(filtered);
+        }
+    }, [employees, searchTerm]);
+
+    // Reset pagination when filtered employees change
     useEffect(() => {
         resetPagination();
-    }, [employees, resetPagination]);
+    }, [filteredEmployees, resetPagination]);
 
     // Fetch all employees from API with their certificates and degrees
     const fetchEmployees = async () => {
@@ -960,6 +1001,15 @@ function AdminEmployee() {
                 <div className="admin-employee-header">
                     <h1>Employee Management</h1>
                     <div className="admin-employee-header-actions">
+                        <div className="admin-employee-search-container">
+                            <input
+                                type="text"
+                                placeholder="Search employees..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="admin-employee-search-input"
+                            />
+                        </div>
                         <button
                             className="admin-employee-create-btn"
                             onClick={openCreateModal}
@@ -972,7 +1022,7 @@ function AdminEmployee() {
 
                 {/* Employees List */}
                 <div className="admin-employee-list-section">
-                    {employees.length === 0 ? (
+                    {filteredEmployees.length === 0 ? (
                         <div className="admin-employee-no-employees">
                             <h3>No employees found</h3>
                             <p>Create your first employee to get started!</p>
@@ -1475,7 +1525,7 @@ function AdminEmployee() {
                 </div>
 
                 {/* Pagination */}
-                {employees.length > 0 && (
+                {filteredEmployees.length > 0 && (
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
@@ -1484,7 +1534,7 @@ function AdminEmployee() {
                         onNextPage={handleNextPage}
                         startIndex={startIndex}
                         endIndex={endIndex}
-                        totalItems={employees.length}
+                        totalItems={filteredEmployees.length}
                         itemsPerPage={1}
                         showInfo={true}
                         className="admin-employee-pagination"

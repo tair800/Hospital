@@ -89,6 +89,31 @@
     align-items: center;
 }
 
+.admin-blog-search-container {
+    position: relative;
+}
+
+.admin-blog-search-input {
+    padding: 10px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 300px;
+    background: white;
+    color: #000;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.admin-blog-search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.admin-blog-search-input::placeholder {
+    color: #999;
+}
+
 .admin-blog-header h2 {
     margin: 0;
     font-size: 1.5rem;
@@ -757,6 +782,17 @@
         gap: 1rem;
         text-align: center;
         padding: 1rem;
+    }
+
+    .admin-blog-header-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .admin-blog-search-input {
+        width: 100%;
+        max-width: 400px;
     }
 
     .admin-blog-header-section h1 {

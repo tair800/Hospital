@@ -49,6 +49,37 @@
     box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
 }
 
+.admin-employee-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.admin-employee-search-container {
+    position: relative;
+}
+
+.admin-employee-search-input {
+    padding: 10px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 300px;
+    background: white;
+    color: #000;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.admin-employee-search-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.admin-employee-search-input::placeholder {
+    color: #999;
+}
+
 /* Employee List Section */
 .admin-employee-list-section {
     display: flex;
@@ -1546,6 +1577,17 @@
         padding: 1rem;
     }
 
+    .admin-employee-header-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .admin-employee-search-input {
+        width: 100%;
+        max-width: 400px;
+    }
+
     .admin-employee-header h1 {
         font-size: 1.5rem;
     }
@@ -1609,6 +1651,11 @@
 
     .admin-employee-create-btn {
         width: 100%;
+    }
+
+    .admin-employee-search-input {
+        width: 100%;
+        font-size: 0.9rem;
     }
 
     .admin-employee-modal {

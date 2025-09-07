@@ -16,6 +16,8 @@ function AdminSponsors() {
     const [loading, setLoading] = useState(false);
     const [editingLogos, setEditingLogos] = useState({});
     const [showModal, setShowModal] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredLogos, setFilteredLogos] = useState([]);
 
     // Pagination hook
     const {
@@ -28,17 +30,33 @@ function AdminSponsors() {
         handlePreviousPage,
         handleNextPage,
         resetPagination
-    } = usePagination(logos, 1);
+    } = usePagination(filteredLogos, 1);
 
     // Fetch all logos on component mount
     useEffect(() => {
         fetchLogos();
     }, []);
 
-    // Reset pagination when logos change
+    // Filter logos based on search term
+    useEffect(() => {
+        if (!searchTerm.trim()) {
+            setFilteredLogos(logos);
+        } else {
+            const searchLower = searchTerm.toLowerCase();
+
+            // Filter logos by name
+            const filtered = logos.filter(logo =>
+                logo.name?.toLowerCase().includes(searchLower)
+            );
+
+            setFilteredLogos(filtered);
+        }
+    }, [logos, searchTerm]);
+
+    // Reset pagination when filtered logos change
     useEffect(() => {
         resetPagination();
-    }, [logos, resetPagination]);
+    }, [filteredLogos, resetPagination]);
 
     // Fetch all logos from API
     const fetchLogos = async () => {
@@ -293,6 +311,15 @@ function AdminSponsors() {
                 <div className="admin-sponsors-header">
                     <h1>Sponsor Logo Management</h1>
                     <div className="admin-sponsors-header-actions">
+                        <div className="admin-sponsors-search-container">
+                            <input
+                                type="text"
+                                placeholder="Search sponsors..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="admin-sponsors-search-input"
+                            />
+                        </div>
                         <button
                             className="admin-sponsors-create-btn"
                             onClick={openCreateModal}
@@ -305,7 +332,7 @@ function AdminSponsors() {
 
                 {/* Logos List */}
                 <div className="admin-sponsors-list-section">
-                    {logos.length === 0 ? (
+                    {filteredLogos.length === 0 ? (
                         <div className="admin-sponsors-no-logos">
                             <h3>No logos found</h3>
                             <p>Create your first sponsor logo to get started!</p>
@@ -405,7 +432,7 @@ function AdminSponsors() {
                 </div>
 
                 {/* Pagination */}
-                {logos.length > 0 && (
+                {filteredLogos.length > 0 && (
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
@@ -414,7 +441,7 @@ function AdminSponsors() {
                         onNextPage={handleNextPage}
                         startIndex={startIndex}
                         endIndex={endIndex}
-                        totalItems={logos.length}
+                        totalItems={filteredLogos.length}
                         itemsPerPage={1}
                         showInfo={true}
                         className="admin-sponsors-pagination"

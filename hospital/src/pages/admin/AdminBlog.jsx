@@ -23,6 +23,8 @@ function AdminBlog() {
     const [loading, setLoading] = useState(false);
     const [editingBlogs, setEditingBlogs] = useState({});
     const [showModal, setShowModal] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredBlogs, setFilteredBlogs] = useState([]);
 
     // Pagination hook
     const {
@@ -30,21 +32,58 @@ function AdminBlog() {
         totalPages,
         currentItems: currentBlogs,
         startIndex,
+        endIndex,
         handlePageChange,
         handlePreviousPage,
         handleNextPage,
         resetPagination
-    } = usePagination(blogs, 1);
+    } = usePagination(filteredBlogs, 1);
 
     // Fetch all blogs on component mount
     useEffect(() => {
         fetchBlogs();
     }, []);
 
-    // Reset pagination when blogs change
+    // Filter blogs based on search term
+    useEffect(() => {
+        if (!searchTerm.trim()) {
+            setFilteredBlogs(blogs);
+        } else {
+            const searchLower = searchTerm.toLowerCase();
+
+            // First, get blogs whose titles start with the search term
+            const startsWithTitle = blogs.filter(blog =>
+                blog.title?.toLowerCase().startsWith(searchLower)
+            );
+
+            // Then, get blogs whose titles contain the search term (but don't start with it)
+            const containsTitle = blogs.filter(blog =>
+                blog.title?.toLowerCase().includes(searchLower) &&
+                !blog.title?.toLowerCase().startsWith(searchLower)
+            );
+
+            // Finally, get blogs where other fields contain the search term
+            const otherFields = blogs.filter(blog =>
+                !blog.title?.toLowerCase().includes(searchLower) && (
+                    blog.description?.toLowerCase().includes(searchLower) ||
+                    blog.secondDescTitle?.toLowerCase().includes(searchLower) ||
+                    blog.secondDescBody?.toLowerCase().includes(searchLower) ||
+                    blog.thirdTextTitle?.toLowerCase().includes(searchLower) ||
+                    blog.thirdTextBody?.toLowerCase().includes(searchLower) ||
+                    blog.date?.toLowerCase().includes(searchLower)
+                )
+            );
+
+            // Combine results in priority order: starts with title, contains title, other fields
+            const filtered = [...startsWithTitle, ...containsTitle, ...otherFields];
+            setFilteredBlogs(filtered);
+        }
+    }, [blogs, searchTerm]);
+
+    // Reset pagination when filtered blogs change
     useEffect(() => {
         resetPagination();
-    }, [blogs, resetPagination]);
+    }, [filteredBlogs, resetPagination]);
 
     // Fetch all blogs from API
     const fetchBlogs = async () => {
@@ -355,6 +394,15 @@ function AdminBlog() {
                 <div className="admin-blog-header">
                     <h1>Blog Management</h1>
                     <div className="admin-blog-header-actions">
+                        <div className="admin-blog-search-container">
+                            <input
+                                type="text"
+                                placeholder="Search blogs..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="admin-blog-search-input"
+                            />
+                        </div>
                         <button
                             className="admin-blog-create-btn"
                             onClick={openCreateModal}
@@ -367,7 +415,7 @@ function AdminBlog() {
 
                 {/* Blogs List */}
                 <div className="admin-blog-list-section">
-                    {blogs.length === 0 ? (
+                    {filteredBlogs.length === 0 ? (
                         <div className="admin-blog-no-blogs">
                             <h3>No blogs found</h3>
                             <p>Create your first blog to get started!</p>
@@ -573,7 +621,7 @@ function AdminBlog() {
                 </div>
 
                 {/* Pagination */}
-                {blogs.length > 0 && (
+                {filteredBlogs.length > 0 && (
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
@@ -582,7 +630,7 @@ function AdminBlog() {
                         onNextPage={handleNextPage}
                         startIndex={startIndex}
                         endIndex={endIndex}
-                        totalItems={blogs.length}
+                        totalItems={filteredBlogs.length}
                         itemsPerPage={1}
                         showInfo={true}
                         className="admin-blog-pagination"

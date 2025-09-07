@@ -30,6 +30,8 @@ function AdminEvents() {
     const [loading, setLoading] = useState(false);
     const [editingEvents, setEditingEvents] = useState({});
     const [showModal, setShowModal] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredEvents, setFilteredEvents] = useState([]);
 
     // Pagination hook
     const {
@@ -37,21 +39,59 @@ function AdminEvents() {
         totalPages,
         currentItems: currentEvents,
         startIndex,
+        endIndex,
         handlePageChange,
         handlePreviousPage,
         handleNextPage,
         resetPagination
-    } = usePagination(events, 1);
+    } = usePagination(filteredEvents, 1);
 
     // Fetch all events on component mount
     useEffect(() => {
         fetchEvents();
     }, []);
 
-    // Reset pagination when events change
+    // Filter events based on search term
+    useEffect(() => {
+        if (!searchTerm.trim()) {
+            setFilteredEvents(events);
+        } else {
+            const searchLower = searchTerm.toLowerCase();
+
+            // First, get events whose titles start with the search term
+            const startsWithTitle = events.filter(event =>
+                event.title?.toLowerCase().startsWith(searchLower)
+            );
+
+            // Then, get events whose titles contain the search term (but don't start with it)
+            const containsTitle = events.filter(event =>
+                event.title?.toLowerCase().includes(searchLower) &&
+                !event.title?.toLowerCase().startsWith(searchLower)
+            );
+
+            // Finally, get events where other fields contain the search term
+            const otherFields = events.filter(event =>
+                !event.title?.toLowerCase().includes(searchLower) && (
+                    event.subtitle?.toLowerCase().includes(searchLower) ||
+                    event.description?.toLowerCase().includes(searchLower) ||
+                    event.longDescription?.toLowerCase().includes(searchLower) ||
+                    event.venue?.toLowerCase().includes(searchLower) ||
+                    event.trainer?.toLowerCase().includes(searchLower) ||
+                    event.eventDate?.toLowerCase().includes(searchLower) ||
+                    event.time?.toLowerCase().includes(searchLower)
+                )
+            );
+
+            // Combine results in priority order: starts with title, contains title, other fields
+            const filtered = [...startsWithTitle, ...containsTitle, ...otherFields];
+            setFilteredEvents(filtered);
+        }
+    }, [events, searchTerm]);
+
+    // Reset pagination when filtered events change
     useEffect(() => {
         resetPagination();
-    }, [events, resetPagination]);
+    }, [filteredEvents, resetPagination]);
 
     // Fetch all events from API
     const fetchEvents = async () => {
@@ -375,6 +415,15 @@ function AdminEvents() {
                 <div className="admin-events-header">
                     <h1>Event Management</h1>
                     <div className="admin-events-header-actions">
+                        <div className="admin-events-search-container">
+                            <input
+                                type="text"
+                                placeholder="Search events..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="admin-events-search-input"
+                            />
+                        </div>
                         <Link
                             to="/admin/requests"
                             className="admin-events-requests-btn"
@@ -394,7 +443,7 @@ function AdminEvents() {
 
                 {/* Events List */}
                 <div className="admin-events-list-section">
-                    {events.length === 0 ? (
+                    {filteredEvents.length === 0 ? (
                         <div className="admin-events-no-events">
                             <h3>No events found</h3>
                             <p>Create your first event to get started!</p>
@@ -737,7 +786,7 @@ function AdminEvents() {
                 </div>
 
                 {/* Pagination */}
-                {events.length > 0 && (
+                {filteredEvents.length > 0 && (
                     <Pagination
                         currentPage={currentPage}
                         totalPages={totalPages}
@@ -746,7 +795,7 @@ function AdminEvents() {
                         onNextPage={handleNextPage}
                         startIndex={startIndex}
                         endIndex={endIndex}
-                        totalItems={events.length}
+                        totalItems={filteredEvents.length}
                         itemsPerPage={1}
                         showInfo={true}
                         className="admin-events-pagination"
