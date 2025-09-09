@@ -33,6 +33,25 @@ function AdminEvents() {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredEvents, setFilteredEvents] = useState([]);
 
+    // New state for event-related data
+    const [eventSpeakers, setEventSpeakers] = useState({});
+    const [eventTimeline, setEventTimeline] = useState({});
+    const [eventEmployees, setEventEmployees] = useState({});
+    const [allEmployees, setAllEmployees] = useState([]);
+    const [showSpeakersModal, setShowSpeakersModal] = useState(false);
+    const [showTimelineModal, setShowTimelineModal] = useState(false);
+    const [showEmployeesModal, setShowEmployeesModal] = useState(false);
+    const [selectedEventId, setSelectedEventId] = useState(null);
+    const [newSpeaker, setNewSpeaker] = useState({ name: '', title: '', image: '' });
+    const [newTimelineSlot, setNewTimelineSlot] = useState({
+        startTime: '',
+        endTime: '',
+        title: '',
+        description: '',
+        info: '',
+        orderIndex: 1
+    });
+
     // Pagination hook
     const {
         currentPage,
@@ -49,6 +68,7 @@ function AdminEvents() {
     // Fetch all events on component mount
     useEffect(() => {
         fetchEvents();
+        fetchAllEmployees();
     }, []);
 
     // Filter events based on search term
@@ -119,6 +139,181 @@ function AdminEvents() {
             showAlert('error', 'Error!', 'Failed to fetch events.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    // Fetch all employees
+    const fetchAllEmployees = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/employees');
+            if (response.ok) {
+                const data = await response.json();
+                setAllEmployees(data);
+            }
+        } catch (error) {
+            console.error('Failed to fetch employees:', error);
+        }
+    };
+
+    // Fetch event speakers
+    const fetchEventSpeakers = async (eventId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/eventspeakers/event/${eventId}`);
+            if (response.ok) {
+                const data = await response.json();
+                setEventSpeakers(prev => ({ ...prev, [eventId]: data }));
+            }
+        } catch (error) {
+            console.error('Failed to fetch speakers:', error);
+        }
+    };
+
+    // Fetch event timeline
+    const fetchEventTimeline = async (eventId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/eventtimeline/event/${eventId}`);
+            if (response.ok) {
+                const data = await response.json();
+                setEventTimeline(prev => ({ ...prev, [eventId]: data }));
+            }
+        } catch (error) {
+            console.error('Failed to fetch timeline:', error);
+        }
+    };
+
+    // Fetch event employees
+    const fetchEventEmployees = async (eventId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/eventemployees/event/${eventId}`);
+            if (response.ok) {
+                const data = await response.json();
+                setEventEmployees(prev => ({ ...prev, [eventId]: data }));
+            }
+        } catch (error) {
+            console.error('Failed to fetch employees:', error);
+        }
+    };
+
+    // Add new speaker
+    const addSpeaker = async (eventId) => {
+        try {
+            const response = await fetch('http://localhost:5000/api/eventspeakers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...newSpeaker, eventId })
+            });
+
+            if (response.ok) {
+                showAlert('success', 'Success!', 'Speaker added successfully!');
+                fetchEventSpeakers(eventId);
+                setNewSpeaker({ name: '', title: '', image: '' });
+            } else {
+                showAlert('error', 'Error!', 'Failed to add speaker.');
+            }
+        } catch (error) {
+            showAlert('error', 'Error!', 'Failed to add speaker.');
+        }
+    };
+
+    // Add new timeline slot
+    const addTimelineSlot = async (eventId) => {
+        try {
+            const response = await fetch('http://localhost:5000/api/eventtimeline', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...newTimelineSlot, eventId })
+            });
+
+            if (response.ok) {
+                showAlert('success', 'Success!', 'Timeline slot added successfully!');
+                fetchEventTimeline(eventId);
+                setNewTimelineSlot({
+                    startTime: '',
+                    endTime: '',
+                    title: '',
+                    description: '',
+                    info: '',
+                    orderIndex: 1
+                });
+            } else {
+                showAlert('error', 'Error!', 'Failed to add timeline slot.');
+            }
+        } catch (error) {
+            showAlert('error', 'Error!', 'Failed to add timeline slot.');
+        }
+    };
+
+    // Add employee to event
+    const addEmployeeToEvent = async (eventId, employeeId) => {
+        try {
+            const response = await fetch('http://localhost:5000/api/eventemployees', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ eventId, employeeId })
+            });
+
+            if (response.ok) {
+                showAlert('success', 'Success!', 'Employee added to event!');
+                fetchEventEmployees(eventId);
+            } else {
+                showAlert('error', 'Error!', 'Failed to add employee to event.');
+            }
+        } catch (error) {
+            showAlert('error', 'Error!', 'Failed to add employee to event.');
+        }
+    };
+
+    // Remove speaker
+    const removeSpeaker = async (speakerId, eventId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/eventspeakers/${speakerId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                showAlert('success', 'Success!', 'Speaker removed successfully!');
+                fetchEventSpeakers(eventId);
+            } else {
+                showAlert('error', 'Error!', 'Failed to remove speaker.');
+            }
+        } catch (error) {
+            showAlert('error', 'Error!', 'Failed to remove speaker.');
+        }
+    };
+
+    // Remove timeline slot
+    const removeTimelineSlot = async (timelineId, eventId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/eventtimeline/${timelineId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                showAlert('success', 'Success!', 'Timeline slot removed successfully!');
+                fetchEventTimeline(eventId);
+            } else {
+                showAlert('error', 'Error!', 'Failed to remove timeline slot.');
+            }
+        } catch (error) {
+            showAlert('error', 'Error!', 'Failed to remove timeline slot.');
+        }
+    };
+
+    // Remove employee from event
+    const removeEmployeeFromEvent = async (eventEmployeeId, eventId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/eventemployees/${eventEmployeeId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                showAlert('success', 'Success!', 'Employee removed from event!');
+                fetchEventEmployees(eventId);
+            } else {
+                showAlert('error', 'Error!', 'Failed to remove employee from event.');
+            }
+        } catch (error) {
+            showAlert('error', 'Error!', 'Failed to remove employee from event.');
         }
     };
 
@@ -404,6 +599,32 @@ function AdminEvents() {
         }
     };
 
+    // Open management modals
+    const openSpeakersModal = (eventId) => {
+        setSelectedEventId(eventId);
+        fetchEventSpeakers(eventId);
+        setShowSpeakersModal(true);
+    };
+
+    const openTimelineModal = (eventId) => {
+        setSelectedEventId(eventId);
+        fetchEventTimeline(eventId);
+        setShowTimelineModal(true);
+    };
+
+    const openEmployeesModal = (eventId) => {
+        setSelectedEventId(eventId);
+        fetchEventEmployees(eventId);
+        setShowEmployeesModal(true);
+    };
+
+    const closeModals = () => {
+        setShowSpeakersModal(false);
+        setShowTimelineModal(false);
+        setShowEmployeesModal(false);
+        setSelectedEventId(null);
+    };
+
 
 
     if (loading) return <div className="admin-events-loading">Loading...</div>;
@@ -473,6 +694,27 @@ function AdminEvents() {
                                     <div className="admin-events-card-header">
                                         <h2>Event #{index + 1}</h2>
                                         <div className="admin-events-status-buttons">
+                                            <button
+                                                className="admin-events-management-btn speakers-btn"
+                                                onClick={() => openSpeakersModal(event.id)}
+                                                title="Manage speakers"
+                                            >
+                                                Speakers ({eventSpeakers[event.id]?.length || 0})
+                                            </button>
+                                            <button
+                                                className="admin-events-management-btn timeline-btn"
+                                                onClick={() => openTimelineModal(event.id)}
+                                                title="Manage timeline"
+                                            >
+                                                Timeline ({eventTimeline[event.id]?.length || 0})
+                                            </button>
+                                            <button
+                                                className="admin-events-management-btn employees-btn"
+                                                onClick={() => openEmployeesModal(event.id)}
+                                                title="Manage employees"
+                                            >
+                                                Employees ({eventEmployees[event.id]?.length || 0})
+                                            </button>
                                             <button
                                                 className={`admin-events-status-btn ${currentData.isMain ? 'active' : ''}`}
                                                 onClick={() => toggleMainStatus(event.id)}
@@ -1039,6 +1281,226 @@ function AdminEvents() {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Speakers Management Modal */}
+            {showSpeakersModal && (
+                <div className="admin-events-modal-overlay" onClick={closeModals}>
+                    <div className="admin-events-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="admin-events-modal-header">
+                            <h2>Manage Speakers</h2>
+                            <button className="admin-events-modal-close" onClick={closeModals}>×</button>
+                        </div>
+                        <div className="admin-events-modal-content">
+                            <div className="admin-events-add-section">
+                                <h3>Add New Speaker</h3>
+                                <div className="admin-events-form-group">
+                                    <input
+                                        type="text"
+                                        placeholder="Speaker Name"
+                                        value={newSpeaker.name}
+                                        onChange={(e) => setNewSpeaker(prev => ({ ...prev, name: e.target.value }))}
+                                        className="admin-events-form-input"
+                                    />
+                                </div>
+                                <div className="admin-events-form-group">
+                                    <input
+                                        type="text"
+                                        placeholder="Speaker Title"
+                                        value={newSpeaker.title}
+                                        onChange={(e) => setNewSpeaker(prev => ({ ...prev, title: e.target.value }))}
+                                        className="admin-events-form-input"
+                                    />
+                                </div>
+                                <div className="admin-events-form-group">
+                                    <input
+                                        type="text"
+                                        placeholder="Image Path (e.g., /src/assets/speaker1.png)"
+                                        value={newSpeaker.image}
+                                        onChange={(e) => setNewSpeaker(prev => ({ ...prev, image: e.target.value }))}
+                                        className="admin-events-form-input"
+                                    />
+                                </div>
+                                <button
+                                    className="admin-events-submit-btn"
+                                    onClick={() => addSpeaker(selectedEventId)}
+                                    disabled={!newSpeaker.name || !newSpeaker.title}
+                                >
+                                    Add Speaker
+                                </button>
+                            </div>
+
+                            <div className="admin-events-list-section">
+                                <h3>Current Speakers</h3>
+                                {eventSpeakers[selectedEventId]?.map((speaker, index) => (
+                                    <div key={speaker.id} className="admin-events-item-card">
+                                        <div className="admin-events-item-info">
+                                            <strong>{speaker.name}</strong>
+                                            <span>{speaker.title}</span>
+                                        </div>
+                                        <button
+                                            className="admin-events-delete-btn"
+                                            onClick={() => removeSpeaker(speaker.id, selectedEventId)}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                )) || <p>No speakers found</p>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Timeline Management Modal */}
+            {showTimelineModal && (
+                <div className="admin-events-modal-overlay" onClick={closeModals}>
+                    <div className="admin-events-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="admin-events-modal-header">
+                            <h2>Manage Timeline</h2>
+                            <button className="admin-events-modal-close" onClick={closeModals}>×</button>
+                        </div>
+                        <div className="admin-events-modal-content">
+                            <div className="admin-events-add-section">
+                                <h3>Add New Timeline Slot</h3>
+                                <div className="admin-events-form-group">
+                                    <input
+                                        type="time"
+                                        placeholder="Start Time"
+                                        value={newTimelineSlot.startTime}
+                                        onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, startTime: e.target.value }))}
+                                        className="admin-events-form-input"
+                                    />
+                                </div>
+                                <div className="admin-events-form-group">
+                                    <input
+                                        type="time"
+                                        placeholder="End Time"
+                                        value={newTimelineSlot.endTime}
+                                        onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, endTime: e.target.value }))}
+                                        className="admin-events-form-input"
+                                    />
+                                </div>
+                                <div className="admin-events-form-group">
+                                    <input
+                                        type="text"
+                                        placeholder="Title"
+                                        value={newTimelineSlot.title}
+                                        onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, title: e.target.value }))}
+                                        className="admin-events-form-input"
+                                    />
+                                </div>
+                                <div className="admin-events-form-group">
+                                    <textarea
+                                        placeholder="Description"
+                                        value={newTimelineSlot.description}
+                                        onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, description: e.target.value }))}
+                                        className="admin-events-form-textarea"
+                                        rows={3}
+                                    />
+                                </div>
+                                <div className="admin-events-form-group">
+                                    <textarea
+                                        placeholder="Info"
+                                        value={newTimelineSlot.info}
+                                        onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, info: e.target.value }))}
+                                        className="admin-events-form-textarea"
+                                        rows={3}
+                                    />
+                                </div>
+                                <div className="admin-events-form-group">
+                                    <input
+                                        type="number"
+                                        placeholder="Order Index"
+                                        value={newTimelineSlot.orderIndex}
+                                        onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, orderIndex: parseInt(e.target.value) || 1 }))}
+                                        className="admin-events-form-input"
+                                        min="1"
+                                    />
+                                </div>
+                                <button
+                                    className="admin-events-submit-btn"
+                                    onClick={() => addTimelineSlot(selectedEventId)}
+                                    disabled={!newTimelineSlot.startTime || !newTimelineSlot.endTime || !newTimelineSlot.title}
+                                >
+                                    Add Timeline Slot
+                                </button>
+                            </div>
+
+                            <div className="admin-events-list-section">
+                                <h3>Current Timeline</h3>
+                                {eventTimeline[selectedEventId]?.map((slot, index) => (
+                                    <div key={slot.id} className="admin-events-item-card">
+                                        <div className="admin-events-item-info">
+                                            <strong>{slot.startTime} - {slot.endTime}</strong>
+                                            <span>{slot.title}</span>
+                                            <p>{slot.description}</p>
+                                        </div>
+                                        <button
+                                            className="admin-events-delete-btn"
+                                            onClick={() => removeTimelineSlot(slot.id, selectedEventId)}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                )) || <p>No timeline slots found</p>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Employees Management Modal */}
+            {showEmployeesModal && (
+                <div className="admin-events-modal-overlay" onClick={closeModals}>
+                    <div className="admin-events-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="admin-events-modal-header">
+                            <h2>Manage Employees</h2>
+                            <button className="admin-events-modal-close" onClick={closeModals}>×</button>
+                        </div>
+                        <div className="admin-events-modal-content">
+                            <div className="admin-events-add-section">
+                                <h3>Add Employee to Event</h3>
+                                <div className="admin-events-form-group">
+                                    <select
+                                        className="admin-events-form-input"
+                                        onChange={(e) => {
+                                            if (e.target.value) {
+                                                addEmployeeToEvent(selectedEventId, parseInt(e.target.value));
+                                                e.target.value = '';
+                                            }
+                                        }}
+                                    >
+                                        <option value="">Select an employee...</option>
+                                        {allEmployees.map(employee => (
+                                            <option key={employee.id} value={employee.id}>
+                                                {employee.fullname} - {employee.field}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="admin-events-list-section">
+                                <h3>Current Employees</h3>
+                                {eventEmployees[selectedEventId]?.map((employee, index) => (
+                                    <div key={employee.id} className="admin-events-item-card">
+                                        <div className="admin-events-item-info">
+                                            <strong>{employee.fullname}</strong>
+                                            <span>{employee.field}</span>
+                                        </div>
+                                        <button
+                                            className="admin-events-delete-btn"
+                                            onClick={() => removeEmployeeFromEvent(employee.id, selectedEventId)}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                )) || <p>No employees assigned</p>}
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}

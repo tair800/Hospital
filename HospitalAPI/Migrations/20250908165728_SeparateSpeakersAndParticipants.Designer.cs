@@ -3,6 +3,7 @@ using System;
 using HospitalAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalAPI.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    partial class HospitalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250908165728_SeparateSpeakersAndParticipants")]
+    partial class SeparateSpeakersAndParticipants
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -385,104 +388,13 @@ namespace HospitalAPI.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("HospitalAPI.Models.EventEmployee", b =>
+            modelBuilder.Entity("HospitalAPI.Models.EventSchedule", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CreatedAt")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("EmployeeId1")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("EventId1")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("UpdatedAt")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("EmployeeId1");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("EventId1");
-
-                    b.ToTable("EventEmployees");
-                });
-
-            modelBuilder.Entity("HospitalAPI.Models.EventSpeaker", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("CreatedAt")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("EventId1")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Image")
-                        .HasMaxLength(500)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UpdatedAt")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("EventId1");
-
-                    b.ToTable("EventSpeakers");
-                });
-
-            modelBuilder.Entity("HospitalAPI.Models.EventTimeline", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -499,28 +411,17 @@ namespace HospitalAPI.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("EventId1")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Info")
-                        .HasMaxLength(2000)
+                    b.Property<string>("SegmentName")
+                        .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("OrderIndex")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("StartTime")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UpdatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -529,9 +430,52 @@ namespace HospitalAPI.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("EventId1");
+                    b.ToTable("EventSchedules");
+                });
 
-                    b.ToTable("EventTimeline");
+            modelBuilder.Entity("HospitalAPI.Models.EventScheduleParticipant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EventScheduleId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("KeyValue")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("SpeakerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("EventScheduleId");
+
+                    b.HasIndex("SpeakerId");
+
+                    b.ToTable("EventScheduleParticipants");
                 });
 
             modelBuilder.Entity("HospitalAPI.Models.Gallery", b =>
@@ -721,6 +665,49 @@ namespace HospitalAPI.Migrations
                     b.ToTable("Requests");
                 });
 
+            modelBuilder.Entity("HospitalAPI.Models.Speaker", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Bio")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Image")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Specialization")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Speakers");
+                });
+
             modelBuilder.Entity("HospitalAPI.Models.EmployeeCertificate", b =>
                 {
                     b.HasOne("HospitalAPI.Models.Employee", null)
@@ -739,61 +726,45 @@ namespace HospitalAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("HospitalAPI.Models.EventEmployee", b =>
+            modelBuilder.Entity("HospitalAPI.Models.EventSchedule", b =>
                 {
-                    b.HasOne("HospitalAPI.Models.Employee", null)
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HospitalAPI.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId1");
-
-                    b.HasOne("HospitalAPI.Models.Event", null)
+                    b.HasOne("HospitalAPI.Models.Event", "Event")
                         .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HospitalAPI.Models.Event", "Event")
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("HospitalAPI.Models.EventScheduleParticipant", b =>
+                {
+                    b.HasOne("HospitalAPI.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EventId1");
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("HospitalAPI.Models.EventSchedule", "EventSchedule")
+                        .WithMany("EventScheduleParticipants")
+                        .HasForeignKey("EventScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HospitalAPI.Models.Speaker", "Speaker")
+                        .WithMany()
+                        .HasForeignKey("SpeakerId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Employee");
 
-                    b.Navigation("Event");
+                    b.Navigation("EventSchedule");
+
+                    b.Navigation("Speaker");
                 });
 
-            modelBuilder.Entity("HospitalAPI.Models.EventSpeaker", b =>
+            modelBuilder.Entity("HospitalAPI.Models.EventSchedule", b =>
                 {
-                    b.HasOne("HospitalAPI.Models.Event", null)
-                        .WithMany()
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HospitalAPI.Models.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("EventId1");
-
-                    b.Navigation("Event");
-                });
-
-            modelBuilder.Entity("HospitalAPI.Models.EventTimeline", b =>
-                {
-                    b.HasOne("HospitalAPI.Models.Event", null)
-                        .WithMany()
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HospitalAPI.Models.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("EventId1");
-
-                    b.Navigation("Event");
+                    b.Navigation("EventScheduleParticipants");
                 });
 #pragma warning restore 612, 618
         }

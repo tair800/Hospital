@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import LogoCarousel from '../../ui/LogoCarousel';
-import { RequestModal } from '../../ui';
+import { RequestModal, EmployeeSlider } from '../../ui';
+// Removed timelineData import - now fetching from API
 import './EventsDetail.css';
 
 const EventsDetail = () => {
@@ -14,6 +15,49 @@ const EventsDetail = () => {
     const [error, setError] = useState(null);
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
     const [showRequestModal, setShowRequestModal] = useState(false);
+    const [timelineSlots, setTimelineSlots] = useState([]);
+    const [selectedTimeSlot, setSelectedTimeSlot] = useState(0);
+    const [timelineLoading, setTimelineLoading] = useState(true);
+
+    // Fetch timeline data from API
+    useEffect(() => {
+        const fetchTimelineData = async () => {
+            try {
+                setTimelineLoading(true);
+                const response = await fetch(`http://localhost:5000/api/eventtimeline/event/${eventId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch timeline data');
+                }
+                const data = await response.json();
+                setTimelineSlots(data);
+                setSelectedTimeSlot(0); // Default to first slot
+                console.log('Timeline data loaded successfully:', data.length, 'slots');
+            } catch (error) {
+                console.error('Error loading timeline data:', error);
+                // Fallback to empty array if there's an error
+                setTimelineSlots([]);
+            } finally {
+                setTimelineLoading(false);
+            }
+        };
+
+        if (eventId) {
+            fetchTimelineData();
+        }
+    }, [eventId]);
+
+    // Update CSS custom property for dynamic height based on timeline slots count
+    useEffect(() => {
+        const timelineLeft = document.querySelector('.event-detail-timeline-left');
+        if (timelineLeft && timelineSlots.length > 0) {
+            const itemCount = timelineSlots.length;
+            timelineLeft.style.setProperty('--timeline-item-count', itemCount.toString());
+            console.log('Setting timeline height for', itemCount, 'items');
+
+            // Force a reflow to ensure the style is applied
+            timelineLeft.offsetHeight;
+        }
+    }, [timelineSlots.length]);
 
     // Fetch event data from API
     useEffect(() => {
@@ -82,6 +126,37 @@ const EventsDetail = () => {
         setShowRequestModal(false);
     };
 
+    // Handle time slot selection
+    const handleTimeSlotClick = (index) => {
+        setSelectedTimeSlot(index);
+        console.log(`Selected time slot: ${index}`);
+        console.log('Selected slot data:', timelineSlots[index]);
+        console.log('Info field:', timelineSlots[index]?.info);
+    };
+
+    // Function to refresh timeline data
+    const refreshTimelineData = () => {
+        try {
+            setTimelineSlots(timelineData.slots);
+            console.log('Timeline data refreshed');
+        } catch (error) {
+            console.error('Error refreshing timeline data:', error);
+        }
+    };
+
+    // Handle scroll button clicks
+    const handleScrollUp = () => {
+        if (selectedTimeSlot > 0) {
+            setSelectedTimeSlot(selectedTimeSlot - 1);
+        }
+    };
+
+    const handleScrollDown = () => {
+        if (selectedTimeSlot < timelineSlots.length - 1) {
+            setSelectedTimeSlot(selectedTimeSlot + 1);
+        }
+    };
+
     // Show loading state
     if (loading) {
         return (
@@ -109,6 +184,10 @@ const EventsDetail = () => {
 
     return (
         <div className="events-detail-page">
+            <div className="events-detail-background-image">
+                <img src="/src/assets/event-dna.png" alt="Equipment DNA Background" />
+            </div>
+
             <img src="/src/assets/events-star1.png" alt="Star 1" className="events-star-left" />
             <img src="/src/assets/events-star2.png" alt="Star 2" className="events-star-right" />
 
@@ -171,6 +250,110 @@ const EventsDetail = () => {
                 <img src={getImagePath(event.detailImageMain)} alt="Event Detail Main" className="main-event-image" />
                 <img src={getImagePath(event.detailImageRight)} alt="Event Detail Right" className="right-event-image" />
                 <button className="muraciet-btn" onClick={() => setShowRequestModal(true)}>Müraciət et</button>
+            </div>
+
+            <div className="employee-slider-section">
+                <div className="event-detail-employee-header">
+                    <div className="event-detail-employee-header-left">
+                        <span className="event-detail-employee-header-second">
+                            <span>Konfrans spikerləri</span>
+                        </span>
+                    </div>
+                </div>
+                <div className="event-detail-employee-slider">
+                    <EmployeeSlider eventId={eventId} />
+                </div>
+                <div className="event-detail-timeline-header">
+                    <div className="event-detail-timeline-header-left">
+                        <span className="event-detail-timeline-header-second">
+                            <span>Konfrans planlaması</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div className="event-detail-timeline-container">
+                    <div className="event-detail-timeline-left">
+                        <div className="time-slot-selector">
+                            {timelineLoading ? (
+                                <div className="timeline-loading">
+                                    <div className="loading-spinner"></div>
+                                    <p>Timeline yüklənir...</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <button
+                                        className="time-slot-scroll-btn"
+                                        onClick={handleScrollUp}
+                                        disabled={selectedTimeSlot === 0}
+                                    >
+                                        ▲
+                                    </button>
+                                    <div className="time-slot-list">
+                                        {timelineSlots.map((slot, index) => (
+                                            <div
+                                                key={slot.id}
+                                                className={`time-slot-item ${selectedTimeSlot === index ? 'active' : ''}`}
+                                                onClick={() => handleTimeSlotClick(index)}
+                                            >
+                                                <div className="time-slot-clock">
+                                                    <img src="/src/assets/clock.png" alt="Clock" />
+                                                </div>
+                                                <div className="time-slot-text">{slot.startTime} - {slot.endTime}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <button
+                                        className="time-slot-scroll-btn"
+                                        onClick={handleScrollDown}
+                                        disabled={selectedTimeSlot === timelineSlots.length - 1}
+                                    >
+                                        ▼
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                    <div className="event-detail-timeline-right">
+                        {timelineLoading ? (
+                            <div className="timeline-loading">
+                                <div className="loading-spinner"></div>
+                                <p>Məlumatlar yüklənir...</p>
+                            </div>
+                        ) : timelineSlots.length > 0 && selectedTimeSlot < timelineSlots.length ? (
+                            <div key={selectedTimeSlot} className="timeline-slot-details">
+                                <div className="timeline-slot-header">
+                                    <h3 className="timeline-slot-title">
+                                        {timelineSlots[selectedTimeSlot].title}
+                                    </h3>
+                                    <div className="timeline-slot-time">
+                                        {timelineSlots[selectedTimeSlot].startTime} - {timelineSlots[selectedTimeSlot].endTime}
+                                    </div>
+                                </div>
+                                <div className="timeline-slot-content">
+                                    <p className="timeline-slot-description">
+                                        {timelineSlots[selectedTimeSlot].description}
+                                    </p>
+                                    <div className="timeline-slot-info">
+                                        <div className="info-content">
+                                            <div className="info-details">
+                                                <div
+                                                    className="info-text"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: timelineSlots[selectedTimeSlot].info || 'Məlumat mövcud deyil'
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="timeline-no-data">
+                                <p>Timeline məlumatları mövcud deyil</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
 
             <div className="logo-carousel-section events-detail-logo-carousel">

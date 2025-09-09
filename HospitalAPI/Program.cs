@@ -50,6 +50,9 @@ using (var scope = app.Services.CreateScope())
             context.Database.Migrate();
         }
         
+        // Seed event data
+        await HospitalAPI.SeedEventData.SeedAsync(context);
+        
         Console.WriteLine("Database initialized successfully");
     }
     catch (Exception ex)

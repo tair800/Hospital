@@ -22,6 +22,9 @@ namespace HospitalAPI.Data
         public DbSet<HomeSection> HomeSections { get; set; }
         public DbSet<Gallery> Gallery { get; set; }
         public DbSet<Request> Requests { get; set; }
+        public DbSet<EventEmployee> EventEmployees { get; set; }
+        public DbSet<EventSpeaker> EventSpeakers { get; set; }
+        public DbSet<EventTimeline> EventTimeline { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -192,6 +195,66 @@ namespace HospitalAPI.Data
                 entity.Property(r => r.Status).IsRequired().HasMaxLength(20).HasDefaultValue("pending");
                 entity.Property(r => r.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
                 entity.Property(r => r.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            });
+
+            // Configure EventEmployee table for SQLite
+            modelBuilder.Entity<EventEmployee>(entity =>
+            {
+                entity.HasKey(ee => ee.Id);
+                entity.Property(ee => ee.EventId).IsRequired();
+                entity.Property(ee => ee.EmployeeId).IsRequired();
+                entity.Property(ee => ee.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(ee => ee.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                
+                // Configure relationships
+                entity.HasOne<Event>()
+                    .WithMany()
+                    .HasForeignKey(ee => ee.EventId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne<Employee>()
+                    .WithMany()
+                    .HasForeignKey(ee => ee.EmployeeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Configure EventSpeaker table for SQLite
+            modelBuilder.Entity<EventSpeaker>(entity =>
+            {
+                entity.HasKey(es => es.Id);
+                entity.Property(es => es.EventId).IsRequired();
+                entity.Property(es => es.Name).IsRequired().HasMaxLength(255);
+                entity.Property(es => es.Title).IsRequired().HasMaxLength(255);
+                entity.Property(es => es.Image).HasMaxLength(500);
+                entity.Property(es => es.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(es => es.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                
+                // Configure relationship with Event
+                entity.HasOne<Event>()
+                    .WithMany()
+                    .HasForeignKey(es => es.EventId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Configure EventTimeline table for SQLite
+            modelBuilder.Entity<EventTimeline>(entity =>
+            {
+                entity.HasKey(et => et.Id);
+                entity.Property(et => et.EventId).IsRequired();
+                entity.Property(et => et.StartTime).IsRequired().HasMaxLength(10);
+                entity.Property(et => et.EndTime).IsRequired().HasMaxLength(10);
+                entity.Property(et => et.Title).IsRequired().HasMaxLength(255);
+                entity.Property(et => et.Description).HasMaxLength(1000);
+                entity.Property(et => et.Info).HasMaxLength(2000);
+                entity.Property(et => et.OrderIndex).IsRequired();
+                entity.Property(et => et.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(et => et.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                
+                // Configure relationship with Event
+                entity.HasOne<Event>()
+                    .WithMany()
+                    .HasForeignKey(et => et.EventId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
 
