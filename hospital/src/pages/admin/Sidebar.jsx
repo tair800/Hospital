@@ -49,8 +49,8 @@ function Sidebar() {
                     </li>
                     <li className="admin-nav-item">
                         <Link to="/admin/employee" className={`admin-nav-link ${location.pathname === '/admin/employee' ? 'active' : ''}`}>
-                            <img src={adminEmployee} alt="Employee" className="admin-nav-icon" />
-                            Employee
+                            <img src={adminEmployee} alt="Üzv" className="admin-nav-icon" />
+                            Üzv
                         </Link>
                     </li>
                     <li className="admin-nav-item">

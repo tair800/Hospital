@@ -535,12 +535,22 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: all 0.3s ease;
+    outline: none;
+    box-shadow: none;
 }
 
 .admin-events-modal-close:hover {
-    background: #f8f9fa;
     color: #333;
+}
+
+.admin-events-modal-close:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.admin-events-modal-close:active {
+    outline: none;
+    box-shadow: none;
 }
 
 .admin-events-modal-form {
@@ -579,6 +589,8 @@
     border: 2px solid #e1e5e9;
     border-radius: 8px;
     font-size: 1rem;
+    background-color: white;
+    color: #000;
     transition: all 0.3s ease;
 }
 
@@ -604,6 +616,44 @@
 .admin-events-form-input[type="date"]::-webkit-clear-button,
 .admin-events-form-input[type="time"]::-webkit-clear-button {
     filter: invert(0) brightness(0);
+}
+
+/* Ensure all inputs have white background */
+input,
+textarea,
+select {
+    background-color: white !important;
+    color: #000 !important;
+}
+
+/* Force 24-hour format for time inputs */
+
+/* Hide AM/PM field in WebKit browsers */
+.admin-events-form-input[type="time"]::-webkit-datetime-edit-ampm-field {
+    display: none !important;
+}
+
+/* Style time input fields for 24-hour format */
+.admin-events-form-input[type="time"]::-webkit-datetime-edit-hour-field,
+.admin-events-form-input[type="time"]::-webkit-datetime-edit-minute-field {
+    color: #000;
+    background: white;
+}
+
+/* Ensure proper 24-hour display */
+.admin-events-form-input[type="time"]::-webkit-datetime-edit-text {
+    color: #000;
+}
+
+/* For Firefox and other browsers */
+.admin-events-form-input[type="time"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+/* Additional 24-hour format enforcement */
+.admin-events-form-input[type="time"] {
+    color-scheme: light;
 }
 
 .admin-events-form-textarea {
@@ -758,6 +808,10 @@
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
+}
+
+.admin-events-submit-btn {
+    margin-top: 14px;
 }
 
 /* Responsive Design */
@@ -990,5 +1044,640 @@
 
     .admin-events-item-card .admin-events-delete-btn {
         align-self: flex-end;
+    }
+}
+
+/* Timeline Modal Structure */
+.timeline-form-header {
+    margin-bottom: 2rem;
+    text-align: center;
+    border-bottom: 2px solid #e1e5e9;
+    padding-bottom: 1rem;
+}
+
+.timeline-form-header h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.timeline-form-subtitle {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.timeline-form-body {
+    margin-bottom: 2rem;
+}
+
+.timeline-time-section,
+.timeline-content-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+}
+
+.section-title {
+    margin: 0 0 1.5rem 0;
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-bottom: 1px solid #e1e5e9;
+    padding-bottom: 0.5rem;
+}
+
+.time-inputs-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.timeline-form-footer {
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 2px solid #e1e5e9;
+}
+
+.input-hint {
+    display: block;
+    margin-top: 0.25rem;
+    color: #666;
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+/* Responsive design for time inputs */
+@media (max-width: 768px) {
+    .time-inputs-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .timeline-time-section,
+    .timeline-content-section {
+        padding: 1rem;
+    }
+}
+
+/* Speaker Modal Structure */
+.speaker-form-header {
+    margin-bottom: 2rem;
+    text-align: center;
+    border-bottom: 2px solid #e1e5e9;
+    padding-bottom: 1rem;
+}
+
+.speaker-form-header h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.speaker-form-subtitle {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.speaker-form-body {
+    margin-bottom: 2rem;
+}
+
+.speaker-basic-section,
+.speaker-media-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+}
+
+.speaker-form-footer {
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 2px solid #e1e5e9;
+}
+
+/* Employee Modal Structure */
+.employee-form-header {
+    margin-bottom: 2rem;
+    text-align: center;
+    border-bottom: 2px solid #e1e5e9;
+    padding-bottom: 1rem;
+}
+
+.employee-form-header h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.employee-form-subtitle {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.employee-form-body {
+    margin-bottom: 2rem;
+}
+
+.employee-search-section,
+.employee-selection-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+}
+
+/* File Input Styling */
+.file-input-container {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.file-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.file-input-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    color: #495057;
+}
+
+.file-input-label:hover {
+    background: #e9ecef;
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.file-input-icon {
+    font-size: 1.2rem;
+}
+
+.file-input-text {
+    font-weight: 500;
+}
+
+.image-preview {
+    position: relative;
+    margin-top: 1rem;
+    display: inline-block;
+}
+
+.preview-image {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    object-fit: cover;
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #dc3545;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    transition: background 0.2s ease;
+}
+
+.remove-image-btn:hover {
+    background: #c82333;
+}
+
+/* Responsive design for modals */
+@media (max-width: 768px) {
+
+    .speaker-basic-section,
+    .speaker-media-section,
+    .employee-search-section,
+    .employee-selection-section {
+        padding: 1rem;
+    }
+
+    .file-input-label {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .preview-image {
+        max-width: 120px;
+        max-height: 120px;
+    }
+}
+
+/* Edit Button Styles */
+.admin-events-edit-btn {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-right: 8px;
+}
+
+.admin-events-edit-btn:hover {
+    background: linear-gradient(135deg, #45a049, #3d8b40);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.admin-events-edit-btn:active {
+    transform: translateY(0);
+}
+
+/* Speaker Image Styles */
+.speaker-image-container {
+    width: 60px;
+    height: 60px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.speaker-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+}
+
+.speaker-thumbnail-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #f5f5f5;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #999;
+}
+
+.speaker-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.speaker-details strong {
+    font-size: 1rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.speaker-details span {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Item Actions Container */
+.admin-events-item-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Cancel Button */
+.admin-events-cancel-btn {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-right: 12px;
+}
+
+.admin-events-cancel-btn:hover {
+    background: linear-gradient(135deg, #d32f2f, #b71c1c);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+.admin-events-cancel-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive adjustments for new elements */
+@media (max-width: 768px) {
+    .admin-events-item-actions {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .admin-events-edit-btn,
+    .admin-events-delete-btn {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 4px;
+    }
+
+    .speaker-image-container {
+        width: 50px;
+        height: 50px;
+        margin-right: 8px;
+    }
+}
+
+/* Edit Modal Styles */
+.edit-modal-overlay {
+    background: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(2px);
+}
+
+.edit-modal {
+    width: 600px !important;
+    max-width: 90vw !important;
+    max-height: 80vh !important;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+    border: 2px solid #dee2e6 !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 12px !important;
+    color: #333 !important;
+}
+
+.edit-modal .admin-events-modal-header {
+    background: linear-gradient(135deg, #007bff, #0056b3) !important;
+    border-bottom: 2px solid #0056b3 !important;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.edit-modal .admin-events-modal-header h2 {
+    color: #fff !important;
+    font-size: 1.4rem !important;
+    font-weight: 600 !important;
+}
+
+.edit-modal .admin-events-modal-close {
+    color: #fff !important;
+    font-size: 1.8rem !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 50% !important;
+    width: 35px !important;
+    height: 35px !important;
+    transition: all 0.3s ease !important;
+}
+
+.edit-modal .admin-events-modal-close:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    color: #ffc107 !important;
+}
+
+.edit-modal .admin-events-modal-content {
+    padding: 1.5rem !important;
+    background: transparent !important;
+}
+
+.edit-modal .timeline-form-header,
+.edit-modal .speaker-form-header {
+    margin-bottom: 1.5rem !important;
+}
+
+.edit-modal .timeline-form-header h3,
+.edit-modal .speaker-form-header h3 {
+    color: #333 !important;
+    font-size: 1.2rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.edit-modal .timeline-form-subtitle,
+.edit-modal .speaker-form-subtitle {
+    color: #666 !important;
+    font-size: 0.9rem !important;
+}
+
+.edit-modal .section-title {
+    color: #333 !important;
+    font-size: 1rem !important;
+    margin-bottom: 1rem !important;
+    padding-bottom: 0.5rem !important;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+.edit-modal .admin-events-form-group label {
+    color: #333 !important;
+    font-weight: 500 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.edit-modal .admin-events-form-input,
+.edit-modal .admin-events-form-textarea {
+    background: #fff !important;
+    border: 1px solid #ced4da !important;
+    color: #333 !important;
+    border-radius: 6px !important;
+    padding: 0.75rem !important;
+    font-size: 0.9rem !important;
+}
+
+.edit-modal .admin-events-form-input:focus,
+.edit-modal .admin-events-form-textarea:focus {
+    background: #fff !important;
+    border-color: #007bff !important;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25) !important;
+    outline: none !important;
+}
+
+.edit-modal .admin-events-form-input::placeholder,
+.edit-modal .admin-events-form-textarea::placeholder {
+    color: #6c757d !important;
+}
+
+.edit-modal .input-hint {
+    color: #6c757d !important;
+    font-size: 0.8rem !important;
+    margin-top: 0.25rem !important;
+}
+
+.edit-modal .file-input-label {
+    background: #f8f9fa !important;
+    border: 2px dashed #ced4da !important;
+    color: #6c757d !important;
+    border-radius: 6px !important;
+}
+
+.edit-modal .file-input-label:hover {
+    background: #e9ecef !important;
+    border-color: #007bff !important;
+    color: #007bff !important;
+}
+
+.edit-modal .preview-image {
+    border: 2px solid #dee2e6 !important;
+    border-radius: 6px !important;
+}
+
+.edit-modal .remove-image-btn {
+    background: #dc3545 !important;
+    color: #fff !important;
+}
+
+.edit-modal .remove-image-btn:hover {
+    background: #c82333 !important;
+}
+
+.edit-modal .timeline-form-footer,
+.edit-modal .speaker-form-footer {
+    margin-top: 2rem !important;
+    padding: 1.5rem !important;
+    border-top: 2px solid #e9ecef !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 1rem !important;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+    border-radius: 0 0 15px 15px !important;
+    margin: 2rem -1.5rem -1.5rem -1.5rem !important;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05) !important;
+    min-height: 80px !important;
+}
+
+.edit-modal .admin-events-cancel-btn,
+.edit-modal .admin-events-submit-btn {
+    background: linear-gradient(135deg, #6c757d, #5a6268) !important;
+    color: #fff !important;
+    border: none !important;
+    padding: 0 !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    width: 140px !important;
+    height: 48px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    margin: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    vertical-align: top !important;
+    top: 0 !important;
+    bottom: 0 !important;
+}
+
+.edit-modal .admin-events-submit-btn {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+    margin-top: 0 !important;
+}
+
+/* Force perfect alignment for edit modal buttons */
+.edit-modal .timeline-form-footer *,
+.edit-modal .speaker-form-footer * {
+    vertical-align: top !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.edit-modal .admin-events-cancel-btn:hover,
+.edit-modal .admin-events-submit-btn:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
+}
+
+.edit-modal .admin-events-cancel-btn:hover {
+    background: linear-gradient(135deg, #dc3545, #c82333) !important;
+}
+
+.edit-modal .admin-events-submit-btn:hover {
+    background: linear-gradient(135deg, #20c997, #17a2b8) !important;
+}
+
+.edit-modal .admin-events-cancel-btn:active,
+.edit-modal .admin-events-submit-btn:active {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.edit-modal .admin-events-submit-btn:disabled {
+    background: #6c757d !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Ensure buttons are always visible */
+.edit-modal .timeline-form-footer,
+.edit-modal .speaker-form-footer {
+    position: relative !important;
+    z-index: 10 !important;
+    background: #f8f9fa !important;
+    border: 1px solid #dee2e6 !important;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.edit-modal .admin-events-cancel-btn,
+.edit-modal .admin-events-submit-btn {
+    position: relative !important;
+    z-index: 11 !important;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Responsive adjustments for edit modals */
+@media (max-width: 768px) {
+    .edit-modal {
+        width: 95vw !important;
+        max-height: 90vh !important;
+        margin: 1rem !important;
+    }
+
+    .edit-modal .admin-events-modal-content {
+        padding: 1rem !important;
+    }
+
+    .edit-modal .timeline-form-footer,
+    .edit-modal .speaker-form-footer {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+
+    .edit-modal .admin-events-cancel-btn,
+    .edit-modal .admin-events-submit-btn {
+        width: 100% !important;
     }
 }

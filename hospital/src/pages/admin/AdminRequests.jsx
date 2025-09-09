@@ -326,10 +326,7 @@ function AdminRequests() {
                                             <label>Created At:</label>
                                             <span>{formatDate(request.createdAt)}</span>
                                         </div>
-                                        <div className="request-info-item">
-                                            <label>Updated At:</label>
-                                            <span>{formatDate(request.updatedAt)}</span>
-                                        </div>
+                                       
                                     </div>
                                 </div>
                             </div>

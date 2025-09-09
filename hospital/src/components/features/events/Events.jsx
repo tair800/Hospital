@@ -4,6 +4,7 @@ import searchIcon from '../../../assets/search-icon.png';
 import cardIcon from '../../../assets/card-icon.png';
 import eventImg from '../../../assets/event-img.png';
 import LogoCarousel from '../../ui/LogoCarousel';
+import { RequestModal } from '../../ui';
 import './Events.css';
 
 const Events = () => {
@@ -23,6 +24,9 @@ const Events = () => {
     const [timeLeft, setTimeLeft] = useState({});
     const [currentSlide, setCurrentSlide] = useState(0);
     const [direction, setDirection] = useState('right'); // 👈 for animations
+
+    // Request modal state
+    const [showRequestModal, setShowRequestModal] = useState(false);
 
     // Get current date for calendar
     const today = new Date();
@@ -170,9 +174,6 @@ const Events = () => {
                                             ? currentEvent.subtitle.substring(0, 50) + '...'
                                             : currentEvent.subtitle}
                                     </p>
-                                    <p className="featured-event-trainer">
-                                        Təlimçi: {currentEvent.trainer}
-                                    </p>
                                 </div>
 
                                 <div className="featured-event-timer">
@@ -208,7 +209,12 @@ const Events = () => {
                                 </div>
 
                                 <div className="featured-event-buttons-outer">
-                                    <button className="featured-event-btn qeydiyyat-btn">Qeydiyyatdan keç</button>
+                                    <button
+                                        className="featured-event-btn qeydiyyat-btn"
+                                        onClick={() => setShowRequestModal(true)}
+                                    >
+                                        Qeydiyyatdan keç
+                                    </button>
                                     <button
                                         className="featured-event-btn detalli-btn"
                                         onClick={() => {
@@ -315,7 +321,6 @@ const Events = () => {
                                         return (
                                             <div key={event.id} className="events-card">
                                                 <span className="event-title">{event.title}</span>
-                                                <span className="trainer-name">Təlimçi : {event.trainer}</span>
                                                 <div className="event-date">
                                                     <span className="event-day">{day}</span>
                                                     <span className="event-month">{month}</span>
@@ -375,6 +380,13 @@ const Events = () => {
             <div className="logo-carousel-section events-logo-carousel">
                 <LogoCarousel />
             </div>
+
+            {/* Request Modal */}
+            <RequestModal
+                isOpen={showRequestModal}
+                onClose={() => setShowRequestModal(false)}
+                onSuccess={() => setShowRequestModal(false)}
+            />
         </div>
     );
 };

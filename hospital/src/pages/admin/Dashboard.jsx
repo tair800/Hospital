@@ -85,11 +85,11 @@ function Dashboard() {
                             .slice(0, 5);
                         setRecentEmployees(recent);
                     } else {
-                        console.error('Failed to fetch employees');
+                        console.error('Failed to fetch üzvlər');
                     }
                 }
             } catch (error) {
-                console.error('Error fetching recent employees:', error);
+                console.error('Error fetching recent üzvlər:', error);
             } finally {
                 setMembersLoading(false);
             }
@@ -263,12 +263,12 @@ function Dashboard() {
                 </div>
 
                 <div className="recent-members-container">
-                    <h3 className="recent-members-title">Recent Members</h3>
+                    <h3 className="recent-members-title">Son Üzvlər</h3>
                     <div className="members-list">
                         {membersLoading ? (
                             <div className="member-item">
                                 <div className="member-info" style={{ textAlign: 'center', width: '100%' }}>
-                                    <p>Loading recent employees...</p>
+                                    <p>Son üzvlər yüklənir...</p>
                                 </div>
                             </div>
                         ) : recentEmployees.length > 0 ? (
@@ -296,7 +296,7 @@ function Dashboard() {
                         ) : (
                             <div className="member-item">
                                 <div className="member-info" style={{ textAlign: 'center', width: '100%' }}>
-                                    <p>No recent employees found</p>
+                                    <p>Son üzv tapılmadı</p>
                                 </div>
                             </div>
                         )}

@@ -41,6 +41,8 @@ function AdminEvents() {
     const [showSpeakersModal, setShowSpeakersModal] = useState(false);
     const [showTimelineModal, setShowTimelineModal] = useState(false);
     const [showEmployeesModal, setShowEmployeesModal] = useState(false);
+    const [showEditTimelineModal, setShowEditTimelineModal] = useState(false);
+    const [showEditSpeakerModal, setShowEditSpeakerModal] = useState(false);
     const [selectedEventId, setSelectedEventId] = useState(null);
     const [newSpeaker, setNewSpeaker] = useState({ name: '', title: '', image: '' });
     const [newTimelineSlot, setNewTimelineSlot] = useState({
@@ -48,9 +50,11 @@ function AdminEvents() {
         endTime: '',
         title: '',
         description: '',
-        info: '',
-        orderIndex: 1
+        info: ''
     });
+    const [editingTimelineSlot, setEditingTimelineSlot] = useState(null);
+    const [editingSpeaker, setEditingSpeaker] = useState(null);
+    const [employeeSearchTerm, setEmployeeSearchTerm] = useState('');
 
     // Pagination hook
     const {
@@ -70,6 +74,7 @@ function AdminEvents() {
         fetchEvents();
         fetchAllEmployees();
     }, []);
+
 
     // Filter events based on search term
     useEffect(() => {
@@ -113,6 +118,7 @@ function AdminEvents() {
         resetPagination();
     }, [filteredEvents, resetPagination]);
 
+
     // Fetch all events from API
     const fetchEvents = async () => {
         try {
@@ -120,7 +126,6 @@ function AdminEvents() {
             const response = await fetch('http://localhost:5000/api/events');
             if (response.ok) {
                 const data = await response.json();
-
 
                 // Sort events by event date (newest first)
                 const sortedData = data.sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate));
@@ -132,6 +137,9 @@ function AdminEvents() {
                     initialEditingState[event.id] = { ...event };
                 });
                 setEditingEvents(initialEditingState);
+
+                // Load related data for all events
+                await loadAllEventRelatedData(sortedData);
             } else {
                 showAlert('error', 'Error!', 'Failed to fetch events.');
             }
@@ -139,6 +147,51 @@ function AdminEvents() {
             showAlert('error', 'Error!', 'Failed to fetch events.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    // Load all related data for events (speakers, timeline, employees)
+    const loadAllEventRelatedData = async (events) => {
+        try {
+            // Create promises for all related data
+            const promises = events.map(async (event) => {
+                const [speakersResponse, timelineResponse, employeesResponse] = await Promise.all([
+                    fetch(`http://localhost:5000/api/eventspeakers/event/${event.id}`),
+                    fetch(`http://localhost:5000/api/eventtimeline/event/${event.id}`),
+                    fetch(`http://localhost:5000/api/eventemployees/event/${event.id}`)
+                ]);
+
+                const speakersData = speakersResponse.ok ? await speakersResponse.json() : [];
+                const timelineData = timelineResponse.ok ? await timelineResponse.json() : [];
+                const employeesData = employeesResponse.ok ? await employeesResponse.json() : [];
+
+                return {
+                    eventId: event.id,
+                    speakers: speakersData,
+                    timeline: timelineData,
+                    employees: employeesData
+                };
+            });
+
+            // Wait for all promises to resolve
+            const results = await Promise.all(promises);
+
+            // Update state with all the data
+            const speakersData = {};
+            const timelineData = {};
+            const employeesData = {};
+
+            results.forEach(({ eventId, speakers, timeline, employees }) => {
+                speakersData[eventId] = speakers;
+                timelineData[eventId] = timeline;
+                employeesData[eventId] = employees;
+            });
+
+            setEventSpeakers(speakersData);
+            setEventTimeline(timelineData);
+            setEventEmployees(employeesData);
+        } catch (error) {
+            console.error('Failed to load event related data:', error);
         }
     };
 
@@ -218,6 +271,25 @@ function AdminEvents() {
     // Add new timeline slot
     const addTimelineSlot = async (eventId) => {
         try {
+            // Check for time conflicts
+            const existingSlots = eventTimeline[eventId] || [];
+            const hasConflict = existingSlots.some(slot =>
+                (newTimelineSlot.startTime >= slot.startTime && newTimelineSlot.startTime < slot.endTime) ||
+                (newTimelineSlot.endTime > slot.startTime && newTimelineSlot.endTime <= slot.endTime) ||
+                (newTimelineSlot.startTime <= slot.startTime && newTimelineSlot.endTime >= slot.endTime)
+            );
+
+            if (hasConflict) {
+                showAlert('error', 'Xəta!', 'Bu vaxt aralığı artıq mövcuddur. Başqa vaxt seçin.');
+                return;
+            }
+
+            // Validate that start time is before end time
+            if (newTimelineSlot.startTime >= newTimelineSlot.endTime) {
+                showAlert('error', 'Xəta!', 'Başlama vaxtı bitmə vaxtından əvvəl olmalıdır.');
+                return;
+            }
+
             const response = await fetch('http://localhost:5000/api/eventtimeline', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -225,21 +297,20 @@ function AdminEvents() {
             });
 
             if (response.ok) {
-                showAlert('success', 'Success!', 'Timeline slot added successfully!');
+                showAlert('success', 'Uğur!', 'Timeline slot uğurla əlavə edildi!');
                 fetchEventTimeline(eventId);
                 setNewTimelineSlot({
                     startTime: '',
                     endTime: '',
                     title: '',
                     description: '',
-                    info: '',
-                    orderIndex: 1
+                    info: ''
                 });
             } else {
-                showAlert('error', 'Error!', 'Failed to add timeline slot.');
+                showAlert('error', 'Xəta!', 'Timeline slot əlavə edilə bilmədi.');
             }
         } catch (error) {
-            showAlert('error', 'Error!', 'Failed to add timeline slot.');
+            showAlert('error', 'Xəta!', 'Timeline slot əlavə edilə bilmədi.');
         }
     };
 
@@ -253,13 +324,35 @@ function AdminEvents() {
             });
 
             if (response.ok) {
-                showAlert('success', 'Success!', 'Employee added to event!');
+                showAlert('success', 'Uğur!', 'Üzv tədbirə əlavə edildi!');
                 fetchEventEmployees(eventId);
             } else {
-                showAlert('error', 'Error!', 'Failed to add employee to event.');
+                showAlert('error', 'Xəta!', 'Üzv tədbirə əlavə edilə bilmədi.');
             }
         } catch (error) {
-            showAlert('error', 'Error!', 'Failed to add employee to event.');
+            showAlert('error', 'Xəta!', 'Üzv tədbirə əlavə edilə bilmədi.');
+        }
+    };
+
+    // Update speaker
+    const updateSpeaker = async (speakerId, eventId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/eventspeakers/${speakerId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(editingSpeaker)
+            });
+
+            if (response.ok) {
+                showAlert('success', 'Uğur!', 'Speaker uğurla yeniləndi!');
+                fetchEventSpeakers(eventId);
+                setEditingSpeaker(null);
+                setShowEditSpeakerModal(false);
+            } else {
+                showAlert('error', 'Xəta!', 'Speaker yenilənə bilmədi.');
+            }
+        } catch (error) {
+            showAlert('error', 'Xəta!', 'Speaker yenilənə bilmədi.');
         }
     };
 
@@ -278,6 +371,61 @@ function AdminEvents() {
             }
         } catch (error) {
             showAlert('error', 'Error!', 'Failed to remove speaker.');
+        }
+    };
+
+    // Update timeline slot
+    const updateTimelineSlot = async (timelineId, eventId) => {
+        try {
+            // Get fresh timeline data from API
+            const response = await fetch(`http://localhost:5000/api/eventtimeline/event/${eventId}`);
+            const freshTimelineData = response.ok ? await response.json() : [];
+
+            // Only check for time conflicts if the time has actually changed
+            const originalSlot = freshTimelineData.find(slot => slot.id == timelineId);
+            const timeChanged = originalSlot && (
+                originalSlot.startTime !== editingTimelineSlot.startTime ||
+                originalSlot.endTime !== editingTimelineSlot.endTime
+            );
+
+            if (timeChanged) {
+                // Check for time conflicts only if time was changed
+                const hasConflict = freshTimelineData.some(slot => {
+                    return slot.id != timelineId && (
+                        (editingTimelineSlot.startTime >= slot.startTime && editingTimelineSlot.startTime < slot.endTime) ||
+                        (editingTimelineSlot.endTime > slot.startTime && editingTimelineSlot.endTime <= slot.endTime) ||
+                        (editingTimelineSlot.startTime <= slot.startTime && editingTimelineSlot.endTime >= slot.endTime)
+                    );
+                });
+
+                if (hasConflict) {
+                    showAlert('error', 'Xəta!', 'Bu vaxt aralığı artıq mövcuddur. Başqa vaxt seçin.');
+                    return;
+                }
+            }
+
+            // Validate that start time is before end time
+            if (editingTimelineSlot.startTime >= editingTimelineSlot.endTime) {
+                showAlert('error', 'Xəta!', 'Başlama vaxtı bitmə vaxtından əvvəl olmalıdır.');
+                return;
+            }
+
+            const updateResponse = await fetch(`http://localhost:5000/api/eventtimeline/${timelineId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(editingTimelineSlot)
+            });
+
+            if (updateResponse.ok) {
+                showAlert('success', 'Uğur!', 'Timeline slot uğurla yeniləndi!');
+                fetchEventTimeline(eventId);
+                setEditingTimelineSlot(null);
+                setShowEditTimelineModal(false);
+            } else {
+                showAlert('error', 'Xəta!', 'Timeline slot yenilənə bilmədi.');
+            }
+        } catch (error) {
+            showAlert('error', 'Xəta!', 'Timeline slot yenilənə bilmədi.');
         }
     };
 
@@ -307,13 +455,13 @@ function AdminEvents() {
             });
 
             if (response.ok) {
-                showAlert('success', 'Success!', 'Employee removed from event!');
+                showAlert('success', 'Uğur!', 'Üzv tədbirdən silindi!');
                 fetchEventEmployees(eventId);
             } else {
-                showAlert('error', 'Error!', 'Failed to remove employee from event.');
+                showAlert('error', 'Xəta!', 'Üzv tədbirdən silinə bilmədi.');
             }
         } catch (error) {
-            showAlert('error', 'Error!', 'Failed to remove employee from event.');
+            showAlert('error', 'Xəta!', 'Üzv tədbirdən silinə bilmədi.');
         }
     };
 
@@ -622,7 +770,58 @@ function AdminEvents() {
         setShowSpeakersModal(false);
         setShowTimelineModal(false);
         setShowEmployeesModal(false);
+        setShowEditTimelineModal(false);
+        setShowEditSpeakerModal(false);
         setSelectedEventId(null);
+        setEmployeeSearchTerm('');
+        setEditingTimelineSlot(null);
+        setEditingSpeaker(null);
+    };
+
+    // Start editing timeline slot
+    const startEditingTimelineSlot = (slot) => {
+        setEditingTimelineSlot({ ...slot });
+        setShowEditTimelineModal(true);
+    };
+
+    // Cancel editing timeline slot
+    const cancelEditingTimelineSlot = () => {
+        setEditingTimelineSlot(null);
+        setShowEditTimelineModal(false);
+    };
+
+    // Start editing speaker
+    const startEditingSpeaker = (speaker) => {
+        setEditingSpeaker({ ...speaker });
+        setShowEditSpeakerModal(true);
+    };
+
+    // Cancel editing speaker
+    const cancelEditingSpeaker = () => {
+        setEditingSpeaker(null);
+        setShowEditSpeakerModal(false);
+    };
+
+    // Filter employees based on search term and exclude already assigned employees
+    const getFilteredEmployees = () => {
+        // Get employees already assigned to the current event
+        const assignedEmployeeIds = eventEmployees[selectedEventId]?.map(emp => emp.id) || [];
+
+        // Filter out assigned employees first
+        const availableEmployees = allEmployees.filter(employee =>
+            !assignedEmployeeIds.includes(employee.id)
+        );
+
+        // Then apply search filter
+        if (!employeeSearchTerm.trim()) {
+            return availableEmployees;
+        }
+        const searchLower = employeeSearchTerm.toLowerCase();
+        return availableEmployees.filter(employee =>
+            employee.fullname?.toLowerCase().includes(searchLower) ||
+            employee.field?.toLowerCase().includes(searchLower) ||
+            employee.clinic?.toLowerCase().includes(searchLower)
+        );
     };
 
 
@@ -692,7 +891,7 @@ function AdminEvents() {
                             return (
                                 <div key={event.id} className="admin-events-card">
                                     <div className="admin-events-card-header">
-                                        <h2>Event #{index + 1}</h2>
+                                        <h2>Event #{startIndex + index + 1}</h2>
                                         <div className="admin-events-status-buttons">
                                             <button
                                                 className="admin-events-management-btn speakers-btn"
@@ -711,9 +910,9 @@ function AdminEvents() {
                                             <button
                                                 className="admin-events-management-btn employees-btn"
                                                 onClick={() => openEmployeesModal(event.id)}
-                                                title="Manage employees"
+                                                title="Üzvləri idarə et"
                                             >
-                                                Employees ({eventEmployees[event.id]?.length || 0})
+                                                Üzvlər ({eventEmployees[event.id]?.length || 0})
                                             </button>
                                             <button
                                                 className={`admin-events-status-btn ${currentData.isMain ? 'active' : ''}`}
@@ -1295,57 +1494,130 @@ function AdminEvents() {
                         </div>
                         <div className="admin-events-modal-content">
                             <div className="admin-events-add-section">
-                                <h3>Add New Speaker</h3>
-                                <div className="admin-events-form-group">
-                                    <input
-                                        type="text"
-                                        placeholder="Speaker Name"
-                                        value={newSpeaker.name}
-                                        onChange={(e) => setNewSpeaker(prev => ({ ...prev, name: e.target.value }))}
-                                        className="admin-events-form-input"
-                                    />
+                                <div className="speaker-form-header">
+                                    <h3>Yeni Speaker Əlavə Et</h3>
+                                    <p className="speaker-form-subtitle">Speaker məlumatlarını doldurun</p>
                                 </div>
-                                <div className="admin-events-form-group">
-                                    <input
-                                        type="text"
-                                        placeholder="Speaker Title"
-                                        value={newSpeaker.title}
-                                        onChange={(e) => setNewSpeaker(prev => ({ ...prev, title: e.target.value }))}
-                                        className="admin-events-form-input"
-                                    />
+
+                                <div className="speaker-form-body">
+                                    <div className="speaker-basic-section">
+                                        <h4 className="section-title">Əsas Məlumatlar</h4>
+                                        <div className="admin-events-form-group">
+                                            <label>Speaker Adı</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Speaker adını daxil edin"
+                                                value={newSpeaker.name}
+                                                onChange={(e) => setNewSpeaker(prev => ({ ...prev, name: e.target.value }))}
+                                                className="admin-events-form-input"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="admin-events-form-group">
+                                            <label>Speaker Vəzifəsi</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Speaker vəzifəsini daxil edin"
+                                                value={newSpeaker.title}
+                                                onChange={(e) => setNewSpeaker(prev => ({ ...prev, title: e.target.value }))}
+                                                className="admin-events-form-input"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="speaker-media-section">
+                                        <h4 className="section-title">Media Faylı</h4>
+                                        <div className="admin-events-form-group">
+                                            <label>Şəkil Seçin</label>
+                                            <div className="file-input-container">
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={(e) => {
+                                                        const file = e.target.files[0];
+                                                        if (file) {
+                                                            setNewSpeaker(prev => ({ ...prev, image: file.name }));
+                                                        }
+                                                    }}
+                                                    className="file-input"
+                                                    id="speaker-image-upload"
+                                                />
+                                                <label htmlFor="speaker-image-upload" className="file-input-label">
+                                                    <span className="file-input-icon">📁</span>
+                                                    <span className="file-input-text">
+                                                        {newSpeaker.image ? 'Şəkil seçildi' : 'Şəkil faylını seçin'}
+                                                    </span>
+                                                </label>
+                                            </div>
+                                            {newSpeaker.image && (
+                                                <div className="image-preview">
+                                                    <img src={getImagePath(newSpeaker.image)} alt="Speaker preview" className="preview-image" />
+                                                    <button
+                                                        type="button"
+                                                        className="remove-image-btn"
+                                                        onClick={() => setNewSpeaker(prev => ({ ...prev, image: '' }))}
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </div>
+                                            )}
+                                            <small className="input-hint">JPG, PNG və ya GIF formatında şəkil seçin</small>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="admin-events-form-group">
-                                    <input
-                                        type="text"
-                                        placeholder="Image Path (e.g., /src/assets/speaker1.png)"
-                                        value={newSpeaker.image}
-                                        onChange={(e) => setNewSpeaker(prev => ({ ...prev, image: e.target.value }))}
-                                        className="admin-events-form-input"
-                                    />
+
+                                <div className="speaker-form-footer">
+                                    <button
+                                        className="admin-events-submit-btn"
+                                        onClick={() => addSpeaker(selectedEventId)}
+                                        disabled={!newSpeaker.name || !newSpeaker.title}
+                                    >
+                                        Speaker Əlavə Et
+                                    </button>
                                 </div>
-                                <button
-                                    className="admin-events-submit-btn"
-                                    onClick={() => addSpeaker(selectedEventId)}
-                                    disabled={!newSpeaker.name || !newSpeaker.title}
-                                >
-                                    Add Speaker
-                                </button>
                             </div>
+
 
                             <div className="admin-events-list-section">
                                 <h3>Current Speakers</h3>
                                 {eventSpeakers[selectedEventId]?.map((speaker, index) => (
                                     <div key={speaker.id} className="admin-events-item-card">
                                         <div className="admin-events-item-info">
-                                            <strong>{speaker.name}</strong>
-                                            <span>{speaker.title}</span>
+                                            <div className="speaker-image-container">
+                                                {speaker.image ? (
+                                                    <img
+                                                        src={getImagePath(speaker.image)}
+                                                        alt={speaker.name}
+                                                        className="speaker-thumbnail"
+                                                    />
+                                                ) : (
+                                                    <div className="speaker-thumbnail-placeholder">
+                                                        <span>📷</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="speaker-details">
+                                                <strong>{speaker.name}</strong>
+                                                <span>{speaker.title}</span>
+                                            </div>
                                         </div>
-                                        <button
-                                            className="admin-events-delete-btn"
-                                            onClick={() => removeSpeaker(speaker.id, selectedEventId)}
-                                        >
-                                            Remove
-                                        </button>
+                                        <div className="admin-events-item-actions">
+                                            <button
+                                                className="admin-events-edit-btn"
+                                                onClick={() => startEditingSpeaker(speaker)}
+                                                title="Edit speaker"
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                className="admin-events-delete-btn"
+                                                onClick={() => removeSpeaker(speaker.id, selectedEventId)}
+                                                title="Remove speaker"
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
                                     </div>
                                 )) || <p>No speakers found</p>}
                             </div>
@@ -1359,91 +1631,162 @@ function AdminEvents() {
                 <div className="admin-events-modal-overlay" onClick={closeModals}>
                     <div className="admin-events-modal" onClick={(e) => e.stopPropagation()}>
                         <div className="admin-events-modal-header">
-                            <h2>Manage Timeline</h2>
+                            <h2>Timeline İdarə Et</h2>
                             <button className="admin-events-modal-close" onClick={closeModals}>×</button>
                         </div>
                         <div className="admin-events-modal-content">
                             <div className="admin-events-add-section">
-                                <h3>Add New Timeline Slot</h3>
-                                <div className="admin-events-form-group">
-                                    <input
-                                        type="time"
-                                        placeholder="Start Time"
-                                        value={newTimelineSlot.startTime}
-                                        onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, startTime: e.target.value }))}
-                                        className="admin-events-form-input"
-                                    />
+                                <div className="timeline-form-header">
+                                    <h3>Yeni Timeline Slot Əlavə Et</h3>
+                                    <p className="timeline-form-subtitle">Timeline slot məlumatlarını doldurun</p>
                                 </div>
-                                <div className="admin-events-form-group">
-                                    <input
-                                        type="time"
-                                        placeholder="End Time"
-                                        value={newTimelineSlot.endTime}
-                                        onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, endTime: e.target.value }))}
-                                        className="admin-events-form-input"
-                                    />
+
+                                <div className="timeline-form-body">
+                                    <div className="timeline-time-section">
+                                        <h4 className="section-title">Vaxt Aralığı</h4>
+                                        <div className="time-inputs-row">
+                                            <div className="admin-events-form-group">
+                                                <label>Başlama Vaxtı</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="09:00"
+                                                    value={newTimelineSlot.startTime}
+                                                    onChange={(e) => {
+                                                        let value = e.target.value;
+
+                                                        // Auto-insert colon after 2 digits
+                                                        if (value.length === 2 && !value.includes(':')) {
+                                                            value = value + ':';
+                                                        }
+
+                                                        // Only allow numbers and colon
+                                                        value = value.replace(/[^0-9:]/g, '');
+
+                                                        // Limit to HH:MM format
+                                                        if (value.length > 5) {
+                                                            value = value.substring(0, 5);
+                                                        }
+
+                                                        setNewTimelineSlot(prev => ({ ...prev, startTime: value }));
+                                                    }}
+                                                    className="admin-events-form-input"
+                                                    maxLength="5"
+                                                    required
+                                                />
+                                                <small className="input-hint">24 saat formatında (HH:MM)</small>
+                                            </div>
+                                            <div className="admin-events-form-group">
+                                                <label>Bitmə Vaxtı</label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="10:15"
+                                                    value={newTimelineSlot.endTime}
+                                                    onChange={(e) => {
+                                                        let value = e.target.value;
+
+                                                        // Auto-insert colon after 2 digits
+                                                        if (value.length === 2 && !value.includes(':')) {
+                                                            value = value + ':';
+                                                        }
+
+                                                        // Only allow numbers and colon
+                                                        value = value.replace(/[^0-9:]/g, '');
+
+                                                        // Limit to HH:MM format
+                                                        if (value.length > 5) {
+                                                            value = value.substring(0, 5);
+                                                        }
+
+                                                        setNewTimelineSlot(prev => ({ ...prev, endTime: value }));
+                                                    }}
+                                                    className="admin-events-form-input"
+                                                    maxLength="5"
+                                                    required
+                                                />
+                                                <small className="input-hint">24 saat formatında (HH:MM)</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="timeline-content-section">
+                                        <h4 className="section-title">Məzmun Məlumatları</h4>
+                                        <div className="admin-events-form-group">
+                                            <label>Başlıq</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Timeline slot başlığı"
+                                                value={newTimelineSlot.title}
+                                                onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, title: e.target.value }))}
+                                                className="admin-events-form-input"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="admin-events-form-group">
+                                            <label>Təsvir</label>
+                                            <textarea
+                                                placeholder="Timeline slot haqqında ətraflı məlumat"
+                                                value={newTimelineSlot.description}
+                                                onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, description: e.target.value }))}
+                                                className="admin-events-form-textarea"
+                                                rows={3}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="admin-events-form-group">
+                                            <label>Əlavə Məlumat</label>
+                                            <textarea
+                                                placeholder="Əlavə qeydlər və məlumatlar"
+                                                value={newTimelineSlot.info}
+                                                onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, info: e.target.value }))}
+                                                className="admin-events-form-textarea"
+                                                rows={3}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="admin-events-form-group">
-                                    <input
-                                        type="text"
-                                        placeholder="Title"
-                                        value={newTimelineSlot.title}
-                                        onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, title: e.target.value }))}
-                                        className="admin-events-form-input"
-                                    />
+
+                                <div className="timeline-form-footer">
+                                    <button
+                                        className="admin-events-submit-btn"
+                                        onClick={() => addTimelineSlot(selectedEventId)}
+                                        disabled={!newTimelineSlot.startTime || !newTimelineSlot.endTime || !newTimelineSlot.title}
+                                    >
+                                        Timeline Slot Əlavə Et
+                                    </button>
                                 </div>
-                                <div className="admin-events-form-group">
-                                    <textarea
-                                        placeholder="Description"
-                                        value={newTimelineSlot.description}
-                                        onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, description: e.target.value }))}
-                                        className="admin-events-form-textarea"
-                                        rows={3}
-                                    />
-                                </div>
-                                <div className="admin-events-form-group">
-                                    <textarea
-                                        placeholder="Info"
-                                        value={newTimelineSlot.info}
-                                        onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, info: e.target.value }))}
-                                        className="admin-events-form-textarea"
-                                        rows={3}
-                                    />
-                                </div>
-                                <div className="admin-events-form-group">
-                                    <input
-                                        type="number"
-                                        placeholder="Order Index"
-                                        value={newTimelineSlot.orderIndex}
-                                        onChange={(e) => setNewTimelineSlot(prev => ({ ...prev, orderIndex: parseInt(e.target.value) || 1 }))}
-                                        className="admin-events-form-input"
-                                        min="1"
-                                    />
-                                </div>
-                                <button
-                                    className="admin-events-submit-btn"
-                                    onClick={() => addTimelineSlot(selectedEventId)}
-                                    disabled={!newTimelineSlot.startTime || !newTimelineSlot.endTime || !newTimelineSlot.title}
-                                >
-                                    Add Timeline Slot
-                                </button>
                             </div>
 
+
                             <div className="admin-events-list-section">
-                                <h3>Current Timeline</h3>
-                                {eventTimeline[selectedEventId]?.map((slot, index) => (
+                                <h3>Cari Timeline</h3>
+                                {eventTimeline[selectedEventId]?.sort((a, b) => a.startTime.localeCompare(b.startTime)).map((slot, index) => (
                                     <div key={slot.id} className="admin-events-item-card">
                                         <div className="admin-events-item-info">
                                             <strong>{slot.startTime} - {slot.endTime}</strong>
                                             <span>{slot.title}</span>
                                             <p>{slot.description}</p>
                                         </div>
-                                        <button
-                                            className="admin-events-delete-btn"
-                                            onClick={() => removeTimelineSlot(slot.id, selectedEventId)}
-                                        >
-                                            Remove
-                                        </button>
+                                        <div className="admin-events-item-actions">
+                                            <button
+                                                className="admin-events-edit-btn"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    startEditingTimelineSlot(slot);
+                                                }}
+                                                title="Edit timeline slot"
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                className="admin-events-delete-btn"
+                                                onClick={() => removeTimelineSlot(slot.id, selectedEventId)}
+                                                title="Remove timeline slot"
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
                                     </div>
                                 )) || <p>No timeline slots found</p>}
                             </div>
@@ -1457,34 +1800,62 @@ function AdminEvents() {
                 <div className="admin-events-modal-overlay" onClick={closeModals}>
                     <div className="admin-events-modal" onClick={(e) => e.stopPropagation()}>
                         <div className="admin-events-modal-header">
-                            <h2>Manage Employees</h2>
+                            <h2>Üzvləri İdarə Et</h2>
                             <button className="admin-events-modal-close" onClick={closeModals}>×</button>
                         </div>
                         <div className="admin-events-modal-content">
                             <div className="admin-events-add-section">
-                                <h3>Add Employee to Event</h3>
-                                <div className="admin-events-form-group">
-                                    <select
-                                        className="admin-events-form-input"
-                                        onChange={(e) => {
-                                            if (e.target.value) {
-                                                addEmployeeToEvent(selectedEventId, parseInt(e.target.value));
-                                                e.target.value = '';
-                                            }
-                                        }}
-                                    >
-                                        <option value="">Select an employee...</option>
-                                        {allEmployees.map(employee => (
-                                            <option key={employee.id} value={employee.id}>
-                                                {employee.fullname} - {employee.field}
-                                            </option>
-                                        ))}
-                                    </select>
+                                <div className="employee-form-header">
+                                    <h3>Tədbirə Üzv Əlavə Et</h3>
+                                    <p className="employee-form-subtitle">Mövcud üzvlərdən seçin və tədbirə əlavə edin</p>
+                                </div>
+
+                                <div className="employee-form-body">
+                                    <div className="employee-search-section">
+                                        <h4 className="section-title">Üzv Axtarışı</h4>
+                                        <div className="admin-events-form-group">
+                                            <label>Axtarış</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Ad, sahə və ya klinika ilə axtarın..."
+                                                value={employeeSearchTerm}
+                                                onChange={(e) => setEmployeeSearchTerm(e.target.value)}
+                                                className="admin-events-form-input"
+                                            />
+                                            <small className="input-hint">Üzv adı, sahə və ya klinika ilə axtarın</small>
+                                        </div>
+                                    </div>
+
+                                    <div className="employee-selection-section">
+                                        <h4 className="section-title">Üzv Seçimi</h4>
+                                        <div className="admin-events-form-group">
+                                            <label>Üzv Seçin</label>
+                                            <select
+                                                className="admin-events-form-input"
+                                                onChange={(e) => {
+                                                    if (e.target.value) {
+                                                        addEmployeeToEvent(selectedEventId, parseInt(e.target.value));
+                                                        e.target.value = '';
+                                                    }
+                                                }}
+                                            >
+                                                <option value="">Üzv seçin...</option>
+                                                {getFilteredEmployees().map(employee => (
+                                                    <option key={employee.id} value={employee.id}>
+                                                        {employee.fullname} - {employee.field} ({employee.clinic})
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <small className="input-hint">
+                                                {getFilteredEmployees().length} üzv tapıldı
+                                            </small>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div className="admin-events-list-section">
-                                <h3>Current Employees</h3>
+                                <h3>Cari Üzvlər</h3>
                                 {eventEmployees[selectedEventId]?.map((employee, index) => (
                                     <div key={employee.id} className="admin-events-item-card">
                                         <div className="admin-events-item-info">
@@ -1495,10 +1866,237 @@ function AdminEvents() {
                                             className="admin-events-delete-btn"
                                             onClick={() => removeEmployeeFromEvent(employee.id, selectedEventId)}
                                         >
-                                            Remove
+                                            Sil
                                         </button>
                                     </div>
-                                )) || <p>No employees assigned</p>}
+                                )) || <p>Heç bir üzv təyin edilməyib</p>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Edit Timeline Modal */}
+            {showEditTimelineModal && editingTimelineSlot && (
+                <div className="admin-events-modal-overlay edit-modal-overlay" onClick={cancelEditingTimelineSlot}>
+                    <div className="admin-events-modal edit-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="admin-events-modal-header">
+                            <h2>Timeline Slot Redaktə Et</h2>
+                            <button className="admin-events-modal-close" onClick={cancelEditingTimelineSlot}>×</button>
+                        </div>
+                        <div className="admin-events-modal-content">
+                            <div className="timeline-form-header">
+                                <h3>Timeline Slot Məlumatlarını Yeniləyin</h3>
+                                <p className="timeline-form-subtitle">Timeline slot məlumatlarını düzəldin</p>
+                            </div>
+
+                            <div className="timeline-form-body">
+                                <div className="timeline-time-section">
+                                    <h4 className="section-title">Vaxt Aralığı</h4>
+                                    <div className="time-inputs-row">
+                                        <div className="admin-events-form-group">
+                                            <label>Başlama Vaxtı</label>
+                                            <input
+                                                type="text"
+                                                placeholder="09:00"
+                                                value={editingTimelineSlot.startTime}
+                                                onChange={(e) => {
+                                                    let value = e.target.value;
+                                                    if (value.length === 2 && !value.includes(':')) {
+                                                        value = value + ':';
+                                                    }
+                                                    value = value.replace(/[^0-9:]/g, '');
+                                                    if (value.length > 5) {
+                                                        value = value.substring(0, 5);
+                                                    }
+                                                    setEditingTimelineSlot(prev => ({ ...prev, startTime: value }));
+                                                }}
+                                                className="admin-events-form-input"
+                                                maxLength="5"
+                                                required
+                                            />
+                                            <small className="input-hint">24 saat formatında (HH:MM)</small>
+                                        </div>
+                                        <div className="admin-events-form-group">
+                                            <label>Bitmə Vaxtı</label>
+                                            <input
+                                                type="text"
+                                                placeholder="10:15"
+                                                value={editingTimelineSlot.endTime}
+                                                onChange={(e) => {
+                                                    let value = e.target.value;
+                                                    if (value.length === 2 && !value.includes(':')) {
+                                                        value = value + ':';
+                                                    }
+                                                    value = value.replace(/[^0-9:]/g, '');
+                                                    if (value.length > 5) {
+                                                        value = value.substring(0, 5);
+                                                    }
+                                                    setEditingTimelineSlot(prev => ({ ...prev, endTime: value }));
+                                                }}
+                                                className="admin-events-form-input"
+                                                maxLength="5"
+                                                required
+                                            />
+                                            <small className="input-hint">24 saat formatında (HH:MM)</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="timeline-content-section">
+                                    <h4 className="section-title">Məzmun Məlumatları</h4>
+                                    <div className="admin-events-form-group">
+                                        <label>Başlıq</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Timeline slot başlığı"
+                                            value={editingTimelineSlot.title}
+                                            onChange={(e) => setEditingTimelineSlot(prev => ({ ...prev, title: e.target.value }))}
+                                            className="admin-events-form-input"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="admin-events-form-group">
+                                        <label>Təsvir</label>
+                                        <textarea
+                                            placeholder="Timeline slot haqqında ətraflı məlumat"
+                                            value={editingTimelineSlot.description}
+                                            onChange={(e) => setEditingTimelineSlot(prev => ({ ...prev, description: e.target.value }))}
+                                            className="admin-events-form-textarea"
+                                            rows={3}
+                                            required
+                                        />
+                                    </div>
+                                    <div className="admin-events-form-group">
+                                        <label>Əlavə Məlumat</label>
+                                        <textarea
+                                            placeholder="Əlavə qeydlər və məlumatlar"
+                                            value={editingTimelineSlot.info}
+                                            onChange={(e) => setEditingTimelineSlot(prev => ({ ...prev, info: e.target.value }))}
+                                            className="admin-events-form-textarea"
+                                            rows={3}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="timeline-form-footer">
+                                <button
+                                    className="admin-events-cancel-btn"
+                                    onClick={cancelEditingTimelineSlot}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="admin-events-submit-btn"
+                                    onClick={() => updateTimelineSlot(editingTimelineSlot.id, selectedEventId)}
+                                    disabled={!editingTimelineSlot.startTime || !editingTimelineSlot.endTime || !editingTimelineSlot.title}
+                                >
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Edit Speaker Modal */}
+            {showEditSpeakerModal && editingSpeaker && (
+                <div className="admin-events-modal-overlay edit-modal-overlay" onClick={cancelEditingSpeaker}>
+                    <div className="admin-events-modal edit-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="admin-events-modal-header">
+                            <h2>Speaker Redaktə Et</h2>
+                            <button className="admin-events-modal-close" onClick={cancelEditingSpeaker}>×</button>
+                        </div>
+                        <div className="admin-events-modal-content">
+                            <div className="speaker-form-header">
+                                <h3>Speaker Məlumatlarını Yeniləyin</h3>
+                                <p className="speaker-form-subtitle">Speaker məlumatlarını düzəldin</p>
+                            </div>
+
+                            <div className="speaker-form-body">
+                                <div className="speaker-basic-section">
+                                    <h4 className="section-title">Əsas Məlumatlar</h4>
+                                    <div className="admin-events-form-group">
+                                        <label>Speaker Adı</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Speaker adını daxil edin"
+                                            value={editingSpeaker.name}
+                                            onChange={(e) => setEditingSpeaker(prev => ({ ...prev, name: e.target.value }))}
+                                            className="admin-events-form-input"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="admin-events-form-group">
+                                        <label>Speaker Vəzifəsi</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Speaker vəzifəsini daxil edin"
+                                            value={editingSpeaker.title}
+                                            onChange={(e) => setEditingSpeaker(prev => ({ ...prev, title: e.target.value }))}
+                                            className="admin-events-form-input"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="speaker-media-section">
+                                    <h4 className="section-title">Media Faylı</h4>
+                                    <div className="admin-events-form-group">
+                                        <label>Şəkil Seçin</label>
+                                        <div className="file-input-container">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => {
+                                                    const file = e.target.files[0];
+                                                    if (file) {
+                                                        setEditingSpeaker(prev => ({ ...prev, image: file.name }));
+                                                    }
+                                                }}
+                                                className="file-input"
+                                                id="edit-speaker-image-upload-modal"
+                                            />
+                                            <label htmlFor="edit-speaker-image-upload-modal" className="file-input-label">
+                                                <span className="file-input-icon">📁</span>
+                                                <span className="file-input-text">
+                                                    {editingSpeaker.image ? 'Şəkil seçildi' : 'Şəkil faylını seçin'}
+                                                </span>
+                                            </label>
+                                        </div>
+                                        {editingSpeaker.image && (
+                                            <div className="image-preview">
+                                                <img src={getImagePath(editingSpeaker.image)} alt="Speaker preview" className="preview-image" />
+                                                <button
+                                                    type="button"
+                                                    className="remove-image-btn"
+                                                    onClick={() => setEditingSpeaker(prev => ({ ...prev, image: '' }))}
+                                                >
+                                                    ✕
+                                                </button>
+                                            </div>
+                                        )}
+                                        <small className="input-hint">JPG, PNG və ya GIF formatında şəkil seçin</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="speaker-form-footer">
+                                <button
+                                    className="admin-events-cancel-btn"
+                                    onClick={cancelEditingSpeaker}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="admin-events-submit-btn"
+                                    onClick={() => updateSpeaker(editingSpeaker.id, selectedEventId)}
+                                    disabled={!editingSpeaker.name || !editingSpeaker.title}
+                                >
+                                    Save
+                                </button>
                             </div>
                         </div>
                     </div>
