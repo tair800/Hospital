@@ -19,6 +19,7 @@ function AdminEvents() {
         time: '',
         venue: '',
         trainer: '',
+        region: '',
         price: 0,
         currency: 'AZN',
         mainImage: '',
@@ -102,6 +103,7 @@ function AdminEvents() {
                     event.longDescription?.toLowerCase().includes(searchLower) ||
                     event.venue?.toLowerCase().includes(searchLower) ||
                     event.trainer?.toLowerCase().includes(searchLower) ||
+                    event.region?.toLowerCase().includes(searchLower) ||
                     event.eventDate?.toLowerCase().includes(searchLower) ||
                     event.time?.toLowerCase().includes(searchLower)
                 )
@@ -1012,6 +1014,18 @@ function AdminEvents() {
                                             </div>
 
                                             <div className="form-group">
+                                                <label>Region</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-input"
+                                                    value={currentData.region || ''}
+                                                    onChange={(e) => handleInlineInputChange(event.id, 'region', e.target.value)}
+                                                    maxLength={100}
+                                                    placeholder="Event region"
+                                                />
+                                            </div>
+
+                                            <div className="form-group">
                                                 <label>Price</label>
                                                 <div className="price-input-group">
                                                     <input
@@ -1345,6 +1359,20 @@ function AdminEvents() {
                                             onChange={(e) => setEventData(prev => ({ ...prev, trainer: e.target.value }))}
                                             maxLength={100}
                                             placeholder="Enter event trainer"
+                                        />
+                                    </div>
+
+                                    <div className="admin-events-form-group">
+                                        <label htmlFor="region">Region</label>
+                                        <input
+                                            type="text"
+                                            id="region"
+                                            name="region"
+                                            className="admin-events-form-input"
+                                            value={eventData.region}
+                                            onChange={(e) => setEventData(prev => ({ ...prev, region: e.target.value }))}
+                                            maxLength={100}
+                                            placeholder="Enter event region"
                                         />
                                     </div>
 

@@ -213,9 +213,18 @@ const EventsDetail = () => {
                         <span className="card-time">{event.time}</span>
                     </div>
                 </div>
+                {event.region && (
+                    <div className="event-detail-card event-region-card">
+                        <img src="/src/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
+                        <img src="/src/assets/location.png" alt="Region" className="card-location-icon" />
+                        <div className="card-location-info">
+                            <span className="card-location">{event.region}</span>
+                        </div>
+                    </div>
+                )}
                 <div className="event-detail-card event-participants-card">
                     <img src="/src/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
-                    <img src="/src/assets/location.png" alt="Location" className="card-location-icon" />
+                    <img src="/src/assets/venue-icon.png" alt="Location" className="card-location-icon" />
                     <div className="card-location-info">
                         <span className="card-location">{event.venue}</span>
                     </div>

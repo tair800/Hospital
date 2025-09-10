@@ -211,6 +211,7 @@ namespace HospitalAPI.Controllers
                 existingEvent.Time = eventItem.Time;
                 existingEvent.Venue = eventItem.Venue;
                 existingEvent.Trainer = eventItem.Trainer;
+                existingEvent.Region = eventItem.Region;
                 existingEvent.Price = eventItem.Price;
                 existingEvent.Currency = eventItem.Currency;
                 existingEvent.MainImage = eventItem.MainImage;

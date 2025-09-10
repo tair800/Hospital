@@ -112,7 +112,7 @@
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     border: 1px solid #e9ecef;
     text-align: center;
-    min-width: 268px;
+    min-width: 230px;
     height: 75px;
     /* Height less than width */
     display: flex;

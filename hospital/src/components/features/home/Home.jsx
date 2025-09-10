@@ -264,6 +264,7 @@ const Home = () => {
                                                 <div className="home-hero-event-info">
                                                     <div className="home-hero-event-date-location">
                                                         {day} {month}, {event.venue}
+                                                        {event.region && `, ${event.region}`}
                                                     </div>
                                                     <div className="home-hero-event-title">
                                                         {event.title}
@@ -524,10 +525,17 @@ const Home = () => {
                                         <div className="home-event-date">
                                             <div className="date-venue-group">
                                                 <span className="home-event-day">{day}</span>
-                                                <div className="home-event-venue" title={event.venue}>
+                                                <div className="home-event-venue" title={`${event.venue}${event.region ? `, ${event.region}` : ''}`}>
                                                     {event.venue && event.venue.length > 20
                                                         ? event.venue.substring(0, 20) + '...'
                                                         : event.venue}
+                                                    {event.region && (
+                                                        <div className="home-event-region">
+                                                            {event.region.length > 15
+                                                                ? event.region.substring(0, 15) + '...'
+                                                                : event.region}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                             <span className="home-event-month">{month}</span>

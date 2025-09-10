@@ -33,6 +33,9 @@ namespace HospitalAPI.Models
         [MaxLength(100)]
         public string? Trainer { get; set; }
         
+        [MaxLength(100)]
+        public string? Region { get; set; }
+        
         [Required]
         public bool IsFree { get; set; }
         

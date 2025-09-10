@@ -7,8 +7,6 @@
 
 /* Events Header Text - Using margins for positioning */
 .events-header-text {
-    margin-top: 200px;
-    margin-left: 8rem;
     display: flex;
     flex-direction: row;
     gap: 1rem;
@@ -745,7 +743,7 @@
 .featured-slider-navigation {
     position: absolute;
     top: 26rem;
-    right: 8rem;
+    right: 12rem;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -981,4 +979,108 @@
         opacity: 1;
         transform: translateX(0);
     }
+}
+
+/* Region Filter Styles */
+.events-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 200px;
+    margin-left: 8rem;
+    margin-right: 8rem;
+}
+
+.region-filter-container {
+    position: relative;
+    display: inline-block;
+}
+
+.region-filter-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-width: 120px;
+}
+
+.region-filter-dropdown:hover {
+    border-color: #1243AC;
+    box-shadow: 0 4px 8px rgba(18, 67, 172, 0.15);
+}
+
+.filter-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.filter-line {
+    width: 12px;
+    height: 2px;
+    background-color: #666;
+    border-radius: 1px;
+}
+
+.filter-line.short {
+    width: 8px;
+}
+
+.region-filter-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+    flex: 1;
+}
+
+.dropdown-arrow {
+    font-size: 0.7rem;
+    color: #666;
+    transition: transform 0.3s ease;
+}
+
+.region-filter-dropdown:hover .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.region-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    margin-top: 4px;
+    overflow: hidden;
+}
+
+.region-dropdown-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 0.9rem;
+    color: #333;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.region-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.region-dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #1243AC;
+}
+
+.region-dropdown-item:active {
+    background-color: #e3f2fd;
 }

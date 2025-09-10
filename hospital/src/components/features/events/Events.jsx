@@ -20,6 +20,10 @@ const Events = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const eventsPerPage = 6;
 
+    // Region filter state
+    const [selectedRegion, setSelectedRegion] = useState('All');
+    const [showRegionDropdown, setShowRegionDropdown] = useState(false);
+
     // Countdown timer state
     const [timeLeft, setTimeLeft] = useState({});
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -50,6 +54,9 @@ const Events = () => {
         if (imageName.startsWith('/src/assets/')) return imageName;
         return `/src/assets/${imageName}`;
     };
+
+    // Get unique regions from events
+    const uniqueRegions = [...new Set(events.map(event => event.region).filter(region => region))].sort();
 
     // Get first day of month (0 = Sunday, 1 = Monday, etc.)
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
@@ -95,6 +102,20 @@ const Events = () => {
         fetchEvents();
     }, []);
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (showRegionDropdown && !event.target.closest('.region-filter-container')) {
+                setShowRegionDropdown(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showRegionDropdown]);
+
     // Countdown timer effect
     useEffect(() => {
         if (mainEvents.length === 0) return;
@@ -131,11 +152,16 @@ const Events = () => {
         navigate(`/event/${eventId}`);
     };
 
+    // Filter events by region
+    const filteredEvents = selectedRegion === 'All'
+        ? events
+        : events.filter(event => event.region === selectedRegion);
+
     // Pagination logic
     const indexOfLastEvent = currentPage * eventsPerPage;
     const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-    const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent);
-    const totalPages = Math.ceil(events.length / eventsPerPage);
+    const currentEvents = filteredEvents.slice(indexOfFirstEvent, indexOfLastEvent);
+    const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -205,6 +231,7 @@ const Events = () => {
                                             <img src="/src/assets/location.png" alt="Venue" className="featured-icon" />
                                             <span>{currentEvent.venue}</span>
                                         </div>
+
                                     </div>
                                 </div>
 
@@ -257,11 +284,57 @@ const Events = () => {
             </div>
 
             {/* Header */}
-            <div className="events-header-text">
-                <span className="events-header-first">Bütün</span>
-                <span className="events-header-second">
-                    <span>Tədbirlər</span>
-                </span>
+            <div className="events-header-section">
+                <div className="events-header-text">
+                    <span className="events-header-first">Bütün</span>
+                    <span className="events-header-second">
+                        <span>Tədbirlər</span>
+                    </span>
+                </div>
+
+                {/* Region Filter Dropdown */}
+                <div className="region-filter-container">
+                    <div
+                        className="region-filter-dropdown"
+                        onClick={() => setShowRegionDropdown(!showRegionDropdown)}
+                    >
+                        <div className="filter-icon">
+                            <div className="filter-line"></div>
+                            <div className="filter-line short"></div>
+                            <div className="filter-line"></div>
+                        </div>
+                        <span className="region-filter-text">{selectedRegion}</span>
+                        <div className="dropdown-arrow">▼</div>
+                    </div>
+
+                    {showRegionDropdown && (
+                        <div className="region-dropdown-menu">
+                            <div
+                                className="region-dropdown-item"
+                                onClick={() => {
+                                    setSelectedRegion('All');
+                                    setShowRegionDropdown(false);
+                                    setCurrentPage(1);
+                                }}
+                            >
+                                All
+                            </div>
+                            {uniqueRegions.map(region => (
+                                <div
+                                    key={region}
+                                    className="region-dropdown-item"
+                                    onClick={() => {
+                                        setSelectedRegion(region);
+                                        setShowRegionDropdown(false);
+                                        setCurrentPage(1);
+                                    }}
+                                >
+                                    {region}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* Content */}
