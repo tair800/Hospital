@@ -31,7 +31,7 @@ const Home = () => {
     useEffect(() => {
         const fetchHomeData = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/HomeSection/first');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/HomeSection/first');
                 if (response.ok) {
                     const data = await response.json();
                     setHomeData({
@@ -57,7 +57,7 @@ const Home = () => {
         const fetchEvents = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:5000/api/events');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/events');
                 if (!response.ok) {
                     throw new Error('Failed to fetch events');
                 }
@@ -99,7 +99,7 @@ const Home = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/employees');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/employees');
                 if (!response.ok) {
                     throw new Error('Failed to fetch employees');
                 }
@@ -198,9 +198,10 @@ const Home = () => {
     // Helper function to get correct image path
     const getImagePath = (imageName) => {
         if (!imageName) return '';
-        if (imageName === 'event-img.png') return '/src/assets/event-img.png';
-        if (imageName.startsWith('/src/assets/')) return imageName;
-        return `/src/assets/${imageName}`;
+        if (imageName === 'event-img.png') return '/assets/event-img.png';
+        if (imageName.startsWith('/assets/')) return imageName;
+        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
+        return `/assets/${imageName}`;
     };
 
     // Slider navigation functions
@@ -220,7 +221,7 @@ const Home = () => {
         <div className="home-page">
             <div className="home-bg-section">
                 <video
-                    src="/src/assets/home-video.mp4"
+                    src="/assets/home-video.mp4"
                     className="home-bg-video"
                     autoPlay
                     loop
@@ -352,7 +353,7 @@ const Home = () => {
             {/* Home Circle Right Decorative Element */}
             <div className="home-circle-right">
                 <img
-                    src="/src/assets/home-circle-right.png"
+                    src="/assets/home-circle-right.png"
                     alt="Decorative Circle"
                     className="home-circle-right-image"
                 />
@@ -361,7 +362,7 @@ const Home = () => {
             {/* Home Circle Left Decorative Element */}
             <div className="home-circle-left">
                 <img
-                    src="/src/assets/home-circle-left1.png"
+                    src="/assets/home-circle-left1.png"
                     alt="Decorative Circle Left"
                     className="home-circle-left-image"
                 />
@@ -370,7 +371,7 @@ const Home = () => {
             {/* Home Circle Left 2 Decorative Element */}
             <div className="home-circle-left2">
                 <img
-                    src="/src/assets/home-circle-left2.png"
+                    src="/assets/home-circle-left2.png"
                     alt="Decorative Circle Left 2"
                     className="home-circle-left2-image"
                 />
@@ -379,7 +380,7 @@ const Home = () => {
             {/* Home Circle Left 3 Decorative Element */}
             <div className="home-circle-left3">
                 <img
-                    src="/src/assets/home-circle-left3.png"
+                    src="/assets/home-circle-left3.png"
                     alt="Decorative Circle Left 3"
                     className="home-circle-left3-image"
                 />
@@ -397,7 +398,7 @@ const Home = () => {
                 <div className="section section-2">
                     <div className="section-bg-image">
                         <img
-                            src="/src/assets/home1-bg.png"
+                            src="/assets/home1-bg.png"
                             alt="Background Pattern"
                             className="section-2-bg-pattern"
                         />
@@ -406,7 +407,7 @@ const Home = () => {
                         <div className="section-2-image">
                             {homeData.section2Image && (
                                 <img
-                                    src={`/src/assets/${homeData.section2Image}`}
+                                    src={`/assets/${homeData.section2Image}`}
                                     alt="Hospital Services"
                                     className="section-2-main-image"
                                 />
@@ -417,7 +418,7 @@ const Home = () => {
                 <div className="section section-3">
                     <div className="section-3-bg-image">
                         <img
-                            src="/src/assets/home2-bg.png"
+                            src="/assets/home2-bg.png"
                             alt="Background Pattern"
                             className="section-3-bg-pattern"
                         />
@@ -426,7 +427,7 @@ const Home = () => {
                         <div className="section-3-image">
                             {homeData.section3Image && (
                                 <img
-                                    src={`/src/assets/${homeData.section3Image}`}
+                                    src={`/assets/${homeData.section3Image}`}
                                     alt="Hospital Services"
                                     className="section-3-main-image"
                                 />
@@ -552,7 +553,7 @@ const Home = () => {
                                 </div>
                                 <div className="card-right-section">
                                     <img
-                                        src="/src/assets/event-shadow.png"
+                                        src="/assets/event-shadow.png"
                                         alt="Event Shadow"
                                         className="home-event-shadow"
                                     />
@@ -567,7 +568,7 @@ const Home = () => {
                                         aria-label={`Go to ${event.title} details`}
                                     >
                                         <img
-                                            src="/src/assets/blog-arrow.png"
+                                            src="/assets/blog-arrow.png"
                                             alt="Go to Event Details"
                                             className="home-arrow-image"
                                         />

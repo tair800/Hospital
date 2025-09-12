@@ -9,6 +9,17 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Loading Animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 /* Contact Content Container */
 .contact-content-container {
     display: flex;

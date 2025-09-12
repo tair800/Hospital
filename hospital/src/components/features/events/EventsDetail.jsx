@@ -24,7 +24,7 @@ const EventsDetail = () => {
         const fetchTimelineData = async () => {
             try {
                 setTimelineLoading(true);
-                const response = await fetch(`http://localhost:5000/api/eventtimeline/event/${eventId}`);
+                const response = await fetch(`https://ahpbca-api.webonly.io/api/eventtimeline/event/${eventId}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch timeline data');
                 }
@@ -64,7 +64,7 @@ const EventsDetail = () => {
         const fetchEvent = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`http://localhost:5000/api/events/${eventId}`);
+                const response = await fetch(`https://ahpbca-api.webonly.io/api/events/${eventId}`);
                 if (!response.ok) {
                     throw new Error('Event not found');
                 }
@@ -115,9 +115,10 @@ const EventsDetail = () => {
     // Helper function to get correct image path
     const getImagePath = (imageName) => {
         if (!imageName) return '';
-        if (imageName === 'event-img.png') return '/src/assets/event-img.png';
-        if (imageName.startsWith('/src/assets/')) return imageName;
-        return `/src/assets/${imageName}`;
+        if (imageName === 'event-img.png') return '/assets/event-img.png';
+        if (imageName.startsWith('/assets/')) return imageName;
+        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
+        return `/assets/${imageName}`;
     };
 
     // Handle request modal success
@@ -185,11 +186,11 @@ const EventsDetail = () => {
     return (
         <div className="events-detail-page">
             <div className="events-detail-background-image">
-                <img src="/src/assets/event-dna.png" alt="Equipment DNA Background" />
+                <img src="/assets/event-dna.png" alt="Equipment DNA Background" />
             </div>
 
-            <img src="/src/assets/events-star1.png" alt="Star 1" className="events-star-left" />
-            <img src="/src/assets/events-star2.png" alt="Star 2" className="events-star-right" />
+            <img src="/assets/events-star1.png" alt="Star 1" className="events-star-left" />
+            <img src="/assets/events-star2.png" alt="Star 2" className="events-star-right" />
 
             <div className="events-detail-main-title">
                 <div className="title-line-1">{event.title}</div>
@@ -198,8 +199,8 @@ const EventsDetail = () => {
 
             <div className="events-detail-cards">
                 <div className="event-detail-card event-date-card">
-                    <img src="/src/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
-                    <img src="/src/assets/calendar.png" alt="Calendar" className="card-calendar-icon" />
+                    <img src="/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
+                    <img src="/assets/calendar.png" alt="Calendar" className="card-calendar-icon" />
                     <div className="card-date-info">
                         <span className="card-date-day">{new Date(event.eventDate).getDate()}</span>
                         <span className="card-date-month">{new Date(event.eventDate).toLocaleDateString('en-US', { month: 'long' })}</span>
@@ -207,24 +208,24 @@ const EventsDetail = () => {
                     </div>
                 </div>
                 <div className="event-detail-card event-location-card">
-                    <img src="/src/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
-                    <img src="/src/assets/clock.png" alt="Clock" className="card-clock-icon" />
+                    <img src="/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
+                    <img src="/assets/clock.png" alt="Clock" className="card-clock-icon" />
                     <div className="card-time-info">
                         <span className="card-time">{event.time}</span>
                     </div>
                 </div>
                 {event.region && (
                     <div className="event-detail-card event-region-card">
-                        <img src="/src/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
-                        <img src="/src/assets/location.png" alt="Region" className="card-location-icon" />
+                        <img src="/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
+                        <img src="/assets/location.png" alt="Region" className="card-location-icon" />
                         <div className="card-location-info">
                             <span className="card-location">{event.region}</span>
                         </div>
                     </div>
                 )}
                 <div className="event-detail-card event-participants-card">
-                    <img src="/src/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
-                    <img src="/src/assets/venue-icon.png" alt="Location" className="card-location-icon" />
+                    <img src="/assets/events-detail.png" alt="Event Detail" className="card-event-detail-image" />
+                    <img src="/assets/venue-icon.png" alt="Location" className="card-location-icon" />
                     <div className="card-location-info">
                         <span className="card-location">{event.venue}</span>
                     </div>
@@ -305,7 +306,7 @@ const EventsDetail = () => {
                                                 onClick={() => handleTimeSlotClick(index)}
                                             >
                                                 <div className="time-slot-clock">
-                                                    <img src="/src/assets/clock.png" alt="Clock" />
+                                                    <img src="/assets/clock.png" alt="Clock" />
                                                 </div>
                                                 <div className="time-slot-text">{slot.startTime} - {slot.endTime}</div>
                                             </div>

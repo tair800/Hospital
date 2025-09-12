@@ -13,6 +13,14 @@ const EmployeeDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Helper function to get correct image path
+    const getImagePath = (imageName) => {
+        if (!imageName) return '';
+        if (imageName.startsWith('/assets/')) return imageName;
+        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
+        return `/assets/${imageName}`;
+    };
+
     // Carousel state
     const [currentPage, setCurrentPage] = useState(0);
     const [slideDirection, setSlideDirection] = useState('');
@@ -23,7 +31,7 @@ const EmployeeDetail = () => {
         const fetchEmployee = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`http://localhost:5000/api/employees/${employeeId}`);
+                const response = await fetch(`https://ahpbca-api.webonly.io/api/employees/${employeeId}`);
                 if (!response.ok) {
                     throw new Error('Employee not found');
                 }
@@ -138,7 +146,7 @@ const EmployeeDetail = () => {
             {/* Background Image Section */}
             <div className="employee-detail-bg-section">
                 <img
-                    src="/src/assets/employee-detail-bg.png"
+                    src="/assets/employee-detail-bg.png"
                     alt="Employee Detail Background"
                     className="employee-detail-bg-image"
                 />
@@ -167,25 +175,25 @@ const EmployeeDetail = () => {
                         <div className="contact-info">
                             {employee.phone && (
                                 <div className="contact-item">
-                                    <img src="/src/assets/phone-icon.png" alt="Phone" className="contact-icon" />
+                                    <img src="/assets/phone-icon.png" alt="Phone" className="contact-icon" />
                                     <span>{employee.phone}</span>
                                 </div>
                             )}
                             {employee.whatsApp && (
                                 <div className="contact-item">
-                                    <img src="/src/assets/whatsapp-icon.png" alt="WhatsApp" className="contact-icon" />
+                                    <img src="/assets/whatsapp-icon.png" alt="WhatsApp" className="contact-icon" />
                                     <span>{employee.whatsApp}</span>
                                 </div>
                             )}
                             {employee.email && (
                                 <div className="contact-item">
-                                    <img src="/src/assets/mail-icon.png" alt="Email" className="contact-icon" />
+                                    <img src="/assets/mail-icon.png" alt="Email" className="contact-icon" />
                                     <span>{employee.email}</span>
                                 </div>
                             )}
                             {employee.location && (
                                 <div className="contact-item">
-                                    <img src="/src/assets/location-icon.png" alt="Location" className="contact-icon" />
+                                    <img src="/assets/location-icon.png" alt="Location" className="contact-icon" />
                                     <span>{employee.location}</span>
                                 </div>
                             )}
@@ -195,7 +203,7 @@ const EmployeeDetail = () => {
                     {/* Right Side - Employee Image */}
                     <div className="employee-detail-right">
                         <img
-                            src={employee.image || "/src/assets/employee1.png"}
+                            src={getImagePath(employee.image) || "/assets/employee1.png"}
                             alt={employee.fullname}
                             className="employee-detail-image"
                         />
@@ -218,14 +226,14 @@ const EmployeeDetail = () => {
 
                 {/* Right Side - Equipment DNA Image */}
                 <div className="equipment-dna-right">
-                    <img src="/src/assets/equipment-dna.png" alt="Equipment DNA" className="equipment-dna-image" />
+                    <img src="/assets/equipment-dna.png" alt="Equipment DNA" className="equipment-dna-image" />
                 </div>
             </div>
 
             {/* New Section: Divided Layout */}
             <div className="employee-divided-section">
                 <div className="divided-left">
-                    <img src="/src/assets/employee-detail.png" alt="Employee Detail" className="divided-left-image" />
+                    <img src="/assets/employee-detail.png" alt="Employee Detail" className="divided-left-image" />
                 </div>
                 <div className="divided-right">
                     <div className="certificate-timeline-container">
@@ -273,7 +281,7 @@ const EmployeeDetail = () => {
                         {getCurrentPageCards().map((card, index) => (
                             <div key={card.id} className={`card card-${index + 1}`}>
                                 <div className="inner-card"></div>
-                                <img src={card.image.startsWith('/src/assets/') ? card.image : `/src/assets/${card.image}`} alt="Employee Certificate" className="card-image" />
+                                <img src={card.image.startsWith('/assets/') ? card.image : card.image.startsWith('/src/assets/') ? card.image.replace('/src/assets/', '/assets/') : `/assets/${card.image}`} alt="Employee Certificate" className="card-image" />
                             </div>
                         ))}
                     </div>

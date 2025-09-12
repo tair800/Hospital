@@ -12,11 +12,15 @@ export const getImagePath = (imageName) => {
 
     // If it's already a full path (starts with / or http), return as is
     if (imageName.startsWith('/') || imageName.startsWith('http')) {
+        // Fix any /src/assets/ paths to /assets/
+        if (imageName.startsWith('/src/assets/')) {
+            return imageName.replace('/src/assets/', '/assets/');
+        }
         return imageName;
     }
 
-    // For local assets, prefix with /src/assets/
-    return `/src/assets/${imageName}`;
+    // For local assets, prefix with /assets/
+    return `/assets/${imageName}`;
 };
 
 /**
@@ -47,11 +51,15 @@ export const getImagePathWithFallback = (imageName, fallbackPath = '') => {
 
     // If it's already a full path, return as is
     if (imageName.startsWith('/') || imageName.startsWith('http')) {
+        // Fix any /src/assets/ paths to /assets/
+        if (imageName.startsWith('/src/assets/')) {
+            return imageName.replace('/src/assets/', '/assets/');
+        }
         return imageName;
     }
 
-    // For local assets, prefix with /src/assets/
-    return `/src/assets/${imageName}`;
+    // For local assets, prefix with /assets/
+    return `/assets/${imageName}`;
 };
 
 /**
@@ -93,12 +101,16 @@ export const getContextualImagePath = (imageName, context = 'admin') => {
 
     // If it's already a full path, return as is
     if (imageName.startsWith('/') || imageName.startsWith('http')) {
+        // Fix any /src/assets/ paths to /assets/
+        if (imageName.startsWith('/src/assets/')) {
+            return imageName.replace('/src/assets/', '/assets/');
+        }
         return imageName;
     }
 
     // Check if it's a local asset
     if (isLocalAsset(imageName)) {
-        return `/src/assets/${imageName}`;
+        return `/assets/${imageName}`;
     }
 
     // For different contexts, use appropriate paths
@@ -108,10 +120,10 @@ export const getContextualImagePath = (imageName, context = 'admin') => {
         case 'employee':
         case 'event':
             // These might be uploads or local assets
-            return imageName.includes('upload') ? `/uploads/${imageName}` : `/src/assets/${imageName}`;
+            return imageName.includes('upload') ? `/uploads/${imageName}` : `/assets/${imageName}`;
         case 'admin':
         default:
             // Default to local assets for admin
-            return `/src/assets/${imageName}`;
+            return `/assets/${imageName}`;
     }
 };

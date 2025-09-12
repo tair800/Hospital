@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import { getImagePath } from '../../utils/imageUtils'
-import adminDeleteIcon from '../../assets/admin-delete.png'
-import adminBrowseIcon from '../../assets/admin-browse.png'
+const adminDeleteIcon = '/assets/admin-delete.png'
+const adminBrowseIcon = '/assets/admin-browse.png'
 import Pagination from '../../components/ui/Pagination'
 import usePagination from '../../hooks/usePagination'
 import './AdminBlog.css'
@@ -89,7 +89,7 @@ function AdminBlog() {
     const fetchBlogs = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:5000/api/blogs');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/blogs');
             if (response.ok) {
                 const data = await response.json();
 
@@ -142,7 +142,7 @@ function AdminBlog() {
 
 
 
-            const response = await fetch(`http://localhost:5000/api/blogs/${blogId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/blogs/${blogId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -331,7 +331,7 @@ function AdminBlog() {
 
 
 
-            const response = await fetch('http://localhost:5000/api/blogs', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/blogs', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -368,7 +368,7 @@ function AdminBlog() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:5000/api/blogs/${blogId}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/blogs/${blogId}`, {
                         method: 'DELETE',
                     });
 

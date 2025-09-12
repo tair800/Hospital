@@ -18,7 +18,7 @@ const BlogDetail = () => {
         const fetchBlogData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:5000/api/blogs');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/blogs');
                 if (!response.ok) {
                     throw new Error('Failed to fetch blog data');
                 }
@@ -89,12 +89,12 @@ const BlogDetail = () => {
         <div className="blog-detail-page">
             {/* Background Images */}
             <img
-                src="/src/assets/blogdetail-bg1.png"
+                src="/assets/blogdetail-bg1.png"
                 alt="Background 1"
                 className="blogdetail-bg1"
             />
             <img
-                src="/src/assets/blogdetail-bg2.png"
+                src="/assets/blogdetail-bg2.png"
                 alt="Background 2"
                 className="blogdetail-bg2"
             />
@@ -112,7 +112,7 @@ const BlogDetail = () => {
                         <div className="blog-meta-container">
                             <div className="blog-date-component">
                                 <img
-                                    src="/src/assets/calendar.png"
+                                    src="/assets/calendar.png"
                                     alt="Calendar"
                                     className="calendar-icon"
                                 />
@@ -122,7 +122,7 @@ const BlogDetail = () => {
                             {/* Visitors Component */}
                             <div className="blog-visitors-component">
                                 <img
-                                    src="/src/assets/eye.png"
+                                    src="/assets/eye.png"
                                     alt="Eye"
                                     className="eye-icon"
                                 />
@@ -217,7 +217,7 @@ const BlogDetail = () => {
                                             <div className="blog-post-title">{blogItem.title}</div>
                                             <div className="blog-post-arrow">
                                                 <img
-                                                    src="/src/assets/blog-arrow.png"
+                                                    src="/assets/blog-arrow.png"
                                                     alt="Arrow"
                                                 />
                                             </div>

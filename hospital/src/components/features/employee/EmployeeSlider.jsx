@@ -64,12 +64,12 @@ const EmployeeSlider = ({ employees }) => {
                                         style={{ cursor: 'pointer' }}
                                     >
                                         <img
-                                            src="/src/assets/employee-bg.png"
+                                            src="/assets/employee-bg.png"
                                             alt="Employee Background"
                                             className="home-employee-bg-image"
                                         />
                                         <img
-                                            src={employee.image ? (employee.image.startsWith('/src/assets/') ? employee.image : `/src/assets/${employee.image}`) : "/src/assets/employee1.png"}
+                                            src={employee.image ? (employee.image.startsWith('/assets/') ? employee.image : employee.image.startsWith('/src/assets/') ? employee.image.replace('/src/assets/', '/assets/') : `/assets/${employee.image}`) : "/assets/employee1.png"}
                                             alt="Employee"
                                             className="home-employee-photo"
                                         />
@@ -99,7 +99,7 @@ const EmployeeSlider = ({ employees }) => {
                         disabled={currentPage === 0}
                         aria-label="Previous page"
                     >
-                        <img src="/src/assets/slider-prev.png" alt="Previous" width="34" height="34" />
+                        <img src="/assets/slider-prev.png" alt="Previous" width="34" height="34" />
                     </button>
 
                     <button
@@ -108,7 +108,7 @@ const EmployeeSlider = ({ employees }) => {
                         disabled={currentPage === displayTotalPages - 1}
                         aria-label="Next page"
                     >
-                        <img src="/src/assets/slider-next.png" alt="Next" width="34" height="34" />
+                        <img src="/assets/slider-next.png" alt="Next" width="34" height="34" />
                     </button>
                 </>
             )}

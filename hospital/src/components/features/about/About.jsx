@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import './About.css'
-import aboutMainImage from '../../../assets/about-main.png'
-import aboutTop1Image from '../../../assets/about-dot1.png'
-import aboutTop2Image from '../../../assets/about-dot2.png'
-import aboutTop3Image from '../../../assets/about-dot3.png'
-import aboutTop4Image from '../../../assets/about-dot4.png'
-import circleImage from '../../../assets/circle.png'
+const aboutMainImage = '/assets/about-main.png'
+const aboutTop1Image = '/assets/about-dot1.png'
+const aboutTop2Image = '/assets/about-dot2.png'
+const aboutTop3Image = '/assets/about-dot3.png'
+const aboutTop4Image = '/assets/about-dot4.png'
+const circleImage = '/assets/circle.png'
 import LogoCarousel from '../../ui/LogoCarousel'
 import AboutCarousel from './AboutCarousel.jsx'
 
@@ -21,7 +21,7 @@ function About() {
         const fetchAboutData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:5000/api/about');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/about');
                 if (!response.ok) {
                     throw new Error('Failed to fetch about data');
                 }
