@@ -280,6 +280,7 @@ footer span {
         min-width: auto;
         padding: 0 0.5rem;
         flex: 1;
+        z-index: 10;
     }
 
     .footer-logo img {
@@ -296,6 +297,8 @@ footer span {
     .footer-navigation .footer-link {
         font-size: 0.7rem;
         padding: 0.1rem 0.3rem;
+        position: relative;
+        z-index: 11;
     }
 
     .social-media-icons {
@@ -306,6 +309,8 @@ footer span {
     .social-icon {
         width: 30px;
         height: 30px;
+        position: relative;
+        z-index: 11;
     }
 
     .social-icon img {
@@ -353,6 +358,7 @@ footer span {
         order: 2;
         padding: 0 0.3rem;
         flex: 1;
+        z-index: 10;
     }
 
     .footer-logo img {
@@ -369,6 +375,8 @@ footer span {
     .footer-navigation .footer-link {
         font-size: 0.65rem;
         padding: 0.1rem 0.2rem;
+        position: relative;
+        z-index: 11;
     }
 
     .social-media-icons {
@@ -379,6 +387,8 @@ footer span {
     .social-icon {
         width: 26px;
         height: 26px;
+        position: relative;
+        z-index: 11;
     }
 
     .social-icon img {
@@ -426,6 +436,7 @@ footer span {
         order: 2;
         padding: 0 0.2rem;
         flex: 1;
+        z-index: 10;
     }
 
     .footer-logo img {
@@ -442,6 +453,8 @@ footer span {
     .footer-navigation .footer-link {
         font-size: 0.6rem;
         padding: 0.05rem 0.15rem;
+        position: relative;
+        z-index: 11;
     }
 
     .social-media-icons {
@@ -452,6 +465,8 @@ footer span {
     .social-icon {
         width: 24px;
         height: 24px;
+        position: relative;
+        z-index: 11;
     }
 
     .social-icon img {
@@ -499,6 +514,7 @@ footer span {
         order: 2;
         padding: 0 0.1rem;
         flex: 1;
+        z-index: 10;
     }
 
     .footer-logo img {
@@ -515,6 +531,8 @@ footer span {
     .footer-navigation .footer-link {
         font-size: 0.55rem;
         padding: 0.03rem 0.1rem;
+        position: relative;
+        z-index: 11;
     }
 
     .social-media-icons {
@@ -525,6 +543,8 @@ footer span {
     .social-icon {
         width: 20px;
         height: 20px;
+        position: relative;
+        z-index: 11;
     }
 
     .social-icon img {

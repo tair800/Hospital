@@ -20,7 +20,7 @@ const Employee = () => {
         handlePageChange,
         handlePreviousPage,
         handleNextPage
-    } = usePagination(employees, 9);
+    } = usePagination(employees, 8);
 
     // Fetch employees from API
     useEffect(() => {
@@ -115,7 +115,7 @@ const Employee = () => {
                 startIndex={startIndex}
                 endIndex={endIndex}
                 totalItems={employees.length}
-                itemsPerPage={9}
+                itemsPerPage={8}
                 showInfo={true}
                 className="employee-pagination"
             />

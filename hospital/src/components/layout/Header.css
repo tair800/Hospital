@@ -300,7 +300,8 @@ header {
 
 @media (max-width: 768px) {
     header {
-        padding: 0;
+        /* padding: 0; */
+        height: 79px;
     }
 
     .header-container {
@@ -441,6 +442,10 @@ header {
     .mobile-login-section .uzv-btn:hover {
         background-color: #0056b3;
         transform: translateY(-2px);
+    }
+
+    .page-name-display {
+        bottom: 0px;
     }
 
     .navigation-container {

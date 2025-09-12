@@ -128,8 +128,8 @@
     }
 
     .about-carousel-slide {
-        min-width: 33.333%;
-        /* Show 3 images per screen on tablets */
+        min-width: 50%;
+        /* Show 2 images per screen on mobile */
     }
 
     .about-carousel-image {

@@ -57,7 +57,21 @@ const EmployeeDetail = () => {
         name: cert.certificateName
     })) : [];
 
-    const cardsPerPage = 4;
+    // Detect mobile screen size
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    const cardsPerPage = isMobile ? 2 : 4;
     const totalPages = Math.ceil(allCards.length / cardsPerPage);
     const shouldShowSlider = allCards.length > cardsPerPage;
 
@@ -269,13 +283,6 @@ const EmployeeDetail = () => {
             {/* Cards Section with Carousel */}
             <div className="cards-section">
                 <div className="cards-carousel-container">
-                    {/* Navigation Buttons - Only show if slider is needed */}
-                    {shouldShowSlider && (
-                        <button className="carousel-btn carousel-btn-prev" onClick={prevPage}>
-                            ‹
-                        </button>
-                    )}
-
                     {/* Cards Container */}
                     <div className={`cards-container ${isSliding ? 'sliding' : ''} ${slideDirection}`}>
                         {getCurrentPageCards().map((card, index) => (
@@ -288,9 +295,14 @@ const EmployeeDetail = () => {
 
                     {/* Navigation Buttons - Only show if slider is needed */}
                     {shouldShowSlider && (
-                        <button className="carousel-btn carousel-btn-next" onClick={nextPage}>
-                            ›
-                        </button>
+                        <div className="carousel-buttons-container">
+                            <button className="carousel-btn carousel-btn-prev" onClick={prevPage}>
+                                ‹
+                            </button>
+                            <button className="carousel-btn carousel-btn-next" onClick={nextPage}>
+                                ›
+                            </button>
+                        </div>
                     )}
                 </div>
 

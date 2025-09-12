@@ -281,20 +281,75 @@
     transform: translateY(-2px);
 }
 
-/* Responsive Design for Employee Pagination */
+/* Mobile Responsive Design */
 @media (max-width: 768px) {
-    .employee-pagination-controls {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 1rem;
-        width: 100%;
+    .employee-page {
+        margin-top: 100px;
     }
 
-    .employee-pagination-pages {
-        flex-wrap: wrap;
+    .employee-cards-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 4.5rem 2rem;
+        padding: 2rem 1rem;
+        max-width: 100%;
+        margin: 2rem auto 0;
+        min-height: auto;
+    }
+
+    .employee-unified-card {
+        width: 100%;
+        height: 280px;
+        margin: 0;
+    }
+
+    .employee-photo {
+        height: 50vh;
+    }
+
+    .employee-fullname {
+        font-size: 16px;
+        top: 12rem;
+        right: 15px;
+        padding: 3px 8px;
+    }
+
+    .employee-field-section {
+        height: 45px;
+        padding: 12px;
+    }
+
+    .employee-field {
+        font-size: 12px;
+    }
+
+    .employee-pagination .pagination-controls {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center;
+        justify-content: space-between !important;
+        width: 65%;
+        padding: 0 2rem;
+    }
+
+    .employee-pagination .pagination-prev {
+        order: 1 !important;
+        flex: 0 0 auto;
+    }
+
+    .employee-pagination .pagination-pages {
+        order: 2 !important;
+        flex: 1;
+        display: flex;
         justify-content: center;
         align-items: center;
+        gap: 0.5rem;
+    }
+
+    .employee-pagination .pagination-next {
+        order: 3 !important;
+        flex: 0 0 auto;
     }
 
     .employee-pagination-page {
@@ -313,6 +368,35 @@
 }
 
 @media (max-width: 480px) {
+    .employee-cards-container {
+        gap: 1rem;
+        padding: 1rem 0.5rem;
+    }
+
+    .employee-unified-card {
+        height: 250px;
+    }
+
+    .employee-photo {
+        height: 45vh;
+    }
+
+    .employee-fullname {
+        font-size: 14px;
+        top: 10.5rem;
+        right: 12px;
+        padding: 2px 6px;
+    }
+
+    .employee-field-section {
+        height: 40px;
+        padding: 10px;
+    }
+
+    .employee-field {
+        font-size: 11px;
+    }
+
     .employee-pagination-pages {
         gap: 0.25rem;
     }
@@ -331,5 +415,36 @@
         font-size: 1rem;
         min-width: 40px;
         height: 40px;
+    }
+}
+
+@media (max-width: 360px) {
+    .employee-cards-container {
+        gap: 0.8rem;
+        padding: 0.8rem 0.3rem;
+    }
+
+    .employee-unified-card {
+        height: 220px;
+    }
+
+    .employee-photo {
+        height: 40vh;
+    }
+
+    .employee-fullname {
+        font-size: 13px;
+        top: 9rem;
+        right: 10px;
+        padding: 2px 5px;
+    }
+
+    .employee-field-section {
+        height: 35px;
+        padding: 8px;
+    }
+
+    .employee-field {
+        font-size: 10px;
     }
 }

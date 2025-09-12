@@ -129,8 +129,8 @@ function About() {
                     <div className="dot4-image-container">
                         <img src={aboutTop4Image} alt="About Dot 4 Image" />
                         <div className="dot4-text-overlay">
-                            <span className="dot3-number">+{counter}</span>
-                            <span className="dot3-label">Events</span>
+                            <span className="dot4-number">+{counter}</span>
+                            <span className="dot4-label">Events</span>
                         </div>
                     </div>
                     <div className="main-image-container">

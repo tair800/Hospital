@@ -39,10 +39,8 @@ function AboutCarousel() {
     // Set images per screen based on screen size
     useEffect(() => {
         const updateImagesPerScreen = () => {
-            if (window.innerWidth <= 480) {
+            if (window.innerWidth <= 768) {
                 setImagesPerScreen(2);
-            } else if (window.innerWidth <= 768) {
-                setImagesPerScreen(3);
             } else if (window.innerWidth <= 1200) {
                 setImagesPerScreen(4);
             } else {
