@@ -6,6 +6,7 @@ const LogoCarousel = () => {
     const [logoData, setLogoData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
     // Helper function to get correct image path
     const getImagePath = (imageName) => {
@@ -37,15 +38,25 @@ const LogoCarousel = () => {
         fetchLogoData();
     }, []);
 
+    // Handle window resize
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     // Create zigzag pattern: odd IDs on first row, even IDs on second row
     const createZigzagData = () => {
+        // Use all available logos for better infinite scroll on both mobile and desktop
         const oddLogos = logoData.filter(logo => logo.id % 2 === 1);  // 1,3,5,7,9,11,13
         const evenLogos = logoData.filter(logo => logo.id % 2 === 0); // 2,4,6,8,10,12,14
 
-        // Duplicate for infinite scroll effect
+        // Duplicate for infinite scroll effect (both mobile and desktop)
         const duplicatedOdd = [...oddLogos, ...oddLogos, ...oddLogos];
         const duplicatedEven = [...evenLogos, ...evenLogos, ...evenLogos];
-
         return { oddLogos: duplicatedOdd, evenLogos: duplicatedEven };
     };
 

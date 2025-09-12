@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const EmployeeSlider = ({ employees }) => {
     const [currentPage, setCurrentPage] = useState(0);
+    const [cardsPerPage, setCardsPerPage] = useState(window.innerWidth <= 768 ? 2 : 4);
     const navigate = useNavigate();
-    const cardsPerPage = 4;
+
+    useEffect(() => {
+        const handleResize = () => {
+            setCardsPerPage(window.innerWidth <= 768 ? 2 : 4);
+            setCurrentPage(0); // Reset to first page when switching between mobile/desktop
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     if (!employees || employees.length === 0) {
         return <div className="no-employees-message">Həkim tapılmadı</div>;

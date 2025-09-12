@@ -273,9 +273,6 @@ const Home = () => {
                                                     <div className="home-hero-event-description">
                                                         <p>{event.description}</p>
                                                     </div>
-                                                    <div className="home-hero-event-trainer">
-                                                        Təlimçi: {event.trainer}
-                                                    </div>
                                                     <div className="home-hero-event-price">
                                                         Qiymət: {formattedPrice}
                                                     </div>
@@ -473,22 +470,61 @@ const Home = () => {
                     <div className="error-message">Xəta: {error}</div>
                 ) : pastEvents.length === 0 ? (
                     <div className="no-events-message">Keçmiş tədbir tapılmadı</div>
-                ) : pastEvents.slice(0, 3).map((event, index) => {
-                    const { day, month } = formatEventDate(event.eventDate);
-                    const truncatedDescription = truncateText(event.description, 100);
+                ) : (
+                    <>
+                        {pastEvents.slice(0, 3).map((event, index) => {
+                            const { day, month } = formatEventDate(event.eventDate);
+                            const truncatedDescription = truncateText(event.description, 100);
 
-                    return (
-                        <InfoCard
-                            key={event.id}
-                            imageSrc={getImagePath(event.mainImage)}
-                            title={event.title}
-                            description={truncatedDescription}
-                            date={day.toString()}
-                            month={month}
-                            onReadMoreClick={() => navigate(`/event/${event.id}`)}
-                        />
-                    );
-                })}
+                            return (
+                                <div
+                                    key={event.id}
+                                    className={`info-card-slide ${index === 0 ? 'active' : ''}`}
+                                >
+                                    <InfoCard
+                                        imageSrc={getImagePath(event.mainImage)}
+                                        title={event.title}
+                                        description={truncatedDescription}
+                                        date={day.toString()}
+                                        month={month}
+                                        onReadMoreClick={() => navigate(`/event/${event.id}`)}
+                                    />
+                                </div>
+                            );
+                        })}
+
+                        {/* Navigation Buttons */}
+                        <button
+                            className="info-card-nav info-card-nav-left"
+                            onClick={() => {
+                                const slides = document.querySelectorAll('.info-card-slide');
+                                const activeSlide = document.querySelector('.info-card-slide.active');
+                                const currentIndex = Array.from(slides).indexOf(activeSlide);
+                                const prevIndex = currentIndex > 0 ? currentIndex - 1 : slides.length - 1;
+
+                                activeSlide.classList.remove('active');
+                                slides[prevIndex].classList.add('active');
+                            }}
+                        >
+                            ‹
+                        </button>
+
+                        <button
+                            className="info-card-nav info-card-nav-right"
+                            onClick={() => {
+                                const slides = document.querySelectorAll('.info-card-slide');
+                                const activeSlide = document.querySelector('.info-card-slide.active');
+                                const currentIndex = Array.from(slides).indexOf(activeSlide);
+                                const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
+
+                                activeSlide.classList.remove('active');
+                                slides[nextIndex].classList.add('active');
+                            }}
+                        >
+                            ›
+                        </button>
+                    </>
+                )}
             </div>
 
             {/* Home Header Text */}
@@ -547,7 +583,7 @@ const Home = () => {
                                         <p className="home-event-desc">
                                             {truncatedDescription}
                                         </p>
-                                        <h4 className="home-event-trainer">Təlimçi: {event.trainer}</h4>
+
                                         <div className="home-event-price">{formattedPrice}</div>
                                     </div>
                                 </div>

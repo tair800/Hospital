@@ -7,6 +7,7 @@ import './Header.css'
 
 function Header({ showTopImage = false, customTopImage = null, hidePageName = false }) {
     const [activePage, setActivePage] = useState('home');
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -25,6 +26,11 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
     const handleItemClick = (item) => {
         setActivePage(item.id);
         navigate(item.href);
+        setIsMobileMenuOpen(false); // Close mobile menu when item is clicked
+    };
+
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
     };
 
     // Set initial active page based on current path
@@ -70,7 +76,7 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
                     />
                 </div>
 
-                <nav className="nav-center">
+                <nav className="nav-center desktop-nav">
                     <div className="navigation-container">
                         {navigationItems.map((item) => (
                             <button
@@ -92,6 +98,40 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
                     </div>
                     <button className="uzv-btn">Üzv ol</button>
                 </div>
+
+                {/* Mobile Hamburger Menu */}
+                <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+                    <span className="hamburger-line"></span>
+                    <span className="hamburger-line"></span>
+                    <span className="hamburger-line"></span>
+                </button>
+
+                {/* Mobile Navigation Menu */}
+                {isMobileMenuOpen && (
+                    <div className="mobile-nav-overlay">
+                        <nav className="nav-center mobile-nav">
+                            <div className="navigation-container">
+                                {navigationItems.map((item) => (
+                                    <button
+                                        key={item.id}
+                                        className={`navigation-item ${activePage === item.id ? 'active' : ''}`}
+                                        onClick={() => handleItemClick(item)}
+                                    >
+                                        {item.label}
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="mobile-login-section">
+                                <div className="language-selector">
+                                    <img src="https://flagcdn.com/w20/us.png" alt="US Flag" className="flag-icon" />
+                                    <span className="language-text">Eng</span>
+                                    <span className="dropdown-arrow">▼</span>
+                                </div>
+                                <button className="uzv-btn">Üzv ol</button>
+                            </div>
+                        </nav>
+                    </div>
+                )}
             </div>
 
             {!hidePageName && (

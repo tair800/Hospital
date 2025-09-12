@@ -73,27 +73,52 @@
         width: 100%;
     }
 
+
     .logo-carousel-item {
-        flex: 0 0 14.285%;
-        min-width: 14.285%;
+        flex: 0 0 20%;
+        min-width: 20%;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .logo-carousel-item img {
-        height: 60px;
+        height: 50px;
+        width: auto;
+        max-width: 100%;
+        object-fit: fill;
     }
 }
 
 @media (max-width: 480px) {
     .logo-carousel-wrapper {
         width: 100%;
+        gap: 0;
+    }
+
+    .logo-row {
+        gap: 1px;
+        margin-bottom: 0;
+    }
+
+    .logo-row:last-child {
+        margin-left: 0;
     }
 
     .logo-carousel-item {
-        flex: 0 0 14.285%;
-        min-width: 14.285%;
+        flex: 0 0 20%;
+        min-width: 20%;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .logo-carousel-item img {
-        height: 50px;
+        height: 60px;
+        width: auto;
+        max-width: 100%;
+        object-fit: fill;
     }
 }
