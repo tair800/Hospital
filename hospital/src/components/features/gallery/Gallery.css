@@ -230,7 +230,7 @@
     margin-top: 2rem;
 }
 
-/* Responsive Design - Same as About page */
+/* Gallery Mobile - One image per screen */
 @media (max-width: 768px) {
     .gallery-content-container {
         margin-top: 150px;
@@ -246,11 +246,31 @@
         font-size: 1rem;
     }
 
-    .gallery-slide {
-        flex: 0 0 calc(50% - 0.5rem);
-        /* 2 images per screen on mobile */
-        min-width: 150px;
-        height: 200px;
+    .gallery-slider-container {
+        overflow: visible;
+        padding: 0;
+    }
+
+    .gallery-slider {
+        overflow-x: auto;
+        overflow-y: visible;
+        min-height: 50vh;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .images-container {
+        display: flex !important;
+        gap: 1rem;
+        padding: 0;
+        width: max-content;
+    }
+
+    .image-item {
+        width: calc(100vw - 4rem) !important;
+        height: 35vh;
+        flex: 0 0 auto !important;
+        min-width: calc(100vw - 4rem) !important;
     }
 }
 
@@ -268,54 +288,14 @@
         font-size: 0.9rem;
     }
 
-    .gallery-slide {
-        flex: 0 0 calc(100% - 0.5rem);
-        /* 1 image per screen on small mobile */
-        min-width: 120px;
-        height: 180px;
-    }
-}
-
-@media (max-width: 1024px) {
     .image-item {
-        width: calc((100vw - 6rem) / 4);
-    }
-
-    .images-container {
-        gap: 1.5rem;
+        width: calc(100vw - 3rem) !important;
+        height: 30vh;
+        min-width: calc(100vw - 3rem) !important;
     }
 }
 
-@media (max-width: 768px) {
-    .gallery-page {
-        margin-top: 150px;
-        padding: 1rem;
-    }
 
-    .gallery-slider-container {
-        padding: 1rem;
-    }
-
-    .gallery-title {
-        font-size: 2rem;
-    }
-
-    .images-container {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.5rem;
-    }
-
-    .slider-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-    }
-
-    .gallery-logo-section {
-        padding: 1.5rem 0;
-        margin-top: 1.5rem;
-    }
-}
 
 @media (max-width: 480px) {
     .gallery-page {

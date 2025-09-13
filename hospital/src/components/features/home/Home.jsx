@@ -217,6 +217,14 @@ const Home = () => {
         setCurrentSlide(index);
     };
 
+    // Add home-page class to body for page-specific styling
+    useEffect(() => {
+        document.body.classList.add('home-page');
+        return () => {
+            document.body.classList.remove('home-page');
+        };
+    }, []);
+
     return (
         <div className="home-page">
             <div className="home-bg-section">

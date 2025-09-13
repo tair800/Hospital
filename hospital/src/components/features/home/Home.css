@@ -2960,3 +2960,11 @@
         display: flex !important;
     }
 }
+
+/* Mobile header height for home page only */
+@media (max-width: 768px) {
+    body.home-page header {
+        /* padding: 0; */
+        height: 0px;
+    }
+}
