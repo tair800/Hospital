@@ -191,6 +191,70 @@ header {
     margin-left: 0.25rem;
 }
 
+.language-selector {
+    position: relative;
+}
+
+.language-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    z-index: 1000;
+    margin-top: 0.25rem;
+    overflow: hidden;
+}
+
+.language-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f3f4f6;
+    color: #374151;
+}
+
+.language-option .language-text {
+    color: #374151;
+}
+
+.language-option:last-child {
+    border-bottom: none;
+}
+
+.language-option:hover {
+    background-color: #f9fafb;
+}
+
+.language-option:hover .language-text {
+    color: #374151;
+}
+
+.language-option.selected {
+    background-color: #1B1B3F;
+    color: #ffffff;
+}
+
+.language-option.selected .language-text {
+    color: #ffffff;
+}
+
+.mobile-language-dropdown {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    max-width: 90vw;
+    z-index: 1001;
+}
+
 .uzv-btn {
     background: #1B1B3F;
     color: white;

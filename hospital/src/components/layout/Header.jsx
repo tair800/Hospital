@@ -3,16 +3,26 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import logoHeader from '../../assets/logo-header.png'
 import topImage from '../../assets/top.png'
 import homeBgImage from '../../assets/home-bg.png'
+import RequestModal from '../ui/RequestModal'
 import './Header.css'
 
 function Header({ showTopImage = false, customTopImage = null, hidePageName = false }) {
     const [activePage, setActivePage] = useState('home');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+    const [selectedLanguage, setSelectedLanguage] = useState('aze');
+    const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
     // Check if we're on the home page
     const isHomePage = location.pathname === '/';
+
+    const languageOptions = [
+        { code: 'aze', name: 'Aze', flag: 'https://flagcdn.com/w20/az.png' },
+        { code: 'eng', name: 'Eng', flag: 'https://flagcdn.com/w20/us.png' },
+        { code: 'rus', name: 'Rus', flag: 'https://flagcdn.com/w20/ru.png' }
+    ];
 
     const navigationItems = [
         { label: 'Ana səhifə', href: '/', id: 'home' },
@@ -31,6 +41,27 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
+    };
+
+    const handleRequestModalOpen = () => {
+        setIsRequestModalOpen(true);
+    };
+
+    const handleRequestModalClose = () => {
+        setIsRequestModalOpen(false);
+    };
+
+    const handleLanguageSelect = (languageCode) => {
+        setSelectedLanguage(languageCode);
+        setIsLanguageDropdownOpen(false);
+    };
+
+    const toggleLanguageDropdown = () => {
+        setIsLanguageDropdownOpen(!isLanguageDropdownOpen);
+    };
+
+    const getCurrentLanguage = () => {
+        return languageOptions.find(lang => lang.code === selectedLanguage) || languageOptions[0];
     };
 
     // Set initial active page based on current path
@@ -91,12 +122,26 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
                 </nav>
 
                 <div className="login-section">
-                    <div className="language-selector">
-                        <img src="https://flagcdn.com/w20/us.png" alt="US Flag" className="flag-icon" />
-                        <span className="language-text">Eng</span>
+                    <div className="language-selector" onClick={toggleLanguageDropdown}>
+                        <img src={getCurrentLanguage().flag} alt={`${getCurrentLanguage().name} Flag`} className="flag-icon" />
+                        <span className="language-text">{getCurrentLanguage().name}</span>
                         <span className="dropdown-arrow">▼</span>
+                        {isLanguageDropdownOpen && (
+                            <div className="language-dropdown">
+                                {languageOptions.map((language) => (
+                                    <div
+                                        key={language.code}
+                                        className={`language-option ${selectedLanguage === language.code ? 'selected' : ''}`}
+                                        onClick={() => handleLanguageSelect(language.code)}
+                                    >
+                                        <img src={language.flag} alt={`${language.name} Flag`} className="flag-icon" />
+                                        <span className="language-text">{language.name}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                    <button className="uzv-btn">Üzv ol</button>
+                    <button className="uzv-btn" onClick={handleRequestModalOpen}>Üzv ol</button>
                 </div>
 
                 {/* Mobile Hamburger Menu */}
@@ -122,12 +167,26 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
                                 ))}
                             </div>
                             <div className="mobile-login-section">
-                                <div className="language-selector">
-                                    <img src="https://flagcdn.com/w20/us.png" alt="US Flag" className="flag-icon" />
-                                    <span className="language-text">Eng</span>
+                                <div className="language-selector" onClick={toggleLanguageDropdown}>
+                                    <img src={getCurrentLanguage().flag} alt={`${getCurrentLanguage().name} Flag`} className="flag-icon" />
+                                    <span className="language-text">{getCurrentLanguage().name}</span>
                                     <span className="dropdown-arrow">▼</span>
+                                    {isLanguageDropdownOpen && (
+                                        <div className="language-dropdown mobile-language-dropdown">
+                                            {languageOptions.map((language) => (
+                                                <div
+                                                    key={language.code}
+                                                    className={`language-option ${selectedLanguage === language.code ? 'selected' : ''}`}
+                                                    onClick={() => handleLanguageSelect(language.code)}
+                                                >
+                                                    <img src={language.flag} alt={`${language.name} Flag`} className="flag-icon" />
+                                                    <span className="language-text">{language.name}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                                <button className="uzv-btn">Üzv ol</button>
+                                <button className="uzv-btn" onClick={handleRequestModalOpen}>Üzv ol</button>
                             </div>
                         </nav>
                     </div>
@@ -148,6 +207,11 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
                     )}
                 </div>
             )}
+
+            <RequestModal
+                isOpen={isRequestModalOpen}
+                onClose={handleRequestModalClose}
+            />
         </header>
     )
 }

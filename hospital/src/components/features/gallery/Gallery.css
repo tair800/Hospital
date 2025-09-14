@@ -171,7 +171,6 @@
     width: calc((100vw - 8rem) / 5);
     height: 70vh;
     flex-shrink: 0;
-    overflow: hidden;
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -247,16 +246,24 @@
     }
 
     .gallery-slider-container {
-        overflow: visible;
         padding: 0;
     }
 
     .gallery-slider {
-        overflow-x: auto;
-        overflow-y: visible;
         min-height: 50vh;
         scroll-behavior: smooth;
+        overflow-x: auto;
+        overflow-y: visible;
         -webkit-overflow-scrolling: touch;
+    }
+
+    .gallery-main-content {
+        background: transparent;
+    }
+
+    .image-item:hover {
+        transform: none;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 
     .images-container {
@@ -268,7 +275,7 @@
 
     .image-item {
         width: calc(100vw - 4rem) !important;
-        height: 35vh;
+        height: 65vh;
         flex: 0 0 auto !important;
         min-width: calc(100vw - 4rem) !important;
     }
@@ -290,7 +297,7 @@
 
     .image-item {
         width: calc(100vw - 3rem) !important;
-        height: 30vh;
+        height: 60vh;
         min-width: calc(100vw - 3rem) !important;
     }
 }
@@ -334,6 +341,18 @@
     .gallery-slider {
         padding: 0 1rem;
         min-height: 60vh;
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .gallery-main-content {
+        background: transparent;
+    }
+
+    .image-item:hover {
+        transform: none;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 
     .images-container {
@@ -344,7 +363,8 @@
 
     .image-item {
         width: calc((100vw - 4rem) / 3);
-        min-height: 60vh;
+        height: 70vh;
+        min-height: 101vh;
     }
 }
 
@@ -352,6 +372,18 @@
     .gallery-slider {
         padding: 0 0.5rem;
         min-height: 50vh;
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .gallery-main-content {
+        background: transparent;
+    }
+
+    .image-item:hover {
+        transform: none;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 
     .images-container {
@@ -362,6 +394,7 @@
 
     .image-item {
         width: calc((100vw - 2.6rem) / 2);
-        min-height: 50vh;
+        height: 65vh;
+        min-height: 65vh;
     }
 }

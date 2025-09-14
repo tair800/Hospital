@@ -9,14 +9,6 @@
     margin-top: 230px;
 }
 
-/* Blog Page Mobile */
-@media (max-width: 768px) {
-    .blog-page {
-        margin-top: 50px;
-    }
-
-}
-
 /* Blog Slider Container */
 .blog-slider-container {
     width: 100%;
