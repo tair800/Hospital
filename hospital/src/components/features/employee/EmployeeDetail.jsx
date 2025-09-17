@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import './EmployeeDetail.css';
+import iconNext from '../../../assets/icon-next.svg';
+import iconPrev from '../../../assets/icon-prev.svg';
 import LogoCarousel from '../../ui/LogoCarousel';
 
 const EmployeeDetail = () => {
@@ -302,12 +304,20 @@ const EmployeeDetail = () => {
                     {/* Navigation Buttons - Only show if slider is needed */}
                     {shouldShowSlider && (
                         <div className="carousel-buttons-container">
-                            <button className="carousel-btn carousel-btn-prev" onClick={prevPage}>
-                                ‹
-                            </button>
-                            <button className="carousel-btn carousel-btn-next" onClick={nextPage}>
-                                ›
-                            </button>
+                            <img
+                                src={iconPrev}
+                                alt="Previous"
+                                className="carousel-btn carousel-btn-prev"
+                                onClick={prevPage}
+                                style={{ cursor: 'pointer' }}
+                            />
+                            <img
+                                src={iconNext}
+                                alt="Next"
+                                className="carousel-btn carousel-btn-next"
+                                onClick={nextPage}
+                                style={{ cursor: 'pointer' }}
+                            />
                         </div>
                     )}
                 </div>

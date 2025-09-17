@@ -448,3 +448,37 @@
         font-size: 10px;
     }
 }
+
+/* 1920x1080 Resolution */
+@media (min-width: 1920px) {
+    .employee-cards-container {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem 1rem;
+        max-width: 1600px;
+    }
+
+    .employee-photo {
+        position: absolute;
+        top: 33.2%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 32vh;
+        object-fit: cover;
+        z-index: 2;
+    }
+
+    .employee-field-section {
+        position: absolute;
+        bottom: -1px;
+        width: 101%;
+        left: -1px;
+        height: 50px;
+        background: white;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 15px;
+    }
+}

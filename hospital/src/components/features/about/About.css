@@ -459,3 +459,26 @@ h1[style*="color: black"] {
         font-size: 1.3rem;
     }
 }
+
+/* 1920x1080 Resolution */
+@media (min-width: 1920px) {
+    .dot4-text-overlay {
+        position: absolute;
+        top: 47%;
+        left: 5.5%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: white;
+        z-index: 2;
+    }
+
+    .dot3-text-overlay {
+        position: absolute;
+        top: 49%;
+        left: 4%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: white;
+        z-index: 2;
+    }
+}

@@ -289,33 +289,65 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(30, 56, 116, 0.9);
+    background: transparent;
     border: none;
-    color: white;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+    color: inherit;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1.5rem;
-    font-weight: 600;
+    transition: opacity 0.18s ease, transform 0.18s ease;
     z-index: 15;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    outline: none;
+}
+
+/* Icon inside the side nav buttons */
+.home-hero-side-nav-icon {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.home-hero-side-nav-icon.left {
+    transform: rotate(180deg);
+}
+
+/* Direction-aware hover animations */
+.home-hero-side-nav-right:hover .home-hero-side-nav-icon {
+    transform: scale(1.08) translateX(2px);
+}
+
+.home-hero-side-nav-left:hover .home-hero-side-nav-icon.left {
+    transform: rotate(180deg) scale(1.08) translateX(-2px);
+}
+
+/* Click (active) feedback */
+.home-hero-side-nav-right:active .home-hero-side-nav-icon {
+    transform: scale(0.92) translateX(1px);
+}
+
+.home-hero-side-nav-left:active .home-hero-side-nav-icon.left {
+    transform: rotate(180deg) scale(0.92) translateX(-1px);
 }
 
 .home-hero-side-nav:hover {
-    background: rgba(30, 56, 116, 1);
-    transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    opacity: 0.9;
 }
 
 .home-hero-side-nav:disabled {
     opacity: 0.3;
     cursor: not-allowed;
     transform: translateY(-50%);
+}
+
+/* Remove focus/active outlines and borders */
+.home-hero-side-nav:focus,
+.home-hero-side-nav:focus-visible,
+.home-hero-side-nav:active {
+    outline: none;
+    border: none;
+    box-shadow: none;
 }
 
 .home-hero-side-nav-left {
@@ -1630,8 +1662,8 @@
     }
 
     .slider-nav-btn {
-        width: 50px;
-        height: 50px;
+        width: 60px !important;
+        height: 60px !important;
         bottom: -60px;
     }
 
@@ -1705,8 +1737,8 @@
     }
 
     .slider-nav-btn {
-        min-height: 44px;
-        min-width: 44px;
+        min-height: 60px !important;
+        min-width: 60px !important;
     }
 
     /* Improve text readability on mobile */
@@ -1737,7 +1769,6 @@
     /* Improve button visibility on mobile */
     .home-hero-side-nav {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        border: 2px solid rgba(255, 255, 255, 0.2);
     }
 
     .home-hero-side-nav:hover {
@@ -2063,8 +2094,8 @@
     }
 
     .slider-nav-btn {
-        width: 45px;
-        height: 45px;
+        width: 60px !important;
+        height: 60px !important;
         bottom: -50px;
     }
 
@@ -2288,40 +2319,21 @@
     margin-bottom: 2rem;
 }
 
+
+
 .home-arrow-image {
     position: absolute;
     bottom: 12px;
-    right: 17px;
-    width: 55px;
-    height: 33px;
-    object-fit: contain;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    z-index: 100;
-    background-color: #1B1B3F;
-    padding: 3px;
-    border-radius: 5px;
-    border: 1px solid #1243AC;
-}
-
-.home-arrow-button {
-    position: absolute;
-    bottom: 12px;
-    right: 17px;
-    background: none;
-    border: none;
-    padding: 0;
+    right: -15px;
     cursor: pointer;
     z-index: 100;
     transition: transform 0.3s ease;
+    width: 100px;
+    height: 50px;
 }
 
-.home-arrow-button:hover {
+.home-arrow-image:hover {
     transform: scale(1.1);
-}
-
-.home-arrow-button:focus {
-    outline: none;
 }
 
 /* Home Events Container */
@@ -2563,27 +2575,13 @@
 /* Remove the old controls container - buttons are now positioned absolutely */
 
 .slider-nav-btn {
-    background: radial-gradient(85.71% 82.76% at 50% 50%, #4B84FF 0%, #102A61 100%);
-    border: none;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    min-width: 60px;
-    min-height: 60px;
-    max-width: 60px;
-    max-height: 60px;
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 60px !important;
+    height: 60px !important;
     cursor: pointer;
     transition: all 0.3s ease;
-    color: white;
-    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
     position: absolute;
     bottom: -70px;
     z-index: 10;
-    overflow: hidden;
 }
 
 .slider-nav-btn.prev-btn {
@@ -2596,11 +2594,12 @@
 
 /* Hover effects removed */
 
-.slider-nav-btn:disabled {
-    background: linear-gradient(135deg, #90caf9, #64b5f6);
-    cursor: not-allowed;
-    opacity: 0.6;
-    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+.slider-nav-btn:hover {
+    transform: scale(1.1);
+}
+
+.slider-nav-btn.prev-btn {
+    transform: rotate(180deg);
 }
 
 /* Dots removed - using only left/right navigation buttons */
@@ -2965,5 +2964,178 @@
     body.home-page header {
         /* padding: 0; */
         height: 0px;
+    }
+}
+
+/* Mobile L - 425px */
+@media (max-width: 425px) {
+    .home-hero-side-nav {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        bottom: 3px;
+    }
+
+    .section-2-image {
+        position: absolute;
+        left: 5px;
+        top: 69%;
+        transform: translateY(-50%);
+        z-index: 2;
+    }
+
+    .section-3-image {
+        position: absolute;
+        right: 6px;
+        top: 33%;
+        transform: translateY(-50%);
+        z-index: 2;
+    }
+
+    .section-2-main-image {
+        transform: scale(1.2);
+    }
+
+    .section-3-main-image {
+        transform: scale(1.2);
+    }
+
+    .section-3-bg-image {
+        position: absolute;
+        top: 38%;
+        right: 31%;
+        transform: translate(50%, -50%);
+        width: 56%;
+        height: auto;
+        z-index: 1;
+    }
+
+    .section-bg-image {
+        position: absolute;
+        top: 63%;
+        left: 31%;
+        transform: translate(-50%, -50%);
+        width: 56%;
+        height: auto;
+        z-index: 1;
+    }
+}
+
+/* 1920x1080 Resolution */
+@media (min-width: 1920px) {
+    .info-card-row {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 5.5rem !important;
+        padding: 0 1rem !important;
+        overflow: visible !important;
+        height: auto !important;
+        position: static !important;
+        background: transparent !important;
+        max-width: 2000px;
+        margin: 0 auto;
+        flex-wrap: nowrap !important;
+    }
+
+    .info-card-slide {
+        position: relative !important;
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+        flex: 0 0 auto !important;
+        width: 260px !important;
+        height: auto !important;
+        min-width: 260px !important;
+    }
+
+    .home-employee-field-section {
+        position: absolute;
+        bottom: -66px;
+        width: 100%;
+        height: 50px;
+        background: white;
+        border-radius: 0 0 0px 0px;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 15px;
+    }
+
+    .employee-slider-container {
+        width: 100%;
+        margin-top: 11rem;
+        margin-bottom: 15rem;
+        position: relative;
+    }
+
+    .employee-slider-bottom-controls {
+        margin-top: 4rem !important;
+        padding: 0 2rem !important;
+    }
+
+    .slider-nav-btn.prev-btn {
+        position: absolute;
+        left: 5rem;
+        bottom: -10rem;
+        width: 80px;
+        height: 80px;
+        background: #1B1B3F;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(27, 27, 63, 0.3);
+        z-index: 10;
+        pointer-events: auto;
+    }
+
+    .slider-nav-btn.next-btn {
+        position: absolute;
+        right: 5rem;
+        bottom: -10rem;
+        width: 80px;
+        height: 80px;
+        background: #1B1B3F;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(27, 27, 63, 0.3);
+        z-index: 10;
+        pointer-events: auto;
+    }
+
+    .slider-nav-btn:hover:not(:disabled) {
+        background: #4B84FF;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(75, 132, 255, 0.4);
+    }
+
+    .slider-nav-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .slider-nav-btn:focus {
+        outline: none;
+        box-shadow: 0 4px 12px rgba(27, 27, 63, 0.3);
+    }
+
+    .slider-nav-btn:active {
+        outline: none;
+        transform: scale(0.95);
+    }
+
+    .slider-nav-btn:focus-visible {
+        outline: none;
     }
 }

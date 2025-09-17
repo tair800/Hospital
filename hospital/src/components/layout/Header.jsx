@@ -18,6 +18,12 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
     // Check if we're on the home page
     const isHomePage = location.pathname === '/';
 
+    // Check if we're on the employee detail page
+    const isEmployeeDetailPage = location.pathname.startsWith('/employee/') && location.pathname !== '/employee';
+
+    // Check if we're on the blog detail page
+    const isBlogDetailPage = location.pathname.startsWith('/blog/') && location.pathname !== '/blog';
+
     const languageOptions = [
         { code: 'aze', name: 'Aze', flag: 'https://flagcdn.com/w20/az.png' },
         { code: 'eng', name: 'Eng', flag: 'https://flagcdn.com/w20/us.png' },
@@ -28,9 +34,9 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
         { label: 'Ana səhifə', href: '/', id: 'home' },
         { label: 'Haqqımızda', href: '/about', id: 'about' },
         { label: 'Tedbirlər', href: '/events', id: 'events' },
-        { label: 'Employee', href: '/employee', id: 'employee' },
+        { label: 'Üzv', href: '/employee', id: 'employee' },
         { label: 'Qalereya', href: '/gallery', id: 'gallery' },
-        { label: 'Blog', href: '/blog', id: 'blog' },
+        { label: 'Bloq', href: '/blog', id: 'blog' },
     ];
 
     const handleItemClick = (item) => {
@@ -91,7 +97,7 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
     }, [location.pathname]);
 
     return (
-        <header>
+        <header className={isHomePage ? 'home-page-header' : isEmployeeDetailPage ? 'employee-detail-page-header' : isBlogDetailPage ? 'blog-detail-page-header' : ''}>
             {showTopImage && (
                 <div className="header-top-image">
                     <img src={customTopImage || topImage} alt="Top Background" />
@@ -200,9 +206,9 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
                             {activePage === 'about' && 'Haqqımızda'}
                             {activePage === 'contact' && 'Əlaqə'}
                             {activePage === 'events' && 'Tədbirlər'}
-                            {activePage === 'employee' && 'Employee'}
+                            {activePage === 'employee' && 'Üzv'}
                             {activePage === 'gallery' && 'Qalereya'}
-                            {activePage === 'blog' && 'Blog'}
+                            {activePage === 'blog' && 'Bloq'}
                         </>
                     )}
                 </div>

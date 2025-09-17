@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getImagePath } from '../../../utils/imageUtils';
 import blog1Image from '../../../assets/blog1.png';
+import iconNext from '../../../assets/icon-next.svg';
+import iconPrev from '../../../assets/icon-prev.svg';
+import blogCardButton from '../../../assets/blog-card-button.svg';
 import './Blog.css';
 import LogoCarousel from '../../ui/LogoCarousel';
 
@@ -10,6 +13,7 @@ const Blog = () => {
     const [blogData, setBlogData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isLargeScreen, setIsLargeScreen] = useState(false);
     const navigate = useNavigate();
 
     // Fetch blog data from API
@@ -42,9 +46,25 @@ const Blog = () => {
         fetchBlogData();
     }, []);
 
+    // Screen size detection for card display
+    useEffect(() => {
+        const checkScreenSize = () => {
+            const isLarge = window.innerWidth >= 1920;
+            console.log('Blog screen width:', window.innerWidth, 'Is large screen:', isLarge);
+            setIsLargeScreen(isLarge);
+        };
+
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
+
     const totalBlogs = blogData.length;
-    const cardsPerScreen = 3;
+    const cardsPerScreen = isLargeScreen ? 4 : 3;
     const totalSlides = Math.ceil(totalBlogs / cardsPerScreen);
+
+    console.log('Blog cards per screen:', cardsPerScreen, 'Is large screen:', isLargeScreen);
 
     const nextSlide = () => {
         setCurrentSlide((prev) => (prev + 1) % totalSlides);
@@ -179,7 +199,7 @@ const Blog = () => {
                                 style={{ cursor: 'pointer' }}
                             >
                                 <img
-                                    src="/assets/blog-arrow.png"
+                                    src={blogCardButton}
                                     alt="Arrow"
                                     style={{
                                         width: 'auto',
@@ -193,21 +213,27 @@ const Blog = () => {
 
                 {/* Navigation Controls */}
                 <div className="blog-navigation">
-                    <button
+                    <img
+                        src={iconPrev}
+                        alt="Previous"
                         className="nav-btn prev-btn"
                         onClick={prevSlide}
-                        disabled={currentSlide === 0}
-                    >
-                        ‹
-                    </button>
+                        style={{
+                            cursor: currentSlide === 0 ? 'not-allowed' : 'pointer',
+                            opacity: currentSlide === 0 ? 0.3 : 1
+                        }}
+                    />
 
-                    <button
+                    <img
+                        src={iconNext}
+                        alt="Next"
                         className="nav-btn next-btn"
                         onClick={nextSlide}
-                        disabled={currentSlide === totalSlides - 1}
-                    >
-                        ›
-                    </button>
+                        style={{
+                            cursor: currentSlide === totalSlides - 1 ? 'not-allowed' : 'pointer',
+                            opacity: currentSlide === totalSlides - 1 ? 0.3 : 1
+                        }}
+                    />
                 </div>
             </div>
 

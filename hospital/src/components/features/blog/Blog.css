@@ -32,37 +32,23 @@
 /* Blog Navigation */
 .blog-navigation {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     /* margin-top: 3rem; */
     padding: 0 2rem;
     margin-bottom: 56px;
+    gap: 73rem;
 }
 
 .nav-btn {
-    background: #102A61;
-    color: white;
-    border: none;
-    border-radius: 50%;
     width: 50px;
     height: 50px;
-    font-size: 1.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-.nav-btn:hover:not(:disabled) {
-    background: #1B1B3F;
+.nav-btn:hover {
     transform: scale(1.1);
-}
-
-.nav-btn:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    opacity: 0.5;
 }
 
 /* Blog Card */
@@ -187,11 +173,11 @@
 /* Blog Card Arrow */
 .blog-card-arrow {
     position: absolute;
-    bottom: 2rem;
+    bottom: 10px;
     right: 0rem;
     z-index: 10;
-    background-color: #1B1B3F;
-    padding: 20px 52px 20px 52px;
+    /* background-color: #1B1B3F; */
+    /* padding: 20px 52px 20px 52px; */
 }
 
 .blog-card-arrow img {
@@ -351,6 +337,74 @@
         width: 30px;
         height: 30px;
     }
+}
+
+/* Mobile L - 425px */
+@media screen and (max-width: 425px) {
+    .blog-page {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        transform: translateY(0) !important;
+        position: relative !important;
+        top: 0 !important;
+    }
 
 
+
+    .blog-cards-container {
+        margin-top: 5rem
+    }
+
+
+    .blog-card-body {
+        height: 122px;
+    }
+
+    .blog-card-image {
+        margin-top: 1rem;
+        margin-left: 0px;
+        width: 101%;
+    }
+}
+
+/* 1920x1080 Resolution */
+@media (min-width: 1920px) {
+    .blog-cards-container {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 2.5rem !important;
+        max-width: 2000px !important;
+        margin: 0 auto !important;
+        margin-top: 5rem !important;
+    }
+
+    .blog-card {
+        width: 100% !important;
+        max-width: 450px !important;
+        margin: 0 auto !important;
+        min-width: 400px !important;
+    }
+
+    .blog-page .blog-cards-container {
+        grid-template-columns: repeat(4, 1fr) !important;
+        max-width: 2000px !important;
+    }
+
+    .blog-page .blog-card {
+        max-width: 450px !important;
+        min-width: 400px !important;
+    }
+
+    .blog-slider-container {
+        width: 100%;
+        max-width: 1400px;
+        position: relative;
+        padding: 0 2rem;
+        margin-left: 3rem;
+        margin-top: -4rem;
+        margin-bottom: 5rem;
+    }
+    .blog-navigation {
+
+        gap: 52rem;
+    }
 }
