@@ -2,7 +2,7 @@ import React from 'react';
 import './InfoCard.css';
 
 const InfoCard = ({
-    imageSrc = "/src/assets/event-img.png",
+    imageSrc = "/assets/event-img.png",
     title = "HPB Cərrahiyyə Hallarının Klinik Təhlili",
     description = "Bu seminar, kompleks hepato-pankreato-biliar cərrahiyyə hallarının idarə olunmasında qarşılaşılan çətinlikləri və müasir yanaşmaları.",
     date = "12",
@@ -51,7 +51,7 @@ const InfoCard = ({
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M100 10 Q100 0 90 10 L10 90 Q0 100 10 100 L100 100 Z" fill="#1B1B3F" />
                     <image
-                        href="/src/assets/arrow-right.png"
+                        href="/assets/arrow-right.png"
                         x="60"
                         y="50"
                         width="30"

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import searchIcon from '../../../assets/search-icon.png';
-import cardIcon from '../../../assets/card-icon.png';
-import eventImg from '../../../assets/event-img.png';
+const searchIcon = '/assets/search-icon.png';
+const cardIcon = '/assets/card-icon.png';
+const eventImg = '/assets/event-img.png';
 import LogoCarousel from '../../ui/LogoCarousel';
 import { RequestModal } from '../../ui';
 import './Events.css';
@@ -50,9 +50,10 @@ const Events = () => {
     // Helper function to get correct image path
     const getImagePath = (imageName) => {
         if (!imageName) return '';
-        if (imageName === 'event-img.png') return '/src/assets/event-img.png';
-        if (imageName.startsWith('/src/assets/')) return imageName;
-        return `/src/assets/${imageName}`;
+        if (imageName === 'event-img.png') return '/assets/event-img.png';
+        if (imageName.startsWith('/assets/')) return imageName;
+        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
+        return `/assets/${imageName}`;
     };
 
     // Get unique regions from events
@@ -78,8 +79,8 @@ const Events = () => {
             try {
                 setLoading(true);
                 const [eventsResponse, mainEventsResponse] = await Promise.all([
-                    fetch('http://localhost:5000/api/events'),
-                    fetch('http://localhost:5000/api/events/featured')
+                    fetch('https://ahpbca-api.webonly.io/api/events'),
+                    fetch('https://ahpbca-api.webonly.io/api/events/featured')
                 ]);
 
                 if (!eventsResponse.ok || !mainEventsResponse.ok) {
@@ -172,7 +173,7 @@ const Events = () => {
         <div className="events-page">
             <div className="events-top-card">
                 <div className="events-top-background">
-                    <img src="/src/assets/events-top.png" alt="Events Top" />
+                    <img src="/assets/events-top.png" alt="Events Top" />
                 </div>
 
                 {/* Featured Event Section */}
@@ -220,7 +221,7 @@ const Events = () => {
                                 <div className="featured-event-details">
                                     <div className="featured-event-date-venue-row">
                                         <div className="featured-event-date">
-                                            <img src="/src/assets/calendar.png" alt="Calendar" className="featured-icon" />
+                                            <img src="/assets/calendar.png" alt="Calendar" className="featured-icon" />
                                             <span>{eventDate.toLocaleDateString('en-US', {
                                                 month: 'long',
                                                 day: 'numeric',
@@ -228,7 +229,7 @@ const Events = () => {
                                             })}</span>
                                         </div>
                                         <div className="featured-event-venue">
-                                            <img src="/src/assets/location.png" alt="Venue" className="featured-icon" />
+                                            <img src="/assets/location.png" alt="Venue" className="featured-icon" />
                                             <span>{currentEvent.venue}</span>
                                         </div>
 
@@ -269,7 +270,7 @@ const Events = () => {
                         setCurrentSlide(prev => prev === 0 ? mainEvents.length - 1 : prev - 1);
                     }}
                 >
-                    <img src="/src/assets/card-icon.png" alt="Previous" className="slider-nav-icon" />
+                    <img src="/assets/card-icon.png" alt="Previous" className="slider-nav-icon" />
                 </button>
 
                 <button
@@ -279,7 +280,7 @@ const Events = () => {
                         setCurrentSlide(prev => prev === mainEvents.length - 1 ? 0 : prev + 1);
                     }}
                 >
-                    <img src="/src/assets/card-icon.png" alt="Next" className="slider-nav-icon" />
+                    <img src="/assets/card-icon.png" alt="Next" className="slider-nav-icon" />
                 </button>
             </div>
 

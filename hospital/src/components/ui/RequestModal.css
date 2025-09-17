@@ -62,6 +62,17 @@
     background-color: rgba(255, 255, 255, 0.1);
 }
 
+.request-modal-close:focus,
+.request-modal-close:active {
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+.request-modal-close {
+    -webkit-tap-highlight-color: transparent;
+}
+
 .request-modal-close:disabled {
     opacity: 0.5;
     cursor: not-allowed;

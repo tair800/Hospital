@@ -1221,6 +1221,37 @@
     border-radius: 8px;
     border: 2px solid #e0e0e0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: zoom-in;
+}
+
+.image-preview-modal {
+    position: relative;
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-preview-modal-img {
+    max-width: 85vw;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.image-preview-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #333;
 }
 
 /* Browse Button for Certificate Images */

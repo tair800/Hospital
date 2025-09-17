@@ -39,7 +39,7 @@ const AdminContact = () => {
 
     const fetchAllContactData = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/Contact');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/Contact');
             if (response.ok) {
                 const contacts = await response.json();
 
@@ -72,7 +72,7 @@ const AdminContact = () => {
 
         try {
             // Get existing contacts
-            const response = await fetch('http://localhost:5000/api/Contact');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/Contact');
             const existingContacts = await response.json();
             const existingMap = {};
             existingContacts.forEach(contact => {
@@ -91,7 +91,7 @@ const AdminContact = () => {
                 const config = contactConfig[type];
                 const existing = existingMap[type];
                 const method = existing ? 'PUT' : 'POST';
-                const url = existing ? `http://localhost:5000/api/Contact/${existing.id}` : 'http://localhost:5000/api/Contact';
+                const url = existing ? `https://ahpbca-api.webonly.io/api/Contact/${existing.id}` : 'https://ahpbca-api.webonly.io/api/Contact';
                 const body = existing
                     ? { id: existing.id, type, value, icon: config.icon }
                     : { type, value, icon: config.icon };

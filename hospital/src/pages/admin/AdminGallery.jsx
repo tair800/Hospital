@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import { getImagePath } from '../../utils/imageUtils'
-import adminDeleteIcon from '../../assets/admin-delete.png'
-import adminBrowseIcon from '../../assets/admin-browse.png'
+const adminDeleteIcon = '/assets/admin-delete.png'
+const adminBrowseIcon = '/assets/admin-browse.png'
 import './AdminGallery.css'
 
 function AdminGallery() {
@@ -25,7 +25,7 @@ function AdminGallery() {
     const fetchGalleryData = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:5000/api/gallery');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/gallery');
             if (response.ok) {
                 const data = await response.json();
 
@@ -76,7 +76,7 @@ function AdminGallery() {
 
 
 
-            const response = await fetch(`http://localhost:5000/api/gallery/${itemId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/gallery/${itemId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -208,7 +208,7 @@ function AdminGallery() {
 
 
 
-            const response = await fetch('http://localhost:5000/api/gallery', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/gallery', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -245,7 +245,7 @@ function AdminGallery() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:5000/api/gallery/${itemId}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/gallery/${itemId}`, {
                         method: 'DELETE',
                     });
 

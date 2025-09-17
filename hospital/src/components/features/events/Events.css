@@ -530,9 +530,16 @@
 
 /* Responsive pagination */
 @media (max-width: 768px) {
+    .pagination-container {
+        margin-top: 2rem;
+        margin-left: -9rem;
+    }
+
     .pagination-controls {
-        flex-direction: column;
+        flex-direction: row;
         gap: 15px;
+        justify-content: center;
+        align-items: center;
     }
 
     .pagination-info {
@@ -543,6 +550,42 @@
 
     .pagination-numbers {
         justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .pagination-number {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    .pagination-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+
+    /* Region Filter Mobile */
+    .region-filter-container {
+        width: 100%;
+    }
+
+    .region-filter-dropdown {
+        width: 100%;
+        padding: 0.8rem 1rem;
+    }
+
+    .region-filter-text {
+        font-size: 0.9rem;
+    }
+
+    .region-dropdown-menu {
+        width: 100%;
+    }
+
+    .region-dropdown-item {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
     }
 }
 
@@ -717,8 +760,6 @@
     font-size: 1rem;
     font-weight: 100;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     min-width: 120px;
     flex-shrink: 0;
     flex: 1;
@@ -1083,4 +1124,417 @@
 
 .region-dropdown-item:active {
     background-color: #e3f2fd;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+    .events-page {
+        margin-top: 100px;
+    }
+
+    /* Events Top Card Mobile */
+    .events-top-card {
+        height: 12rem;
+        margin-bottom: 1rem;
+        width: 90%;
+        margin-left: 17px;
+        margin-right: auto;
+        position: relative;
+    }
+
+    .featured-events-content {
+        padding: 0.3rem;
+        height: 100%;
+        display: flex;
+        align-items: start;
+    }
+
+    .featured-event-card {
+        padding: 0.5rem;
+        height: 79%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .featured-event-title {
+        font-size: 0.8rem;
+        margin-bottom: 0.1rem;
+        text-align: left;
+    }
+
+    .featured-event-subtitle {
+        font-size: 0.5rem;
+        margin-bottom: 0.1rem;
+        text-align: left;
+    }
+
+    .featured-event-timer {
+        position: absolute;
+        top: -3px;
+        right: -202px;
+        gap: 0.02rem;
+        margin: 0;
+        justify-content: flex-start;
+        padding: 0.1rem;
+        border: 1px solid rgba(119, 201, 99, 0.3);
+        border-radius: 4px;
+    }
+
+    .timer-unit {
+        padding: 0;
+    }
+
+    .timer-number {
+        font-size: 0.3rem;
+    }
+
+    .featured-event-details {
+        margin: 0.1rem 0;
+        text-align: left;
+    }
+
+    .featured-event-date-venue-row {
+        position: absolute;
+        bottom: 27px;
+        left: 46%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 350px;
+        justify-content: center;
+        z-index: 10;
+        /* background: rgba(0, 0, 0, 0.1); */
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        min-width: 300px;
+    }
+
+    .featured-event-buttons-outer {
+        position: absolute;
+        bottom: -10px;
+        left: 10px;
+        flex-direction: row;
+        gap: 0.3rem;
+        margin-top: 0.1rem;
+        justify-content: flex-start;
+    }
+
+    .featured-event-btn {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.6rem;
+        flex: none;
+        min-width: auto;
+    }
+
+    /* Slider Navigation Mobile */
+    .featured-slider-navigation {
+        margin-top: 1rem;
+        gap: 1rem;
+    }
+
+    .slider-nav-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .slider-nav-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Events Header Section Mobile */
+    .events-header-section {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        padding: 1rem;
+        margin-top: 1rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .events-header-text {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .events-top-card {
+        height: 11rem;
+        margin-bottom: 7rem;
+        width: 90%;
+        margin-left: 17px;
+        margin-right: auto;
+        position: relative;
+        margin-top: -45px;
+    }
+
+    .featured-event-buttons-outer {
+        position: absolute;
+        bottom: -31px;
+        left: 10px;
+        flex-direction: row;
+        gap: 0.3rem;
+        margin-top: 0.1rem;
+        justify-content: flex-start;
+    }
+
+    .featured-event-date-venue-row {
+        position: absolute;
+        bottom: 2px;
+        left: 26%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 350px;
+        justify-content: center;
+        z-index: 10;
+        /* background: rgba(0, 0, 0, 0.1); */
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+    }
+
+    .featured-slider-navigation {
+        position: absolute;
+        top: 11rem;
+        right: 15rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+
+
+
+
+
+    .featured-event-timer {
+        position: absolute;
+        top: -1px;
+        right: -45px;
+        gap: 0.02rem;
+        margin: 0;
+        justify-content: flex-start;
+        padding: 0.1rem;
+        border: 1px solid rgba(119, 201, 99, 0.3);
+        border-radius: 4px;
+    }
+
+    .featured-event-subtitle {
+        font-size: 1rem;
+        margin-bottom: 0.1rem;
+        text-align: left;
+        width: 78%;
+    }
+
+    .events-header-first {
+        font-size: 2rem;
+    }
+
+    .events-header-second {
+        font-size: 1.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    /* Events Content Container Mobile */
+    .events-content-container {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 2rem;
+        margin-top: 1rem;
+    }
+
+    .events-left-section {
+        flex: none;
+        width: 100%;
+        margin-left: 0;
+        padding: 0;
+        order: 2;
+    }
+
+    .events-right-section {
+        flex: none;
+        width: 100%;
+        order: 1;
+    }
+
+    /* Search Container Mobile */
+    .search-container {
+        max-width: 100%;
+    }
+
+    .search-input {
+        font-size: 14px;
+        padding: 10px 35px 10px 0;
+    }
+
+    /* Calendar Container Mobile */
+    .calendar-container {
+        max-width: 100%;
+        padding: 12px;
+    }
+
+    .calendar-header {
+        margin-bottom: 12px;
+    }
+
+    .calendar-month-year {
+        font-size: 14px;
+    }
+
+    .calendar-days-header span {
+        font-size: 10px;
+        padding: 4px 0;
+    }
+
+    .calendar-day {
+        font-size: 12px;
+        padding: 6px 4px;
+    }
+
+    /* Events Grid Mobile - 1 card per row */
+    .events-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    /* Hide left section on mobile */
+    .events-left-section {
+        display: none;
+    }
+
+    .events-main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 2rem;
+        min-height: 300px;
+        margin-left: 153px;
+    }
+
+    .events-card {
+        padding: 1rem;
+    }
+
+    .event-title {
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
+    .event-day {
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .event-month {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .event-venue {
+        font-size: 0.8rem;
+        font-weight: 400;
+        line-height: 1.2;
+    }
+
+    .event-image {
+        height: 172px;
+    }
+
+    .card-icon {
+        width: 30px;
+        height: 30px;
+        right: 8px;
+        top: 8px;
+    }
+
+    .event-date {
+        position: absolute;
+        top: 9.5rem;
+        left: 18%;
+        transform: translateX(-50%);
+        display: inline-block;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .event-date .event-day {
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+
+    .event-date .event-month {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+}
+
+/* Medium Mobile - 3 cards per row */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .events-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+}
+
+
+
+
+@media (max-width: 480px) {
+    .events-top-card {
+        height: 20rem;
+    }
+
+    .featured-event-title {
+        font-size: 1.2rem;
+    }
+
+    .featured-event-subtitle {
+        font-size: 0.8rem;
+    }
+
+    .timer-number {
+        font-size: 1rem;
+    }
+
+    .events-header-first {
+        font-size: 1.5rem;
+    }
+
+    .events-header-second {
+        font-size: 1.2rem;
+    }
+
+    .events-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .events-card {
+        padding: 0.8rem;
+    }
+
+    .event-image {
+        height: 100px;
+    }
+
+    .card-icon {
+        width: 25px;
+        height: 25px;
+    }
 }

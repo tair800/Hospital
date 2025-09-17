@@ -1106,6 +1106,59 @@
     margin-bottom: 5rem;
 }
 
+/* Image modal for certificate cards */
+.employee-detail-image-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 2rem;
+}
+
+.employee-detail-image-modal {
+    position: relative;
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.employee-detail-image-modal-img {
+    max-width: 85vw;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.employee-detail-image-modal-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #333;
+}
+
+.employee-detail-image-modal-close:focus,
+.employee-detail-image-modal-close:active {
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+.employee-detail-image-modal-close {
+    -webkit-tap-highlight-color: transparent;
+}
+
 /* Carousel Container */
 .cards-carousel-container {
     max-width: 1400px;
@@ -1163,6 +1216,30 @@
     z-index: 10;
     flex-shrink: 0;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Desktop: place carousel buttons under the cards, aligned left and right */
+@media (min-width: 769px) {
+    .cards-carousel-container {
+        position: relative;
+    }
+
+    .carousel-buttons-container {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -70px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 3rem;
+        pointer-events: none;
+    }
+
+    .carousel-buttons-container .carousel-btn {
+        pointer-events: auto;
+        margin: 0;
+    }
 }
 
 .carousel-btn:hover {
@@ -1293,4 +1370,298 @@
     right: 0;
     width: 100% !important;
     box-sizing: border-box;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+    .employee-detail-page {
+        margin-top: -79px;
+    }
+
+    /* Header Section Mobile */
+    .employee-detail-bg-section {
+        height: 28rem;
+    }
+
+    .employee-detail-header-content {
+        flex-direction: row;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        top: 5rem;
+        width: calc(100% - 2rem);
+        gap: 2rem;
+    }
+
+    .employee-detail-left {
+        max-width: 50%;
+        order: 1;
+    }
+
+    .employee-detail-right {
+        order: 2;
+        margin-right: 0;
+        align-self: center;
+        margin-top: 34px;
+    }
+
+    .employee-detail-image {
+        width: 200px;
+        height: 334px;
+    }
+
+    .employee-name {
+        font-size: 2rem;
+        text-align: left;
+    }
+
+    .employee-title {
+        justify-content: flex-start;
+    }
+
+    .employee-title p {
+        font-size: 1rem;
+    }
+
+    .contact-info {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .contact-item {
+        font-size: 0.9rem;
+    }
+
+    /* About Section Mobile */
+    .employee-about-section {
+        flex-direction: column;
+        padding: 2rem 0;
+        min-height: auto;
+    }
+
+    .employee-about-content {
+        margin-left: 1rem;
+        margin-right: 1rem;
+        padding: 0;
+        order: 1;
+    }
+
+    .equipment-dna-right {
+        position: absolute;
+        order: 2;
+        align-self: center;
+        margin-top: 1rem;
+        top: -8rem;
+    }
+
+    .equipment-dna-image {
+        width: 106%;
+        height: 98vh;
+        max-width: 507px;
+    }
+
+    .about-title {
+        font-size: 1.5rem;
+        text-align: center;
+        display: block;
+        margin: 0 auto 1rem;
+        z-index: 9;
+    }
+
+    .about-paragraph {
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    /* Divided Section Mobile */
+    .employee-divided-section {
+        flex-direction: column;
+        gap: 1rem;
+        padding-bottom: 2rem;
+    }
+
+    .divided-left {
+        flex: none;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        order: 1;
+        z-index: 9;
+    }
+
+    .divided-left-image {
+        height: 200px;
+    }
+
+    .divided-right {
+        flex: none;
+        padding: 0 1rem;
+        order: 2;
+    }
+
+    .certificate-timeline-container {
+        width: 100%;
+    }
+
+    .certificate-title {
+        font-size: 1.5rem;
+        text-align: center;
+        display: block;
+        margin: 0 auto 1rem;
+    }
+
+    .certificate-description {
+        font-size: 0.9rem;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    /* Certificate Timeline Mobile */
+    .certificate-timeline-line {
+        /* margin: 1rem 0; */
+        margin-top: 80px;
+    }
+
+    .certificate-number {
+        font-size: 2rem;
+        top: -50px;
+    }
+
+    .certificate-info {
+        bottom: -70px;
+        width: 100px;
+    }
+
+    .certificate-university {
+        font-size: 0.8rem;
+    }
+
+    .certificate-years {
+        font-size: 0.7rem;
+    }
+
+    /* Cards Section Mobile */
+    .cards-section {
+        padding: 2rem 0;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .cards-carousel-container {
+        padding: 0 1rem;
+        gap: 15px;
+    }
+
+    .cards-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        overflow: visible;
+        display: grid;
+    }
+
+    .cards-container.sliding {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .cards-container.slide-left {
+        transform: translateX(-100%);
+    }
+
+    .cards-container.slide-right {
+        transform: translateX(100%);
+    }
+
+    .card {
+        height: 150px;
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .card-image {
+        width: 169px;
+        height: 125px;
+        bottom: 40px;
+        right: 18px;
+    }
+
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    /* Navigation buttons positioned at bottom */
+    .cards-carousel-container {
+        padding: 0 1rem;
+        gap: 15px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cards-container {
+        order: 1;
+        width: 100%;
+    }
+
+    .carousel-buttons-container {
+        order: 2;
+        display: flex;
+        justify-content: center;
+        gap: 19rem;
+        margin-top: 1rem;
+    }
+
+    .carousel-btn {
+        margin: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .employee-detail-bg-section {
+        height: 20rem;
+    }
+
+    .employee-detail-image {
+        width: 150px;
+        height: 200px;
+    }
+
+    .employee-name {
+        font-size: 1.5rem;
+    }
+
+    .employee-title p {
+        font-size: 0.9rem;
+    }
+
+    .about-title {
+        font-size: 1.2rem;
+    }
+
+    .about-paragraph {
+        font-size: 0.8rem;
+    }
+
+    .certificate-title {
+        font-size: 1.2rem;
+    }
+
+    .certificate-description {
+        font-size: 0.8rem;
+    }
+
+    .cards-container {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .card {
+        height: 120px;
+    }
+
+    .card-image {
+        width: 100px;
+        height: 80px;
+        bottom: 30px;
+        right: 10px;
+    }
 }

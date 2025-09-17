@@ -239,13 +239,48 @@ footer span {
 
 @media (max-width: 768px) {
     .footer-content {
-        gap: 1rem;
-        padding: 0.8rem 0;
+        gap: 0.5rem;
+        padding: 1rem 0.5rem;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .footer-left {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 60px;
+        z-index: 1;
+    }
+
+    .footer-right {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 60px;
+        z-index: 1;
     }
 
     .footer-left img,
     .footer-right img {
-        height: 160px;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .footer-center {
+        order: 2;
+        position: static;
+        transform: none;
+        width: auto;
+        min-width: auto;
+        padding: 0 0.5rem;
+        flex: 1;
+        z-index: 10;
     }
 
     .footer-logo img {
@@ -253,24 +288,29 @@ footer span {
     }
 
     .footer-navigation {
-        gap: 1rem;
-        margin-bottom: 0.6rem;
+        gap: 0.6rem;
+        margin-bottom: 0.8rem;
         flex-wrap: wrap;
         justify-content: center;
     }
 
-    .footer-navigation span {
+    .footer-navigation .footer-link {
         font-size: 0.7rem;
+        padding: 0.1rem 0.3rem;
+        position: relative;
+        z-index: 11;
     }
 
     .social-media-icons {
-        gap: 0.6rem;
-        margin-bottom: 0.6rem;
+        gap: 0.8rem;
+        margin-bottom: 0.5rem;
     }
 
     .social-icon {
-        width: 28px;
-        height: 28px;
+        width: 30px;
+        height: 30px;
+        position: relative;
+        z-index: 11;
     }
 
     .social-icon img {
@@ -281,36 +321,74 @@ footer span {
 
 @media (max-width: 576px) {
     .footer-content {
-        gap: 0.8rem;
-        padding: 0.6rem 0;
+        gap: 0.3rem;
+        padding: 0.8rem 0.3rem;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .footer-left {
+        position: absolute;
+        left: -54px;
+        top: 0;
+        height: 100%;
+        width: 254px;
+        z-index: 1;
+    }
+
+    .footer-right {
+        position: absolute;
+        right: -54px;
+        top: 0;
+        height: 100%;
+        width: 254px;
+        z-index: 1;
     }
 
     .footer-left img,
     .footer-right img {
-        height: 120px;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .footer-center {
+        order: 2;
+        padding: 0 0.3rem;
+        flex: 1;
+        z-index: 10;
     }
 
     .footer-logo img {
-        height: 40px;
+        height: 45px;
     }
 
     .footer-navigation {
-        gap: 0.8rem;
-        margin-bottom: 0.5rem;
+        gap: 0.5rem;
+        margin-bottom: 0.6rem;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
-    .footer-navigation span {
+    .footer-navigation .footer-link {
         font-size: 0.65rem;
+        padding: 0.1rem 0.2rem;
+        position: relative;
+        z-index: 11;
     }
 
     .social-media-icons {
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
+        gap: 0.6rem;
+        margin-bottom: 0.4rem;
     }
 
     .social-icon {
-        width: 24px;
-        height: 24px;
+        width: 26px;
+        height: 26px;
+        position: relative;
+        z-index: 11;
     }
 
     .social-icon img {
@@ -321,38 +399,74 @@ footer span {
 
 @media (max-width: 480px) {
     .footer-content {
-        gap: 0.6rem;
-        padding: 0.5rem 0;
+        gap: 0.2rem;
+        padding: 0.6rem 0.2rem;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .footer-left {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 40px;
+        z-index: 1;
+    }
+
+    .footer-right {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 40px;
+        z-index: 1;
     }
 
     .footer-left img,
     .footer-right img {
-        height: 100px;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .footer-center {
+        order: 2;
+        padding: 0 0.2rem;
+        flex: 1;
+        z-index: 10;
     }
 
     .footer-logo img {
-        height: 35px;
+        height: 40px;
     }
 
     .footer-navigation {
-        gap: 0.6rem;
-        margin-bottom: 0.4rem;
-        flex-direction: column;
         gap: 0.4rem;
+        margin-bottom: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
-    .footer-navigation span {
+    .footer-navigation .footer-link {
         font-size: 0.6rem;
+        padding: 0.05rem 0.15rem;
+        position: relative;
+        z-index: 11;
     }
 
     .social-media-icons {
-        gap: 0.4rem;
-        margin-bottom: 0.4rem;
+        gap: 0.5rem;
+        margin-bottom: 0.3rem;
     }
 
     .social-icon {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
+        position: relative;
+        z-index: 11;
     }
 
     .social-icon img {
@@ -362,23 +476,75 @@ footer span {
 }
 
 @media (max-width: 360px) {
+    .footer-content {
+        gap: 0.1rem;
+        padding: 0.5rem 0.1rem;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .footer-left {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 35px;
+        z-index: 1;
+    }
+
+    .footer-right {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 35px;
+        z-index: 1;
+    }
 
     .footer-left img,
     .footer-right img {
-        height: 80px;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .footer-center {
+        order: 2;
+        padding: 0 0.1rem;
+        flex: 1;
+        z-index: 10;
     }
 
     .footer-logo img {
-        height: 30px;
+        height: 35px;
     }
 
-    .footer-navigation span {
+    .footer-navigation {
+        gap: 0.3rem;
+        margin-bottom: 0.4rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .footer-navigation .footer-link {
         font-size: 0.55rem;
+        padding: 0.03rem 0.1rem;
+        position: relative;
+        z-index: 11;
+    }
+
+    .social-media-icons {
+        gap: 0.4rem;
+        margin-bottom: 0.2rem;
     }
 
     .social-icon {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
+        position: relative;
+        z-index: 11;
     }
 
     .social-icon img {

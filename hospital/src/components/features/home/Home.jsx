@@ -31,7 +31,7 @@ const Home = () => {
     useEffect(() => {
         const fetchHomeData = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/HomeSection/first');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/HomeSection/first');
                 if (response.ok) {
                     const data = await response.json();
                     setHomeData({
@@ -57,7 +57,7 @@ const Home = () => {
         const fetchEvents = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:5000/api/events');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/events');
                 if (!response.ok) {
                     throw new Error('Failed to fetch events');
                 }
@@ -99,7 +99,7 @@ const Home = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/employees');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/employees');
                 if (!response.ok) {
                     throw new Error('Failed to fetch employees');
                 }
@@ -159,19 +159,14 @@ const Home = () => {
             return '';
         }
 
-        // If the text contains the expected structure, format it with line breaks
-        if (text.includes('Azərbaycan') && text.includes('Hepato-Pankreato-Biliar')) {
-            return (
-                <>
-                    Azərbaycan<br />
-                    Hepato-Pankreato-Biliar<br />
-                    Cərrahlar İctimai Birliyi
-                </>
-            );
-        }
-
-        // For other text, try to split intelligently or return as is
-        return text;
+        // Preserve user-provided content from admin; render line breaks
+        const lines = text.split(/\r?\n/);
+        return lines.map((line, index) => (
+            <React.Fragment key={index}>
+                {line}
+                {index < lines.length - 1 && <br />}
+            </React.Fragment>
+        ));
     };
 
     // Helper function to format date
@@ -198,9 +193,10 @@ const Home = () => {
     // Helper function to get correct image path
     const getImagePath = (imageName) => {
         if (!imageName) return '';
-        if (imageName === 'event-img.png') return '/src/assets/event-img.png';
-        if (imageName.startsWith('/src/assets/')) return imageName;
-        return `/src/assets/${imageName}`;
+        if (imageName === 'event-img.png') return '/assets/event-img.png';
+        if (imageName.startsWith('/assets/')) return imageName;
+        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
+        return `/assets/${imageName}`;
     };
 
     // Slider navigation functions
@@ -216,11 +212,19 @@ const Home = () => {
         setCurrentSlide(index);
     };
 
+    // Add home-page class to body for page-specific styling
+    useEffect(() => {
+        document.body.classList.add('home-page');
+        return () => {
+            document.body.classList.remove('home-page');
+        };
+    }, []);
+
     return (
         <div className="home-page">
             <div className="home-bg-section">
                 <video
-                    src="/src/assets/home-video.mp4"
+                    src="/assets/home-video.mp4"
                     className="home-bg-video"
                     autoPlay
                     loop
@@ -271,9 +275,6 @@ const Home = () => {
                                                     </div>
                                                     <div className="home-hero-event-description">
                                                         <p>{event.description}</p>
-                                                    </div>
-                                                    <div className="home-hero-event-trainer">
-                                                        Təlimçi: {event.trainer}
                                                     </div>
                                                     <div className="home-hero-event-price">
                                                         Qiymət: {formattedPrice}
@@ -352,7 +353,7 @@ const Home = () => {
             {/* Home Circle Right Decorative Element */}
             <div className="home-circle-right">
                 <img
-                    src="/src/assets/home-circle-right.png"
+                    src="/assets/home-circle-right.png"
                     alt="Decorative Circle"
                     className="home-circle-right-image"
                 />
@@ -361,7 +362,7 @@ const Home = () => {
             {/* Home Circle Left Decorative Element */}
             <div className="home-circle-left">
                 <img
-                    src="/src/assets/home-circle-left1.png"
+                    src="/assets/home-circle-left1.png"
                     alt="Decorative Circle Left"
                     className="home-circle-left-image"
                 />
@@ -370,7 +371,7 @@ const Home = () => {
             {/* Home Circle Left 2 Decorative Element */}
             <div className="home-circle-left2">
                 <img
-                    src="/src/assets/home-circle-left2.png"
+                    src="/assets/home-circle-left2.png"
                     alt="Decorative Circle Left 2"
                     className="home-circle-left2-image"
                 />
@@ -379,7 +380,7 @@ const Home = () => {
             {/* Home Circle Left 3 Decorative Element */}
             <div className="home-circle-left3">
                 <img
-                    src="/src/assets/home-circle-left3.png"
+                    src="/assets/home-circle-left3.png"
                     alt="Decorative Circle Left 3"
                     className="home-circle-left3-image"
                 />
@@ -397,7 +398,7 @@ const Home = () => {
                 <div className="section section-2">
                     <div className="section-bg-image">
                         <img
-                            src="/src/assets/home1-bg.png"
+                            src="/assets/home1-bg.png"
                             alt="Background Pattern"
                             className="section-2-bg-pattern"
                         />
@@ -406,7 +407,7 @@ const Home = () => {
                         <div className="section-2-image">
                             {homeData.section2Image && (
                                 <img
-                                    src={`/src/assets/${homeData.section2Image}`}
+                                    src={`/assets/${homeData.section2Image}`}
                                     alt="Hospital Services"
                                     className="section-2-main-image"
                                 />
@@ -417,7 +418,7 @@ const Home = () => {
                 <div className="section section-3">
                     <div className="section-3-bg-image">
                         <img
-                            src="/src/assets/home2-bg.png"
+                            src="/assets/home2-bg.png"
                             alt="Background Pattern"
                             className="section-3-bg-pattern"
                         />
@@ -426,7 +427,7 @@ const Home = () => {
                         <div className="section-3-image">
                             {homeData.section3Image && (
                                 <img
-                                    src={`/src/assets/${homeData.section3Image}`}
+                                    src={`/assets/${homeData.section3Image}`}
                                     alt="Hospital Services"
                                     className="section-3-main-image"
                                 />
@@ -472,22 +473,61 @@ const Home = () => {
                     <div className="error-message">Xəta: {error}</div>
                 ) : pastEvents.length === 0 ? (
                     <div className="no-events-message">Keçmiş tədbir tapılmadı</div>
-                ) : pastEvents.slice(0, 3).map((event, index) => {
-                    const { day, month } = formatEventDate(event.eventDate);
-                    const truncatedDescription = truncateText(event.description, 100);
+                ) : (
+                    <>
+                        {pastEvents.slice(0, 3).map((event, index) => {
+                            const { day, month } = formatEventDate(event.eventDate);
+                            const truncatedDescription = truncateText(event.description, 100);
 
-                    return (
-                        <InfoCard
-                            key={event.id}
-                            imageSrc={getImagePath(event.mainImage)}
-                            title={event.title}
-                            description={truncatedDescription}
-                            date={day.toString()}
-                            month={month}
-                            onReadMoreClick={() => navigate(`/event/${event.id}`)}
-                        />
-                    );
-                })}
+                            return (
+                                <div
+                                    key={event.id}
+                                    className={`info-card-slide ${index === 0 ? 'active' : ''}`}
+                                >
+                                    <InfoCard
+                                        imageSrc={getImagePath(event.mainImage)}
+                                        title={event.title}
+                                        description={truncatedDescription}
+                                        date={day.toString()}
+                                        month={month}
+                                        onReadMoreClick={() => navigate(`/event/${event.id}`)}
+                                    />
+                                </div>
+                            );
+                        })}
+
+                        {/* Navigation Buttons */}
+                        <button
+                            className="info-card-nav info-card-nav-left"
+                            onClick={() => {
+                                const slides = document.querySelectorAll('.info-card-slide');
+                                const activeSlide = document.querySelector('.info-card-slide.active');
+                                const currentIndex = Array.from(slides).indexOf(activeSlide);
+                                const prevIndex = currentIndex > 0 ? currentIndex - 1 : slides.length - 1;
+
+                                activeSlide.classList.remove('active');
+                                slides[prevIndex].classList.add('active');
+                            }}
+                        >
+                            ‹
+                        </button>
+
+                        <button
+                            className="info-card-nav info-card-nav-right"
+                            onClick={() => {
+                                const slides = document.querySelectorAll('.info-card-slide');
+                                const activeSlide = document.querySelector('.info-card-slide.active');
+                                const currentIndex = Array.from(slides).indexOf(activeSlide);
+                                const nextIndex = currentIndex < slides.length - 1 ? currentIndex + 1 : 0;
+
+                                activeSlide.classList.remove('active');
+                                slides[nextIndex].classList.add('active');
+                            }}
+                        >
+                            ›
+                        </button>
+                    </>
+                )}
             </div>
 
             {/* Home Header Text */}
@@ -546,13 +586,13 @@ const Home = () => {
                                         <p className="home-event-desc">
                                             {truncatedDescription}
                                         </p>
-                                        <h4 className="home-event-trainer">Təlimçi: {event.trainer}</h4>
+
                                         <div className="home-event-price">{formattedPrice}</div>
                                     </div>
                                 </div>
                                 <div className="card-right-section">
                                     <img
-                                        src="/src/assets/event-shadow.png"
+                                        src="/assets/event-shadow.png"
                                         alt="Event Shadow"
                                         className="home-event-shadow"
                                     />
@@ -567,7 +607,7 @@ const Home = () => {
                                         aria-label={`Go to ${event.title} details`}
                                     >
                                         <img
-                                            src="/src/assets/blog-arrow.png"
+                                            src="/assets/blog-arrow.png"
                                             alt="Go to Event Details"
                                             className="home-arrow-image"
                                         />

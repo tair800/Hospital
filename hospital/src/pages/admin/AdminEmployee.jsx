@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import { getImagePath } from '../../utils/imageUtils'
-import adminDeleteIcon from '../../assets/admin-delete.png'
-import adminBrowseIcon from '../../assets/admin-browse.png'
-import employee1Image from '../../assets/employee1.png'
+const adminDeleteIcon = '/assets/admin-delete.png'
+const adminBrowseIcon = '/assets/admin-browse.png'
+const employee1Image = '/assets/employee1.png'
 import Pagination from '../../components/ui/Pagination'
 import usePagination from '../../hooks/usePagination'
 import './AdminEmployee.css'
@@ -28,6 +28,7 @@ function AdminEmployee() {
     const [certificateEditData, setCertificateEditData] = useState({});
     const [degreeEditData, setDegreeEditData] = useState({});
     const [showCertificateModal, setShowCertificateModal] = useState(false);
+    const [showCertificateImagePreview, setShowCertificateImagePreview] = useState(false);
     const [showDegreeModal, setShowDegreeModal] = useState(false);
     const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
     const [certificateData, setCertificateData] = useState({
@@ -110,7 +111,7 @@ function AdminEmployee() {
     const fetchEmployees = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:5000/api/employees');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/employees');
             if (response.ok) {
                 const employees = await response.json();
 
@@ -121,7 +122,7 @@ function AdminEmployee() {
                     employees.map(async (employee) => {
                         try {
                             // Fetch full employee data with certificates and degrees
-                            const employeeResponse = await fetch(`http://localhost:5000/api/employees/${employee.id}`);
+                            const employeeResponse = await fetch(`https://ahpbca-api.webonly.io/api/employees/${employee.id}`);
                             if (employeeResponse.ok) {
                                 const fullEmployeeData = await employeeResponse.json();
 
@@ -179,7 +180,7 @@ function AdminEmployee() {
 
 
 
-            const response = await fetch(`http://localhost:5000/api/employees/${employeeId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/employees/${employeeId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -212,17 +213,10 @@ function AdminEmployee() {
                 // Save degree changes if any
                 await saveAllDegreeChanges();
 
-                showAlert('success', 'Success!', 'Employee and certificates updated successfully!');
-                // Update the employees state with the edited data
-                setEmployees(prev => prev.map(employee =>
-                    employee.id === employeeId ? responseData : employee
-                ));
-
-                // Also update editingEmployees to sync with the response
-                setEditingEmployees(prev => ({
-                    ...prev,
-                    [employeeId]: responseData
-                }));
+                showAlert('success', 'Success!', 'Employee and credentials updated successfully!');
+                // Re-fetch to ensure certificates and degrees are present
+                await fetchEmployees();
+                return;
             } else {
                 showAlert('error', 'Error!', `Failed to update employee. Status: ${response.status}`);
             }
@@ -428,7 +422,7 @@ function AdminEmployee() {
 
 
 
-            const response = await fetch('http://localhost:5000/api/employees', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/employees', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -465,7 +459,7 @@ function AdminEmployee() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:5000/api/employees/${employeeId}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/employees/${employeeId}`, {
                         method: 'DELETE',
                     });
 
@@ -499,7 +493,7 @@ function AdminEmployee() {
         e.preventDefault();
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:5000/api/employee-certificates', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/employee-certificates', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -536,7 +530,7 @@ function AdminEmployee() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:5000/api/employee-certificates/${certificateId}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-certificates/${certificateId}`, {
                         method: 'DELETE',
                     });
 
@@ -597,7 +591,7 @@ function AdminEmployee() {
 
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:5000/api/employee-degrees', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/employee-degrees', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -636,7 +630,7 @@ function AdminEmployee() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:5000/api/employee-degrees/${degreeId}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-degrees/${degreeId}`, {
                         method: 'DELETE',
                     });
 
@@ -741,7 +735,7 @@ function AdminEmployee() {
 
 
 
-                const response = await fetch(`http://localhost:5000/api/employee-certificates/${certificateId}`, {
+                const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-certificates/${certificateId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -825,7 +819,7 @@ function AdminEmployee() {
 
 
 
-                const response = await fetch(`http://localhost:5000/api/employee-degrees/${degreeId}`, {
+                const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-degrees/${degreeId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload),
@@ -879,7 +873,7 @@ function AdminEmployee() {
                 return;
             }
 
-            const response = await fetch(`http://localhost:5000/api/employee-certificates/${certificateId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-certificates/${certificateId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -965,7 +959,7 @@ function AdminEmployee() {
                 return;
             }
 
-            const response = await fetch(`http://localhost:5000/api/employee-degrees/${degreeId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-degrees/${degreeId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1202,9 +1196,7 @@ function AdminEmployee() {
                                                                 src={
                                                                     currentImage === 'employee1.png'
                                                                         ? employee1Image
-                                                                        : currentImage?.startsWith('http') || currentImage?.startsWith('/')
-                                                                            ? currentImage
-                                                                            : `/uploads/${currentImage}`
+                                                                        : getImagePath(currentImage)
                                                                 }
                                                                 alt="Employee profile"
                                                                 className="current-image"
@@ -1271,11 +1263,7 @@ function AdminEmployee() {
                                                         // Otherwise, use the original image logic
                                                         return currentImage ? (
                                                             <img
-                                                                src={
-                                                                    currentImage?.startsWith('http') || currentImage?.startsWith('/')
-                                                                        ? currentImage
-                                                                        : `/uploads/${currentImage}`
-                                                                }
+                                                                src={getImagePath(currentImage)}
                                                                 alt="Employee detail"
                                                                 className="current-image"
                                                                 onError={(e) => {
@@ -1384,11 +1372,7 @@ function AdminEmployee() {
                                                                         // Otherwise, use the original image logic
                                                                         return currentImage ? (
                                                                             <img
-                                                                                src={
-                                                                                    (currentImage.startsWith('http') || currentImage.startsWith('/'))
-                                                                                        ? currentImage
-                                                                                        : `/uploads/${currentImage}`
-                                                                                }
+                                                                                src={getImagePath(currentImage)}
                                                                                 alt={certificate.certificateName}
                                                                                 className="employee-certificate-image"
                                                                                 onError={(e) => {
@@ -1396,7 +1380,7 @@ function AdminEmployee() {
                                                                                     const triedUploads = e.target.dataset.triedUploads === 'true';
                                                                                     if (!triedUploads && file && !file.startsWith('/src/') && !file.startsWith('http')) {
                                                                                         e.target.dataset.triedUploads = 'true';
-                                                                                        e.target.src = `/src/assets/${file}`;
+                                                                                        e.target.src = `/assets/${file}`;
                                                                                     } else {
                                                                                         e.target.style.display = 'none';
                                                                                         e.target.nextSibling && (e.target.nextSibling.style.display = 'block');
@@ -1698,7 +1682,7 @@ function AdminEmployee() {
                                             <div className="admin-employee-image-placeholder">
                                                 {employeeData.image ? (
                                                     <img
-                                                        src={employeeData.image === 'employee1.png' ? employee1Image : `/src/assets/${employeeData.image}`}
+                                                        src={employeeData.image === 'employee1.png' ? employee1Image : getImagePath(employeeData.image)}
                                                         alt="Employee profile"
                                                         className="admin-employee-current-image"
                                                         onError={(e) => {
@@ -1740,7 +1724,7 @@ function AdminEmployee() {
                                             <div className="admin-employee-image-placeholder">
                                                 {employeeData.detailImage ? (
                                                     <img
-                                                        src={`/src/assets/${employeeData.detailImage}`}
+                                                        src={getImagePath(employeeData.detailImage)}
                                                         alt="Employee detail"
                                                         className="admin-employee-current-image"
                                                         onError={(e) => {
@@ -1860,9 +1844,10 @@ function AdminEmployee() {
                                 {certificateData.certificateImage && (
                                     <div className="certificate-preview">
                                         <img
-                                            src={`/src/assets/${certificateData.certificateImage}`}
+                                            src={getImagePath(certificateData.certificateImage)}
                                             alt="Certificate preview"
                                             className="certificate-preview-image"
+                                            onClick={() => setShowCertificateImagePreview(true)}
                                             onError={(e) => {
 
                                                 e.target.style.display = 'none';
@@ -1889,6 +1874,19 @@ function AdminEmployee() {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {showCertificateImagePreview && (
+                <div className="admin-employee-modal-overlay" onClick={() => setShowCertificateImagePreview(false)}>
+                    <div className="image-preview-modal" onClick={(e) => e.stopPropagation()}>
+                        <img
+                            src={getImagePath(certificateData.certificateImage)}
+                            alt="Certificate full preview"
+                            className="image-preview-modal-img"
+                        />
+                        <button className="image-preview-close" onClick={() => setShowCertificateImagePreview(false)}>×</button>
                     </div>
                 </div>
             )}

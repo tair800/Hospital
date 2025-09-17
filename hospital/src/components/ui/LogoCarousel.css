@@ -71,29 +71,78 @@
 @media (max-width: 768px) {
     .logo-carousel-wrapper {
         width: 100%;
+        overflow-x: scroll;
+        scroll-behavior: smooth;
+    }
+
+    .logo-row {
+        display: flex;
+        width: max-content;
+        gap: 10px;
+    }
+
+    .logo-row:first-child {
+        margin-left: 0;
+    }
+
+    .logo-row:last-child {
+        margin-left: 60px;
+        /* Half of 120px to center the second row between first row logos */
     }
 
     .logo-carousel-item {
-        flex: 0 0 14.285%;
-        min-width: 14.285%;
+        flex: 0 0 120px;
+        min-width: 120px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .logo-carousel-item img {
-        height: 60px;
+        height: 50px;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
     }
 }
 
 @media (max-width: 480px) {
     .logo-carousel-wrapper {
         width: 100%;
+        overflow-x: scroll;
+        scroll-behavior: smooth;
+    }
+
+    .logo-row {
+        display: flex;
+        width: max-content;
+        gap: 5px;
+        margin-bottom: 0;
+    }
+
+    .logo-row:first-child {
+        margin-left: 0;
+    }
+
+    .logo-row:last-child {
+        margin-left: 50px;
+        /* Half of 100px to center the second row between first row logos */
     }
 
     .logo-carousel-item {
-        flex: 0 0 14.285%;
-        min-width: 14.285%;
+        flex: 0 0 100px;
+        min-width: 100px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .logo-carousel-item img {
-        height: 50px;
+        height: 60px;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
     }
 }

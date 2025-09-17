@@ -16,7 +16,7 @@ const Gallery = () => {
         const fetchGalleryData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:5000/api/gallery');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/gallery');
                 if (!response.ok) {
                     throw new Error('Failed to fetch gallery data');
                 }
@@ -36,8 +36,9 @@ const Gallery = () => {
     // Helper function to get correct image path
     const getImagePath = (imageName) => {
         if (!imageName) return '';
-        if (imageName.startsWith('/src/assets/')) return imageName;
-        return `/src/assets/${imageName}`;
+        if (imageName.startsWith('/assets/')) return imageName;
+        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
+        return `/assets/${imageName}`;
     };
 
     // Create infinite loop by duplicating images multiple times

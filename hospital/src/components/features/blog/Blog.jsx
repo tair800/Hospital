@@ -17,7 +17,7 @@ const Blog = () => {
         const fetchBlogData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:5000/api/blogs');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/blogs');
                 if (!response.ok) {
                     throw new Error('Failed to fetch blog data');
                 }
@@ -179,7 +179,7 @@ const Blog = () => {
                                 style={{ cursor: 'pointer' }}
                             >
                                 <img
-                                    src="/src/assets/blog-arrow.png"
+                                    src="/assets/blog-arrow.png"
                                     alt="Arrow"
                                     style={{
                                         width: 'auto',

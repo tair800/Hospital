@@ -1,9 +1,9 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import './AdminHeader.css'
-import adminGlobe from '../../assets/admin-globe.png'
-import adminSettings from '../../assets/admin-settings.png'
-import adminUser from '../../assets/admin-user.png'
+const adminGlobe = '/assets/admin-globe.png'
+const adminSettings = '/assets/admin-settings.png'
+const adminUser = '/assets/admin-user.png'
 
 function AdminHeader({ title = "Dashboard" }) {
     const navigate = useNavigate()

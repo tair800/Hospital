@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import './About.css'
-import aboutMainImage from '../../../assets/about-main.png'
-import aboutTop1Image from '../../../assets/about-dot1.png'
-import aboutTop2Image from '../../../assets/about-dot2.png'
-import aboutTop3Image from '../../../assets/about-dot3.png'
-import aboutTop4Image from '../../../assets/about-dot4.png'
-import circleImage from '../../../assets/circle.png'
+const aboutMainImage = '/assets/about-main.png'
+const aboutTop1Image = '/assets/about-dot1.png'
+const aboutTop2Image = '/assets/about-dot2.png'
+const aboutTop3Image = '/assets/about-dot3.png'
+const aboutTop4Image = '/assets/about-dot4.png'
+const circleImage = '/assets/circle.png'
 import LogoCarousel from '../../ui/LogoCarousel'
 import AboutCarousel from './AboutCarousel.jsx'
 
@@ -21,7 +21,7 @@ function About() {
         const fetchAboutData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:5000/api/about');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/about');
                 if (!response.ok) {
                     throw new Error('Failed to fetch about data');
                 }
@@ -99,6 +99,14 @@ function About() {
         );
     }
 
+    // Helper: normalize image path coming from API or fallback
+    const getImagePath = (imageName) => {
+        if (!imageName) return aboutMainImage;
+        if (imageName.startsWith('/assets/')) return imageName;
+        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
+        return `/assets/${imageName}`;
+    };
+
     return (
         <div className="about-page">
             <img
@@ -129,13 +137,13 @@ function About() {
                     <div className="dot4-image-container">
                         <img src={aboutTop4Image} alt="About Dot 4 Image" />
                         <div className="dot4-text-overlay">
-                            <span className="dot3-number">+{counter}</span>
-                            <span className="dot3-label">Events</span>
+                            <span className="dot4-number">+{counter}</span>
+                            <span className="dot4-label">Events</span>
                         </div>
                     </div>
                     <div className="main-image-container">
                         <img
-                            src={aboutMainImage}
+                            src={getImagePath(aboutData?.img)}
                             alt="About Main Image"
                         />
                     </div>

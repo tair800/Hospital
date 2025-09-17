@@ -13,7 +13,7 @@ import telegram from '../../../assets/telegram.png';
 import LogoCarousel from '../../ui/LogoCarousel';
 
 // API configuration
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://ahpbca-api.webonly.io';
 
 const Contact = () => {
     const canvasRef = useRef(null);
@@ -23,6 +23,8 @@ const Contact = () => {
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [splineLoading, setSplineLoading] = useState(true);
+    const [splineError, setSplineError] = useState(false);
 
     // Fetch contact data from API
     useEffect(() => {
@@ -59,149 +61,178 @@ const Contact = () => {
     }, []);
 
     useEffect(() => {
-        // Add a small delay to ensure the canvas is rendered
-        const timer = setTimeout(() => {
-            if (canvasRef.current) {
+        let app = null;
+        let cleanup = null;
+
+        const loadSpline = () => {
+            if (!canvasRef.current) {
+                console.log('Canvas not ready, retrying...');
+                setTimeout(loadSpline, 100);
+                return;
+            }
+
+            setSplineLoading(true);
+            setSplineError(false);
+
+            // Show fallback while loading
+            const fallback = document.querySelector('.spline-fallback');
+            if (fallback) {
+                fallback.style.display = 'block';
+            }
+
+            try {
+                app = new Application(canvasRef.current);
 
 
-                // Show fallback while loading
-                const fallback = document.querySelector('.spline-fallback');
-                if (fallback) {
-                    fallback.style.display = 'block';
-                }
+                // Set up mouse tracking for the Spline scene
+                const canvas = canvasRef.current;
 
-                try {
-                    const app = new Application(canvasRef.current);
+                // Add mouse event listeners for better tracking
+                let isMouseDown = false;
+                let lastMouseX = 0;
+                let lastMouseY = 0;
 
+                const handleMouseDown = (e) => {
+                    isMouseDown = true;
+                    lastMouseX = e.clientX;
+                    lastMouseY = e.clientY;
+                };
 
-                    // Set up mouse tracking for the Spline scene
-                    const canvas = canvasRef.current;
+                const handleMouseUp = () => {
+                    isMouseDown = false;
+                };
 
-                    // Add mouse event listeners for better tracking
-                    let isMouseDown = false;
-                    let lastMouseX = 0;
-                    let lastMouseY = 0;
-
-                    const handleMouseDown = (e) => {
-                        isMouseDown = true;
+                const handleMouseMove = (e) => {
+                    if (isMouseDown) {
+                        const deltaX = e.clientX - lastMouseX;
+                        const deltaY = e.clientY - lastMouseY;
                         lastMouseX = e.clientX;
                         lastMouseY = e.clientY;
-                    };
 
-                    const handleMouseUp = () => {
-                        isMouseDown = false;
-                    };
-
-                    const handleMouseMove = (e) => {
-                        if (isMouseDown) {
-                            const deltaX = e.clientX - lastMouseX;
-                            const deltaY = e.clientY - lastMouseY;
-                            lastMouseX = e.clientX;
-                            lastMouseY = e.clientY;
-
-                            // Pass mouse movement to Spline
-                            if (app && app.events) {
-                                app.events.emit('mouseMove', { deltaX, deltaY });
-                            }
+                        // Pass mouse movement to Spline
+                        if (app && app.events) {
+                            app.events.emit('mouseMove', { deltaX, deltaY });
                         }
-                    };
+                    }
+                };
 
-                    // Add event listeners
-                    canvas.addEventListener('mousedown', handleMouseDown);
-                    canvas.addEventListener('mouseup', handleMouseUp);
-                    canvas.addEventListener('mouseleave', handleMouseUp);
-                    canvas.addEventListener('mousemove', handleMouseMove);
+                // Add event listeners
+                canvas.addEventListener('mousedown', handleMouseDown);
+                canvas.addEventListener('mouseup', handleMouseUp);
+                canvas.addEventListener('mouseleave', handleMouseUp);
+                canvas.addEventListener('mousemove', handleMouseMove);
 
-                    // Add touch support for mobile devices
-                    const handleTouchStart = (e) => {
-                        e.preventDefault();
-                        if (e.touches.length === 1) {
-                            isMouseDown = true;
-                            lastMouseX = e.touches[0].clientX;
-                            lastMouseY = e.touches[0].clientY;
+                // Add touch support for mobile devices
+                const handleTouchStart = (e) => {
+                    e.preventDefault();
+                    if (e.touches.length === 1) {
+                        isMouseDown = true;
+                        lastMouseX = e.touches[0].clientX;
+                        lastMouseY = e.touches[0].clientY;
+                    }
+                };
+
+                const handleTouchEnd = (e) => {
+                    e.preventDefault();
+                    isMouseDown = false;
+                };
+
+                const handleTouchMove = (e) => {
+                    e.preventDefault();
+                    if (isMouseDown && e.touches.length === 1) {
+                        const deltaX = e.touches[0].clientX - lastMouseX;
+                        const deltaY = e.touches[0].clientY - lastMouseY;
+                        lastMouseX = e.touches[0].clientX;
+                        lastMouseY = e.touches[0].clientY;
+
+                        // Pass touch movement to Spline
+                        if (app && app.events) {
+                            app.events.emit('mouseMove', { deltaX, deltaY });
                         }
-                    };
+                    }
+                };
 
-                    const handleTouchEnd = (e) => {
-                        e.preventDefault();
-                        isMouseDown = false;
-                    };
+                canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+                canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+                canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
 
-                    const handleTouchMove = (e) => {
-                        e.preventDefault();
-                        if (isMouseDown && e.touches.length === 1) {
-                            const deltaX = e.touches[0].clientX - lastMouseX;
-                            const deltaY = e.touches[0].clientY - lastMouseY;
-                            lastMouseX = e.touches[0].clientX;
-                            lastMouseY = e.touches[0].clientY;
+                // Cleanup function
+                const cleanup = () => {
+                    canvas.removeEventListener('mousedown', handleMouseDown);
+                    canvas.removeEventListener('mouseup', handleMouseUp);
+                    canvas.removeEventListener('mouseleave', handleMouseUp);
+                    canvas.removeEventListener('mousemove', handleMouseMove);
+                    canvas.removeEventListener('touchstart', handleTouchStart);
+                    canvas.removeEventListener('touchend', handleTouchEnd);
+                    canvas.removeEventListener('touchmove', handleTouchMove);
+                };
 
-                            // Pass touch movement to Spline
-                            if (app && app.events) {
-                                app.events.emit('mouseMove', { deltaX, deltaY });
-                            }
-                        }
-                    };
-
-                    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-                    canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
-                    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-
-                    // Cleanup function
-                    const cleanup = () => {
-                        canvas.removeEventListener('mousedown', handleMouseDown);
-                        canvas.removeEventListener('mouseup', handleMouseUp);
-                        canvas.removeEventListener('mouseleave', handleMouseUp);
-                        canvas.removeEventListener('mousemove', handleMouseMove);
-                        canvas.removeEventListener('touchstart', handleTouchStart);
-                        canvas.removeEventListener('touchend', handleTouchEnd);
-                        canvas.removeEventListener('touchmove', handleTouchMove);
-                    };
-
-                    // Set a timeout for loading
-                    const timeout = setTimeout(() => {
-
-                        if (fallback) {
-                            fallback.style.display = 'block';
-                        }
-                        cleanup();
-                    }, 10000); // 10 seconds timeout
-
-                    app.load('https://prod.spline.design/kCfMTbwclFSOycz6/scene.splinecode')
-                        .then(() => {
-
-                            clearTimeout(timeout);
-                            if (fallback) {
-                                fallback.style.display = 'none';
-                            }
-
-                            // Enable mouse tracking after scene loads
-                            if (app && app.events) {
-                                app.events.emit('mouseTracking', { enabled: true });
-                            }
-                        })
-                        .catch((error) => {
-                            console.error('Failed to load Spline scene:', error);
-                            clearTimeout(timeout);
-                            if (fallback) {
-                                fallback.style.display = 'block';
-                            }
-                            cleanup();
-                        });
-
-                    // Return cleanup function
-                    return cleanup;
-                } catch (error) {
-                    console.error('Failed to create Spline Application:', error);
+                // Set a timeout for loading
+                const timeout = setTimeout(() => {
+                    console.error('Spline loading timeout');
+                    setSplineError(true);
+                    setSplineLoading(false);
                     if (fallback) {
                         fallback.style.display = 'block';
                     }
+                    if (cleanup) cleanup();
+                }, 15000); // 15 seconds timeout
+
+                app.load('https://prod.spline.design/kCfMTbwclFSOycz6/scene.splinecode')
+                    .then(() => {
+                        console.log('Spline scene loaded successfully');
+                        clearTimeout(timeout);
+                        setSplineLoading(false);
+                        setSplineError(false);
+                        if (fallback) {
+                            fallback.style.display = 'none';
+                        }
+
+                        // Enable mouse tracking after scene loads
+                        if (app && app.events) {
+                            app.events.emit('mouseTracking', { enabled: true });
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Failed to load Spline scene:', error);
+                        clearTimeout(timeout);
+                        setSplineError(true);
+                        setSplineLoading(false);
+                        if (fallback) {
+                            fallback.style.display = 'block';
+                        }
+                        if (cleanup) cleanup();
+                    });
+
+            } catch (error) {
+                console.error('Failed to create Spline Application:', error);
+                setSplineError(true);
+                setSplineLoading(false);
+                if (fallback) {
+                    fallback.style.display = 'block';
                 }
-            } else {
-
             }
-        }, 100); // 100ms delay
+        };
 
-        return () => clearTimeout(timer);
+        // Start loading with a small delay
+        const timer = setTimeout(loadSpline, 100);
+
+        return () => {
+            clearTimeout(timer);
+            if (cleanup) cleanup();
+            if (app) {
+                try {
+                    app.dispose();
+                } catch (e) {
+                    console.log('Error disposing Spline app:', e);
+                }
+            }
+        };
+
+        // Start loading
+        const cleanupFunction = loadSpline();
+
+        return cleanupFunction;
     }, []);
 
     // Helper function to get icon based on icon name
@@ -276,17 +307,51 @@ const Contact = () => {
                             width: '100%',
                             height: '100%',
                             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                            display: 'none'
+                            display: splineLoading || splineError ? 'block' : 'none'
                         }}>
                             <div style={{
                                 display: 'flex',
+                                flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 height: '100%',
                                 color: 'white',
                                 fontSize: '1.2rem'
                             }}>
-                                3D Scene Loading...
+                                {splineLoading && (
+                                    <>
+                                        <div style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            border: '3px solid rgba(255,255,255,0.3)',
+                                            borderTop: '3px solid white',
+                                            borderRadius: '50%',
+                                            animation: 'spin 1s linear infinite',
+                                            marginBottom: '20px'
+                                        }}></div>
+                                        <div>Loading 3D Scene...</div>
+                                    </>
+                                )}
+                                {splineError && (
+                                    <>
+                                        <div style={{ fontSize: '2rem', marginBottom: '10px' }}>⚠️</div>
+                                        <div>Failed to load 3D scene</div>
+                                        <button
+                                            onClick={() => window.location.reload()}
+                                            style={{
+                                                marginTop: '10px',
+                                                padding: '8px 16px',
+                                                background: 'rgba(255,255,255,0.2)',
+                                                border: '1px solid white',
+                                                borderRadius: '4px',
+                                                color: 'white',
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            Retry
+                                        </button>
+                                    </>
+                                )}
                             </div>
                         </div>
                         {/* Contact Information Overlay */}

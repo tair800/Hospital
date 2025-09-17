@@ -13,7 +13,7 @@ function Error404() {
                     loop
                     playsInline
                 >
-                    <source src="/src/assets/home-video.mp4" type="video/mp4" />
+                    <source src="/assets/home-video.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
                 <div className="error-video-overlay"></div>

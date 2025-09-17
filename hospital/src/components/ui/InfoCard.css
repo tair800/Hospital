@@ -9,7 +9,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    margin-bottom:5rem;
+    margin-bottom: 5rem;
 }
 
 .info-card img {
@@ -117,4 +117,136 @@
     align-items: flex-start;
     justify-content: center;
     width: 100%;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .info-card {
+        width: 280px;
+        height: 220px;
+        margin-bottom: 2rem;
+    }
+
+    .card-bottom-text {
+        font-size: 16px;
+        max-width: 130px;
+        bottom: 12px;
+        left: 12px;
+    }
+
+    .card-top-text {
+        font-size: 9px;
+        max-width: 150px;
+        top: 6px;
+        right: 24px;
+    }
+
+    .card-triangle,
+    .card-triangle-white,
+    .card-triangle-white-top {
+        width: 80px;
+        height: 80px;
+    }
+
+    .card-triangle-white {
+        bottom: -4px;
+        right: -4px;
+        width: 100px;
+        height: 100px;
+    }
+
+    .card-triangle-white-top {
+        top: -4px;
+        left: -4px;
+        width: 100px;
+        height: 100px;
+    }
+
+    .info-card-row {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .info-card {
+        width: 250px;
+        height: 200px;
+        margin-bottom: 1.5rem;
+    }
+
+    .card-bottom-text {
+        font-size: 14px;
+        max-width: 120px;
+        bottom: 10px;
+        left: 10px;
+    }
+
+    .card-top-text {
+        font-size: 8px;
+        max-width: 130px;
+        top: 5px;
+        right: 20px;
+    }
+
+    .card-triangle,
+    .card-triangle-white,
+    .card-triangle-white-top {
+        width: 70px;
+        height: 70px;
+    }
+
+    .card-triangle-white {
+        bottom: -3px;
+        right: -3px;
+        width: 85px;
+        height: 85px;
+    }
+
+    .card-triangle-white-top {
+        top: -3px;
+        left: -3px;
+        width: 85px;
+        height: 85px;
+    }
+
+    .info-card-row {
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .info-card {
+        width: 220px;
+        height: 180px;
+    }
+
+    .card-bottom-text {
+        font-size: 13px;
+        max-width: 110px;
+    }
+
+    .card-top-text {
+        font-size: 7px;
+        max-width: 120px;
+    }
+
+    .card-triangle,
+    .card-triangle-white,
+    .card-triangle-white-top {
+        width: 60px;
+        height: 60px;
+    }
+
+    .card-triangle-white {
+        width: 75px;
+        height: 75px;
+    }
+
+    .card-triangle-white-top {
+        width: 75px;
+        height: 75px;
+    }
 }

@@ -20,14 +20,14 @@ const Employee = () => {
         handlePageChange,
         handlePreviousPage,
         handleNextPage
-    } = usePagination(employees, 9);
+    } = usePagination(employees, 8);
 
     // Fetch employees from API
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:5000/api/employees');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/employees');
                 if (!response.ok) {
                     throw new Error('Failed to fetch employees');
                 }
@@ -88,7 +88,7 @@ const Employee = () => {
                             className="employee-bg-image"
                         />
                         <img
-                            src={employee.image ? (employee.image.startsWith('/src/assets/') ? employee.image : `/src/assets/${employee.image}`) : "/src/assets/employee1.png"}
+                            src={employee.image ? (employee.image.startsWith('/assets/') ? employee.image : employee.image.startsWith('/src/assets/') ? employee.image.replace('/src/assets/', '/assets/') : `/assets/${employee.image}`) : "/assets/employee1.png"}
                             alt="Employee"
                             className="employee-photo"
                         />
@@ -115,7 +115,7 @@ const Employee = () => {
                 startIndex={startIndex}
                 endIndex={endIndex}
                 totalItems={employees.length}
-                itemsPerPage={9}
+                itemsPerPage={8}
                 showInfo={true}
                 className="employee-pagination"
             />

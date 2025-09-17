@@ -7,12 +7,20 @@ function AboutCarousel() {
     const [loading, setLoading] = useState(true);
     const [imagesPerScreen, setImagesPerScreen] = useState(5);
 
+    // Helper function to get correct image path
+    const getImagePath = (imageName) => {
+        if (!imageName) return '';
+        if (imageName.startsWith('/assets/')) return imageName;
+        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
+        return `/assets/${imageName}`;
+    };
+
     // Fetch carousel data from API
     useEffect(() => {
         const fetchCarouselData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://localhost:5000/api/aboutcarousel');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/aboutcarousel');
                 if (!response.ok) {
                     throw new Error('Failed to fetch carousel data');
                 }
@@ -31,10 +39,8 @@ function AboutCarousel() {
     // Set images per screen based on screen size
     useEffect(() => {
         const updateImagesPerScreen = () => {
-            if (window.innerWidth <= 480) {
+            if (window.innerWidth <= 768) {
                 setImagesPerScreen(2);
-            } else if (window.innerWidth <= 768) {
-                setImagesPerScreen(3);
             } else if (window.innerWidth <= 1200) {
                 setImagesPerScreen(4);
             } else {
@@ -103,7 +109,7 @@ function AboutCarousel() {
                     {carouselData.map((item, index) => (
                         <div key={item.id} className="about-carousel-slide">
                             <img
-                                src={item.image}
+                                src={getImagePath(item.image)}
                                 alt={item.name}
                                 className="about-carousel-image"
                             />

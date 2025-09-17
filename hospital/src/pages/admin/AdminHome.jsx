@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import { getImagePath } from '../../utils/imageUtils'
-import adminDeleteIcon from '../../assets/admin-delete.png'
-import adminBrowseIcon from '../../assets/admin-browse.png'
+const adminDeleteIcon = '/assets/admin-delete.png'
+const adminBrowseIcon = '/assets/admin-browse.png'
 import './AdminHome.css'
 
 function AdminHome() {
@@ -23,7 +23,7 @@ function AdminHome() {
 
     const fetchHomeData = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/HomeSection/first');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/HomeSection/first');
             if (response.ok) {
                 const data = await response.json();
                 setHomeData({
@@ -92,7 +92,7 @@ function AdminHome() {
         try {
             setLoading(true);
 
-            const response = await fetch('http://localhost:5000/api/HomeSection/first', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/HomeSection/first', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -120,7 +120,7 @@ function AdminHome() {
                     {homeData[sectionName] ? (
                         // Show existing uploaded image
                         <img
-                            src={`/src/assets/${homeData[sectionName]}`}
+                            src={`/assets/${homeData[sectionName]}`}
                             alt={`${title} image`}
                             className="current-image"
                         />
