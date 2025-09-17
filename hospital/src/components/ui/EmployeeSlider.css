@@ -135,34 +135,16 @@
 }
 
 .employee-slider-bottom-arrow {
-    background: #1B1B3F;
-    color: white;
-    border: none;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    font-size: 1.8rem;
-    font-weight: bold;
+    width: 50px;
+    height: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(27, 27, 63, 0.3);
 }
 
-.employee-slider-bottom-arrow:hover:not(:disabled) {
-    background: #4B84FF;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(75, 132, 255, 0.4);
+.employee-slider-bottom-arrow:hover {
+    transform: scale(1.1);
 }
 
-.employee-slider-bottom-arrow:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
 
 /* Employee Slider Card - Reusing Employee Card Styles */
 .employee-slider-card {

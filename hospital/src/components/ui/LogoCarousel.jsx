@@ -69,26 +69,45 @@ const LogoCarousel = () => {
 
         const wrapper = carouselRef.current;
 
-        // We duplicated data 3 times, so one logical set is 1/3 of total scroll width
-        const singleSetWidth = wrapper.scrollWidth / 3;
+        const computeSingleSetWidth = () => wrapper.scrollWidth / 3;
+        let singleSetWidth = computeSingleSetWidth();
 
         // Start from the middle set to allow seamless back-shift later
         wrapper.scrollLeft = singleSetWidth;
 
-        const speed = 0.6; // pixels per tick
-        const intervalMs = 16; // ~60fps
+        const speedPxPerSec = 30; // pixels per second
+        let rafId = null;
+        let lastTs = null;
 
-        const autoScroll = setInterval(() => {
+        const step = (ts) => {
             if (!wrapper) return;
-            let next = wrapper.scrollLeft + speed;
-            // When we reach near the end of the second set, jump back by one set width
+            if (lastTs == null) {
+                lastTs = ts;
+            }
+            const deltaSec = (ts - lastTs) / 1000;
+            lastTs = ts;
+
+            let next = wrapper.scrollLeft + speedPxPerSec * deltaSec;
+            // When we reach near the end of the second set, jump back by one set width instantly
             if (next >= singleSetWidth * 2) {
                 next -= singleSetWidth;
             }
             wrapper.scrollLeft = next;
-        }, intervalMs);
+            rafId = requestAnimationFrame(step);
+        };
 
-        return () => clearInterval(autoScroll);
+        rafId = requestAnimationFrame(step);
+
+        // Recompute widths on resize to keep loop seamless
+        const handleResize = () => {
+            singleSetWidth = computeSingleSetWidth();
+        };
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            if (rafId) cancelAnimationFrame(rafId);
+            window.removeEventListener('resize', handleResize);
+        };
     }, [logoData]);
 
     // Show loading state
@@ -141,11 +160,18 @@ const LogoCarousel = () => {
                     <div className="logo-row">
                         {oddLogos.map((logo, index) => (
                             <div key={`odd-${logo.id}-${index}`} className="logo-carousel-item">
-                                <img
-                                    src={getImagePath(logo.image)}
-                                    alt={logo.name}
-                                    draggable={false}
-                                />
+                                <div className="logo-card">
+                                    <div className="logo-card-image">
+                                        <img
+                                            src={getImagePath(logo.image)}
+                                            alt={logo.name}
+                                            draggable={false}
+                                        />
+                                    </div>
+                                    <div className="logo-card-text" title={logo.name}>
+                                        {logo.name}
+                                    </div>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -154,11 +180,18 @@ const LogoCarousel = () => {
                     <div className="logo-row">
                         {evenLogos.map((logo, index) => (
                             <div key={`even-${logo.id}-${index}`} className="logo-carousel-item">
-                                <img
-                                    src={getImagePath(logo.image)}
-                                    alt={logo.name}
-                                    draggable={false}
-                                />
+                                <div className="logo-card">
+                                    <div className="logo-card-image">
+                                        <img
+                                            src={getImagePath(logo.image)}
+                                            alt={logo.name}
+                                            draggable={false}
+                                        />
+                                    </div>
+                                    <div className="logo-card-text" title={logo.name}>
+                                        {logo.name}
+                                    </div>
+                                </div>
                             </div>
                         ))}
                     </div>

@@ -46,6 +46,17 @@ function Footer() {
                             <img src={telegram} alt="Telegram" />
                         </div>
                     </div>
+                    <div className="footer-copyright">
+                        <div className="footer-copyright-line"></div>
+                        <div className="footer-copyright-content">
+                            <div className="footer-copyright-left">
+                                Veb-sayt Webonly tərəfindən hazırlanıb.
+                            </div>
+                            <div className="footer-copyright-right">
+                                Copywrite @2025. Bütün hüquqlar qorunur. AHBPCA
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className="footer-right">
                     <img src={footerRight} alt="Footer Right Image" />

@@ -54,7 +54,7 @@ function About() {
                     return 70;
                 }
             });
-        }, 1);
+        }, 30); // Slowed down from 1ms to 50ms
 
         return () => clearInterval(timer);
     }, []);
@@ -70,7 +70,7 @@ function About() {
                     return 100;
                 }
             });
-        }, 1);
+        }, 10); // Slowed down from 1ms to 30ms
 
         return () => clearInterval(timer);
     }, []);

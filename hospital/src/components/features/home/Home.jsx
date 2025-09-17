@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
+import iconNext from '../../../assets/icon-next.svg';
+import homeLongButton from '../../../assets/home-long-button.svg';
 import InfoCard from '../../ui/InfoCard';
 import EmployeeSlider from '../employee/EmployeeSlider';
 import LogoCarousel from '../../ui/LogoCarousel';
@@ -13,6 +15,7 @@ const Home = () => {
     const [employees, setEmployees] = useState([]);
     const [heroEvents, setHeroEvents] = useState([]);
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [isLargeScreen, setIsLargeScreen] = useState(false);
     const [homeData, setHomeData] = useState({
         section1Description: '',
         section2Image: '',
@@ -71,11 +74,11 @@ const Home = () => {
                     .slice(0, 3);
                 setLatestEvents(upcomingEvents);
 
-                // Get past events (for InfoCard components)
+                // Get past events (for InfoCard components) - fetch more for large screens
                 const pastEventsData = data
                     .filter(event => new Date(event.eventDate) < now) // Only past events
                     .sort((a, b) => new Date(b.eventDate) - new Date(a.eventDate)) // Most recent first
-                    .slice(0, 3);
+                    .slice(0, 8); // Fetch up to 8 events to support 3, 4, and 5 card displays
                 setPastEvents(pastEventsData);
 
                 // Get hero events (upcoming events for slider - take first 3)
@@ -220,6 +223,18 @@ const Home = () => {
         };
     }, []);
 
+    // Screen size detection for card display
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsLargeScreen(window.innerWidth >= 1920);
+        };
+
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
+
     return (
         <div className="home-page">
             <div className="home-bg-section">
@@ -335,7 +350,7 @@ const Home = () => {
                                 disabled={currentSlide === 0}
                                 aria-label="Previous slide"
                             >
-                                <span>&lt;</span>
+                                <img src={iconNext} alt="Previous" className="home-hero-side-nav-icon left" />
                             </button>
                             <button
                                 className="home-hero-side-nav home-hero-side-nav-right"
@@ -343,7 +358,7 @@ const Home = () => {
                                 disabled={currentSlide === heroEvents.length - 1}
                                 aria-label="Next slide"
                             >
-                                <span>&gt;</span>
+                                <img src={iconNext} alt="Next" className="home-hero-side-nav-icon" />
                             </button>
                         </>
                     )}
@@ -475,7 +490,7 @@ const Home = () => {
                     <div className="no-events-message">Keçmiş tədbir tapılmadı</div>
                 ) : (
                     <>
-                        {pastEvents.slice(0, 3).map((event, index) => {
+                        {pastEvents.slice(0, isLargeScreen ? 5 : 3).map((event, index) => {
                             const { day, month } = formatEventDate(event.eventDate);
                             const truncatedDescription = truncateText(event.description, 100);
 
@@ -601,17 +616,13 @@ const Home = () => {
                                         alt="Event Image"
                                         className="home-event-image"
                                     />
-                                    <button
-                                        className="home-arrow-button"
+                                    <img
+                                        src={homeLongButton}
+                                        alt="Go to Event Details"
+                                        className="home-arrow-image"
                                         onClick={() => navigate(`/event/${event.id}`)}
-                                        aria-label={`Go to ${event.title} details`}
-                                    >
-                                        <img
-                                            src="/assets/blog-arrow.png"
-                                            alt="Go to Event Details"
-                                            className="home-arrow-image"
-                                        />
-                                    </button>
+                                        style={{ cursor: 'pointer' }}
+                                    />
                                 </div>
                             </div>
                         );

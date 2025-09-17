@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getImagePath } from '../../../utils/imageUtils';
 import blog1Image from '../../../assets/blog1.png';
+import blogDetailArrow from '../../../assets/blog-detail-arrow.svg';
 import './BlogDetail.css';
 import LogoCarousel from '../../ui/LogoCarousel';
 
@@ -120,14 +121,14 @@ const BlogDetail = () => {
                             </div>
 
                             {/* Visitors Component */}
-                            <div className="blog-visitors-component">
+                            {/* <div className="blog-visitors-component">
                                 <img
                                     src="/assets/eye.png"
                                     alt="Eye"
                                     className="eye-icon"
                                 />
                                 <span className="visitors-text">{blog.visitors}</span>
-                            </div>
+                            </div> */}
                         </div>
 
                         {/* Blog Description Text */}
@@ -217,7 +218,7 @@ const BlogDetail = () => {
                                             <div className="blog-post-title">{blogItem.title}</div>
                                             <div className="blog-post-arrow">
                                                 <img
-                                                    src="/assets/blog-arrow.png"
+                                                    src={blogDetailArrow}
                                                     alt="Arrow"
                                                 />
                                             </div>

@@ -1200,22 +1200,12 @@
 
 /* Carousel Navigation Buttons */
 .carousel-btn {
-    background: #1B1B3F;
-    color: white;
-    border: none;
     width: 50px;
     height: 50px;
-    border-radius: 50%;
-    font-size: 24px;
-    font-weight: bold;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     transition: all 0.3s ease;
     z-index: 10;
     flex-shrink: 0;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Desktop: place carousel buttons under the cards, aligned left and right */
@@ -1243,13 +1233,7 @@
 }
 
 .carousel-btn:hover {
-    background: #1243AC;
     transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-}
-
-.carousel-btn:active {
-    transform: scale(0.95);
 }
 
 /* Pagination Dots */
@@ -1584,10 +1568,10 @@
     }
 
     .carousel-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
+        width: 50px;
+        height: 50px;
     }
+
 
     /* Navigation buttons positioned at bottom */
     .cards-carousel-container {
@@ -1613,6 +1597,7 @@
     .carousel-btn {
         margin: 0;
     }
+
 }
 
 @media (max-width: 480px) {
@@ -1663,5 +1648,16 @@
         height: 80px;
         bottom: 30px;
         right: 10px;
+    }
+}
+
+/* 1920x1080 Resolution */
+@media (min-width: 1920px) {
+    .divided-left-image {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 }

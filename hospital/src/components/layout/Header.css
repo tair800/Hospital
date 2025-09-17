@@ -613,3 +613,38 @@ header {
         padding: 0.5rem;
     }
 }
+
+/* 1920x1080 Resolution - All pages except home */
+@media (min-width: 1920px) {
+
+    /* Apply to all headers by default */
+    header {
+        background: transparent;
+        color: white;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        position: relative;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        margin-bottom: 27rem;
+    }
+
+    /* Override for home page - remove margin-bottom */
+    header.home-page-header {
+        margin-bottom: 0;
+    }
+
+    /* Override for employee detail page - remove margin-bottom */
+    header.employee-detail-page-header {
+        margin-bottom: 0;
+    }
+
+    /* Override for blog detail page - remove margin-bottom */
+    header.blog-detail-page-header {
+        margin-bottom: 0;
+    }
+
+
+}

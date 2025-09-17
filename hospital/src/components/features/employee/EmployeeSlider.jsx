@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import iconNext from '../../../assets/icon-next.svg';
 
 const EmployeeSlider = ({ employees }) => {
     const [currentPage, setCurrentPage] = useState(0);
@@ -103,23 +104,27 @@ const EmployeeSlider = ({ employees }) => {
             {/* Navigation Controls - Always show if there are multiple pages */}
             {displayTotalPages > 1 && (
                 <>
-                    <button
+                    <img
+                        src={iconNext}
+                        alt="Previous"
                         className="slider-nav-btn prev-btn"
                         onClick={goToPrevPage}
-                        disabled={currentPage === 0}
-                        aria-label="Previous page"
-                    >
-                        <img src="/assets/slider-prev.png" alt="Previous" width="34" height="34" />
-                    </button>
+                        style={{
+                            cursor: currentPage === 0 ? 'not-allowed' : 'pointer',
+                            opacity: currentPage === 0 ? 0.3 : 1
+                        }}
+                    />
 
-                    <button
+                    <img
+                        src={iconNext}
+                        alt="Next"
                         className="slider-nav-btn next-btn"
                         onClick={goToNextPage}
-                        disabled={currentPage === displayTotalPages - 1}
-                        aria-label="Next page"
-                    >
-                        <img src="/assets/slider-next.png" alt="Next" width="34" height="34" />
-                    </button>
+                        style={{
+                            cursor: currentPage === displayTotalPages - 1 ? 'not-allowed' : 'pointer',
+                            opacity: currentPage === displayTotalPages - 1 ? 0.3 : 1
+                        }}
+                    />
                 </>
             )}
         </div>
