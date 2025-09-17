@@ -62,21 +62,31 @@ const LogoCarousel = () => {
 
     const { oddLogos, evenLogos } = createZigzagData();
 
-    // Auto-scroll functionality
+    // Auto-scroll functionality with seamless looping
     useEffect(() => {
         if (logoData.length === 0) return; // Don't start scrolling until data is loaded
+        if (!carouselRef.current) return;
+
+        const wrapper = carouselRef.current;
+
+        // We duplicated data 3 times, so one logical set is 1/3 of total scroll width
+        const singleSetWidth = wrapper.scrollWidth / 3;
+
+        // Start from the middle set to allow seamless back-shift later
+        wrapper.scrollLeft = singleSetWidth;
+
+        const speed = 0.6; // pixels per tick
+        const intervalMs = 16; // ~60fps
 
         const autoScroll = setInterval(() => {
-            if (carouselRef.current) {
-                const maxScroll = carouselRef.current.scrollWidth - carouselRef.current.clientWidth;
-                if (carouselRef.current.scrollLeft >= maxScroll) {
-                    // Reset to beginning for infinite effect
-                    carouselRef.current.scrollLeft = 0;
-                } else {
-                    carouselRef.current.scrollLeft += 1; // Scroll speed
-                }
+            if (!wrapper) return;
+            let next = wrapper.scrollLeft + speed;
+            // When we reach near the end of the second set, jump back by one set width
+            if (next >= singleSetWidth * 2) {
+                next -= singleSetWidth;
             }
-        }, 30); // Update every 30ms for smooth scrolling
+            wrapper.scrollLeft = next;
+        }, intervalMs);
 
         return () => clearInterval(autoScroll);
     }, [logoData]);

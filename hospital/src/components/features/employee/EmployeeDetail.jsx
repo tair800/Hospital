@@ -25,6 +25,8 @@ const EmployeeDetail = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [slideDirection, setSlideDirection] = useState('');
     const [isSliding, setIsSliding] = useState(false);
+    const [showImageModal, setShowImageModal] = useState(false);
+    const [activeImageSrc, setActiveImageSrc] = useState('');
 
     // Fetch employee data from API
     useEffect(() => {
@@ -286,7 +288,11 @@ const EmployeeDetail = () => {
                     {/* Cards Container */}
                     <div className={`cards-container ${isSliding ? 'sliding' : ''} ${slideDirection}`}>
                         {getCurrentPageCards().map((card, index) => (
-                            <div key={card.id} className={`card card-${index + 1}`}>
+                            <div key={card.id} className={`card card-${index + 1}`} onClick={() => {
+                                const src = card.image && (card.image.startsWith('/assets/') ? card.image : card.image.startsWith('/src/assets/') ? card.image.replace('/src/assets/', '/assets/') : `/assets/${card.image}`);
+                                setActiveImageSrc(src);
+                                setShowImageModal(true);
+                            }}>
                                 <div className="inner-card"></div>
                                 <img src={card.image.startsWith('/assets/') ? card.image : card.image.startsWith('/src/assets/') ? card.image.replace('/src/assets/', '/assets/') : `/assets/${card.image}`} alt="Employee Certificate" className="card-image" />
                             </div>
@@ -308,6 +314,15 @@ const EmployeeDetail = () => {
 
 
             </div>
+
+            {showImageModal && (
+                <div className="employee-detail-image-modal-overlay" onClick={() => setShowImageModal(false)}>
+                    <div className="employee-detail-image-modal" onClick={(e) => e.stopPropagation()}>
+                        <img src={activeImageSrc} alt="Certificate" className="employee-detail-image-modal-img" />
+                        <button className="employee-detail-image-modal-close" onClick={() => setShowImageModal(false)}>×</button>
+                    </div>
+                </div>
+            )}
 
             {/* Logo Carousel Section */}
             <LogoCarousel />

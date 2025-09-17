@@ -1106,6 +1106,59 @@
     margin-bottom: 5rem;
 }
 
+/* Image modal for certificate cards */
+.employee-detail-image-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 2rem;
+}
+
+.employee-detail-image-modal {
+    position: relative;
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.employee-detail-image-modal-img {
+    max-width: 85vw;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.employee-detail-image-modal-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #333;
+}
+
+.employee-detail-image-modal-close:focus,
+.employee-detail-image-modal-close:active {
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+.employee-detail-image-modal-close {
+    -webkit-tap-highlight-color: transparent;
+}
+
 /* Carousel Container */
 .cards-carousel-container {
     max-width: 1400px;
@@ -1163,6 +1216,30 @@
     z-index: 10;
     flex-shrink: 0;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Desktop: place carousel buttons under the cards, aligned left and right */
+@media (min-width: 769px) {
+    .cards-carousel-container {
+        position: relative;
+    }
+
+    .carousel-buttons-container {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -70px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 3rem;
+        pointer-events: none;
+    }
+
+    .carousel-buttons-container .carousel-btn {
+        pointer-events: auto;
+        margin: 0;
+    }
 }
 
 .carousel-btn:hover {

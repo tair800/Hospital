@@ -28,6 +28,7 @@ function AdminEmployee() {
     const [certificateEditData, setCertificateEditData] = useState({});
     const [degreeEditData, setDegreeEditData] = useState({});
     const [showCertificateModal, setShowCertificateModal] = useState(false);
+    const [showCertificateImagePreview, setShowCertificateImagePreview] = useState(false);
     const [showDegreeModal, setShowDegreeModal] = useState(false);
     const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
     const [certificateData, setCertificateData] = useState({
@@ -212,17 +213,10 @@ function AdminEmployee() {
                 // Save degree changes if any
                 await saveAllDegreeChanges();
 
-                showAlert('success', 'Success!', 'Employee and certificates updated successfully!');
-                // Update the employees state with the edited data
-                setEmployees(prev => prev.map(employee =>
-                    employee.id === employeeId ? responseData : employee
-                ));
-
-                // Also update editingEmployees to sync with the response
-                setEditingEmployees(prev => ({
-                    ...prev,
-                    [employeeId]: responseData
-                }));
+                showAlert('success', 'Success!', 'Employee and credentials updated successfully!');
+                // Re-fetch to ensure certificates and degrees are present
+                await fetchEmployees();
+                return;
             } else {
                 showAlert('error', 'Error!', `Failed to update employee. Status: ${response.status}`);
             }
@@ -1853,6 +1847,7 @@ function AdminEmployee() {
                                             src={getImagePath(certificateData.certificateImage)}
                                             alt="Certificate preview"
                                             className="certificate-preview-image"
+                                            onClick={() => setShowCertificateImagePreview(true)}
                                             onError={(e) => {
 
                                                 e.target.style.display = 'none';
@@ -1879,6 +1874,19 @@ function AdminEmployee() {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {showCertificateImagePreview && (
+                <div className="admin-employee-modal-overlay" onClick={() => setShowCertificateImagePreview(false)}>
+                    <div className="image-preview-modal" onClick={(e) => e.stopPropagation()}>
+                        <img
+                            src={getImagePath(certificateData.certificateImage)}
+                            alt="Certificate full preview"
+                            className="image-preview-modal-img"
+                        />
+                        <button className="image-preview-close" onClick={() => setShowCertificateImagePreview(false)}>×</button>
                     </div>
                 </div>
             )}

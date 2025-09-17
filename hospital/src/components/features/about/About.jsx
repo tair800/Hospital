@@ -99,6 +99,14 @@ function About() {
         );
     }
 
+    // Helper: normalize image path coming from API or fallback
+    const getImagePath = (imageName) => {
+        if (!imageName) return aboutMainImage;
+        if (imageName.startsWith('/assets/')) return imageName;
+        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
+        return `/assets/${imageName}`;
+    };
+
     return (
         <div className="about-page">
             <img
@@ -135,7 +143,7 @@ function About() {
                     </div>
                     <div className="main-image-container">
                         <img
-                            src={aboutMainImage}
+                            src={getImagePath(aboutData?.img)}
                             alt="About Main Image"
                         />
                     </div>

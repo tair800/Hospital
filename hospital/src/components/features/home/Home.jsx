@@ -159,19 +159,14 @@ const Home = () => {
             return '';
         }
 
-        // If the text contains the expected structure, format it with line breaks
-        if (text.includes('Azərbaycan') && text.includes('Hepato-Pankreato-Biliar')) {
-            return (
-                <>
-                    Azərbaycan<br />
-                    Hepato-Pankreato-Biliar<br />
-                    Cərrahlar İctimai Birliyi
-                </>
-            );
-        }
-
-        // For other text, try to split intelligently or return as is
-        return text;
+        // Preserve user-provided content from admin; render line breaks
+        const lines = text.split(/\r?\n/);
+        return lines.map((line, index) => (
+            <React.Fragment key={index}>
+                {line}
+                {index < lines.length - 1 && <br />}
+            </React.Fragment>
+        ));
     };
 
     // Helper function to format date
