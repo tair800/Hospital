@@ -374,7 +374,8 @@
     }
 
     .employee-unified-card {
-        height: 250px;
+        height: 242px;
+        margin-bottom: 25px;
     }
 
     .employee-photo {
@@ -415,6 +416,14 @@
         font-size: 1rem;
         min-width: 40px;
         height: 40px;
+    }
+}
+
+/* 430 x 932 viewport tweak - Employee page */
+@media (max-width: 430px) and (max-height: 932px) {
+    .employee-unified-card {
+        height: 362px;
+        margin-bottom: 25px;
     }
 }
 

@@ -1,17 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import './Gallery.css';
 import LogoCarousel from '../../ui/LogoCarousel';
 
 const Gallery = () => {
-    const [isDragging, setIsDragging] = useState(false);
-    const [startX, setStartX] = useState(0);
-    const [scrollLeft, setScrollLeft] = useState(0);
     const [galleryData, setGalleryData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const sliderRef = useRef(null);
+    const cardsRef = useRef(null);
+    const cursorRef = useRef(null);
+    const rafRef = useRef(0);
+    const scrollPosRef = useRef(0);
+    const cardSpanRef = useRef(0);
 
-    // Fetch gallery data from API
     useEffect(() => {
         const fetchGalleryData = async () => {
             try {
@@ -23,17 +23,14 @@ const Gallery = () => {
                 const data = await response.json();
                 setGalleryData(data);
             } catch (err) {
-                console.error('Error fetching gallery data:', err);
                 setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchGalleryData();
     }, []);
 
-    // Helper function to get correct image path
     const getImagePath = (imageName) => {
         if (!imageName) return '';
         if (imageName.startsWith('/assets/')) return imageName;
@@ -41,132 +38,62 @@ const Gallery = () => {
         return `/assets/${imageName}`;
     };
 
-    // Create infinite loop by duplicating images multiple times
-    const images = galleryData.length > 0
-        ? [...galleryData, ...galleryData, ...galleryData, ...galleryData, ...galleryData]
-        : [];
+    const baseCards = useMemo(() => {
+        const color = '#00e1ff';
+        return galleryData.map((img) => ({
+            id: img.id,
+            title: img.title,
+            src: getImagePath(img.image),
+            color,
+            glowDuration: 3 + Math.random() * 4,
+            glowDelay: Math.random() * -5
+        }));
+    }, [galleryData]);
 
-    const handleMouseDown = (e) => {
-        e.preventDefault();
-        if (sliderRef.current) {
-            setIsDragging(true);
-            setStartX(e.pageX);
-            setScrollLeft(sliderRef.current.scrollLeft);
+    const repeated = useMemo(() => {
+        return [...baseCards, ...baseCards, ...baseCards];
+    }, [baseCards]);
 
-            // Add grabbing cursor and disable smooth scrolling
-            sliderRef.current.style.cursor = 'grabbing';
-            sliderRef.current.style.userSelect = 'none';
-            sliderRef.current.style.scrollBehavior = 'auto';
-            sliderRef.current.classList.add('grabbing');
-        }
-    };
-
-    const handleMouseUp = () => {
-        setIsDragging(false);
-
-        // Reset cursor, user select, and smooth scrolling
-        if (sliderRef.current) {
-            sliderRef.current.style.cursor = 'grab';
-            sliderRef.current.style.userSelect = 'auto';
-            sliderRef.current.style.scrollBehavior = 'smooth';
-            sliderRef.current.classList.remove('grabbing');
-        }
-    };
-
-    const handleMouseMove = (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-
-        const x = e.pageX;
-        const walk = (x - startX);
-        if (sliderRef.current) {
-            sliderRef.current.scrollLeft = scrollLeft - walk;
-        }
-    };
-
-    const handleTouchStart = (e) => {
-        if (sliderRef.current) {
-            setIsDragging(true);
-            setStartX(e.touches[0].pageX);
-            setScrollLeft(sliderRef.current.scrollLeft);
-
-            // Disable smooth scrolling during touch
-            sliderRef.current.style.scrollBehavior = 'auto';
-            sliderRef.current.classList.add('grabbing');
-        }
-    };
-
-    const handleTouchMove = (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-
-        const x = e.touches[0].pageX;
-        const walk = (x - startX);
-        if (sliderRef.current) {
-            sliderRef.current.scrollLeft = scrollLeft - walk;
-        }
-    };
-
-    const handleTouchEnd = () => {
-        setIsDragging(false);
-
-        // Re-enable smooth scrolling
-        if (sliderRef.current) {
-            sliderRef.current.style.scrollBehavior = 'smooth';
-            sliderRef.current.classList.remove('grabbing');
-        }
-    };
-
-    // Handle mouse leave
-    const handleMouseLeave = () => {
-        if (isDragging) {
-            setIsDragging(false);
-            if (sliderRef.current) {
-                sliderRef.current.style.cursor = 'grab';
-                sliderRef.current.style.userSelect = 'auto';
-                sliderRef.current.style.scrollBehavior = 'smooth';
-                sliderRef.current.classList.remove('grabbing');
-            }
-        }
-    };
-
-    // Global mouse event listeners for better drag experience
     useEffect(() => {
-        const handleGlobalMouseUp = () => {
-            if (isDragging) {
-                setIsDragging(false);
-                if (sliderRef.current) {
-                    sliderRef.current.style.cursor = 'grab';
-                    sliderRef.current.style.userSelect = 'auto';
-                    sliderRef.current.style.scrollBehavior = 'smooth';
-                    sliderRef.current.classList.remove('grabbing');
-                }
-            }
+        const cardsEl = cardsRef.current;
+        if (!cardsEl || baseCards.length === 0) return;
+
+        const computeCardSpan = () => {
+            const styles = getComputedStyle(document.documentElement);
+            const cardWidth = parseInt(styles.getPropertyValue('--gallery-card-width')) || 280;
+            const cardSpacing = parseInt(styles.getPropertyValue('--gallery-card-spacing')) || 40;
+            cardSpanRef.current = baseCards.length * (cardWidth + cardSpacing);
         };
 
-        const handleGlobalMouseMove = (e) => {
-            if (!isDragging) return;
+        computeCardSpan();
+        const handleResize = () => computeCardSpan();
+        window.addEventListener('resize', handleResize);
 
-            const x = e.pageX;
-            const walk = (x - startX);
-            if (sliderRef.current) {
-                sliderRef.current.scrollLeft = scrollLeft - walk;
+        const speed = 0.5;
+        const animate = () => {
+            scrollPosRef.current += speed;
+            if (scrollPosRef.current >= cardSpanRef.current) {
+                scrollPosRef.current = 0;
             }
+            cardsEl.style.transform = `translateX(-${scrollPosRef.current}px)`;
+            rafRef.current = requestAnimationFrame(animate);
         };
+        rafRef.current = requestAnimationFrame(animate);
 
-        // Add global event listeners
-        document.addEventListener('mouseup', handleGlobalMouseUp);
-        document.addEventListener('mousemove', handleGlobalMouseMove);
-        document.addEventListener('mouseleave', handleGlobalMouseUp);
+        const handleMouseMove = (e) => {
+            if (!cursorRef.current) return;
+            cursorRef.current.style.left = `${e.clientX}px`;
+            cursorRef.current.style.top = `${e.clientY}px`;
+        };
+        document.addEventListener('mousemove', handleMouseMove);
 
         return () => {
-            document.removeEventListener('mouseup', handleGlobalMouseUp);
-            document.removeEventListener('mousemove', handleGlobalMouseMove);
-            document.removeEventListener('mouseleave', handleGlobalMouseUp);
+            cancelAnimationFrame(rafRef.current);
+            document.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('resize', handleResize);
         };
-    }, [isDragging, startX, scrollLeft]);
+    }, [baseCards]);
 
-    // Show loading state
     if (loading) {
         return (
             <div className="gallery-page">
@@ -177,7 +104,6 @@ const Gallery = () => {
         );
     }
 
-    // Show error state
     if (error) {
         return (
             <div className="gallery-page">
@@ -188,8 +114,7 @@ const Gallery = () => {
         );
     }
 
-    // Show empty state
-    if (galleryData.length === 0) {
+    if (baseCards.length === 0) {
         return (
             <div className="gallery-page">
                 <div className="gallery-empty">
@@ -201,39 +126,25 @@ const Gallery = () => {
 
     return (
         <div className="gallery-page">
-            <div className="gallery-slider-container">
-                <div
-                    className="gallery-slider"
-                    ref={sliderRef}
-                    onMouseDown={handleMouseDown}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseLeave}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                    style={{
-                        cursor: 'grab',
-                        userSelect: 'none'
-                    }}
-                >
-                    <div className="images-container">
-                        {images.map((image, index) => (
-                            <div key={`${image.id}-${index}`} className="image-item">
-                                <img
-                                    src={getImagePath(image.image)}
-                                    alt={image.title || `Gallery ${image.id}`}
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover',
-                                        pointerEvents: 'none'
-                                    }}
-                                    draggable={false}
-                                />
+            <div className="gallery-anim-page">
+                <div className="gallery-anim-container">
+                    <div className="gallery-cards-container" ref={cardsRef}>
+                        {repeated.map((card, idx) => (
+                            <div
+                                key={`${card.id}-${idx}`}
+                                className="gallery-card"
+                                style={{
+                                    ['--glow-color']: card.color,
+                                    ['--glow-duration']: `${card.glowDuration}s`,
+                                    ['--glow-delay']: `${card.glowDelay}s`
+                                }}
+                            >
+                                <img className="gallery-card-image" src={card.src} alt={card.title || `Gallery ${card.id}`} />
                             </div>
                         ))}
                     </div>
                 </div>
+                <div className="gallery-cursor-light" ref={cursorRef} />
             </div>
 
             <div className="gallery-logo-section">

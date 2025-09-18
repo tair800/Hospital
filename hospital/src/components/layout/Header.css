@@ -88,6 +88,11 @@ header {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
+/* Hide legacy buttons only in desktop nav container */
+.nav-center.desktop-nav .navigation-container {
+    display: none;
+}
+
 .navigation-item {
     background: none;
     border: none;
@@ -644,6 +649,11 @@ header {
     /* Override for blog detail page - remove margin-bottom */
     header.blog-detail-page-header {
         margin-bottom: 0;
+    }
+
+    /* Override for gallery page - remove margin-bottom */
+    header.gallery-page-header {
+        margin-bottom: 15rem;
     }
 
 

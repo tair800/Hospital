@@ -534,12 +534,16 @@
         font-weight: 500;
     }
 
-    
-.search-container {
-    position: relative;
-    width: 100%;
-    max-width: 499px;
-}
+    /* Use non-rotated prev icon when swapping to icon-prev.svg at 1920+ */
+    .slider-nav-btn.prev-btn {
+        transform: none;
+    }
+
+    .search-container {
+        position: relative;
+        width: 100%;
+        max-width: 499px;
+    }
 }
 
 /* Events Card */
@@ -1172,7 +1176,7 @@
 }
 
 .slider-nav-btn.prev-btn {
-    transform: rotate(180deg);
+    transform: none;
 }
 
 
@@ -1966,5 +1970,31 @@
     .employee-cards-container {
         gap: 2rem;
         padding: 1rem 0.5rem;
+    }
+}
+
+/* Rotate both slider buttons 180deg at 1920px+ */
+@media (min-width: 1920px) {
+    .featured-slider-navigation .slider-nav-btn {
+        transform: rotate(180deg) !important;
+    }
+
+    .featured-slider-navigation .slider-nav-btn:hover {
+        transform: rotate(180deg) scale(1.1) !important;
+    }
+}
+
+/* Swap places of prev/next buttons at 1920px+ */
+@media (min-width: 1920px) {
+    .featured-slider-navigation {
+        flex-direction: row;
+    }
+
+    .featured-slider-navigation .slider-nav-btn.next-btn {
+        order: 0 !important;
+    }
+
+    .featured-slider-navigation .slider-nav-btn.prev-btn {
+        order: 1 !important;
     }
 }

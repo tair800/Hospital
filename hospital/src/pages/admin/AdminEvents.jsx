@@ -828,19 +828,19 @@ function AdminEvents() {
 
 
 
-    if (loading) return <div className="admin-events-loading">Loading...</div>;
+    if (loading) return <div className="admin-events-loading">Yüklənir...</div>;
 
     return (
         <div className="admin-events-page">
             <div className="admin-events-container">
-                {/* Header with Create Button */}
+                {/* Başlıq və Yarat düyməsi */}
                 <div className="admin-events-header">
-                    <h1>Event Management</h1>
+                    <h1>Tədbirlərin İdarə Edilməsi</h1>
                     <div className="admin-events-header-actions">
                         <div className="admin-events-search-container">
                             <input
                                 type="text"
-                                placeholder="Search events..."
+                                placeholder="Tədbir axtar..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="admin-events-search-input"
@@ -849,16 +849,16 @@ function AdminEvents() {
                         <Link
                             to="/admin/requests"
                             className="admin-events-requests-btn"
-                            title="View requests"
+                            title="Müraciətləri gör"
                         >
-                            View Requests
+                            Müraciətləri Gör
                         </Link>
                         <button
                             className="admin-events-create-btn"
                             onClick={openCreateModal}
-                            title="Create new event"
+                            title="Yeni tədbir yarat"
                         >
-                            Create Event
+                            Tədbir yarat
                         </button>
                     </div>
                 </div>
@@ -867,13 +867,13 @@ function AdminEvents() {
                 <div className="admin-events-list-section">
                     {filteredEvents.length === 0 ? (
                         <div className="admin-events-no-events">
-                            <h3>No events found</h3>
-                            <p>Create your first event to get started!</p>
+                            <h3>Heç bir tədbir tapılmadı</h3>
+                            <p>Başlamaq üçün ilk tədbirinizi yaradın!</p>
                             <button
                                 className="admin-events-create-first-btn"
                                 onClick={openCreateModal}
                             >
-                                Create First Event
+                                İlk Tədbiri Yarat
                             </button>
                         </div>
                     ) : (
@@ -890,24 +890,29 @@ function AdminEvents() {
                                 eventDate = new Date(); // Fallback to current date if error
                             }
 
+                            // Determine display index relative to the current filtered list (stable across search)
+                            const displayIndex = (filteredEvents.findIndex(e => e.id === event.id) !== -1)
+                                ? filteredEvents.findIndex(e => e.id === event.id) + 1
+                                : (startIndex + index + 1);
+
                             return (
                                 <div key={event.id} className="admin-events-card">
                                     <div className="admin-events-card-header">
-                                        <h2>Event #{startIndex + index + 1}</h2>
+                                        <h2>Tədbir #{(event && event.id != null) ? event.id : displayIndex}</h2>
                                         <div className="admin-events-status-buttons">
                                             <button
                                                 className="admin-events-management-btn speakers-btn"
                                                 onClick={() => openSpeakersModal(event.id)}
-                                                title="Manage speakers"
+                                                title="Spikerləri idarə et"
                                             >
-                                                Speakers ({eventSpeakers[event.id]?.length || 0})
+                                                Spikerlər ({eventSpeakers[event.id]?.length || 0})
                                             </button>
                                             <button
                                                 className="admin-events-management-btn timeline-btn"
                                                 onClick={() => openTimelineModal(event.id)}
-                                                title="Manage timeline"
+                                                title="Zaman cədvəlini idarə et"
                                             >
-                                                Timeline ({eventTimeline[event.id]?.length || 0})
+                                                Zaman cədvəli ({eventTimeline[event.id]?.length || 0})
                                             </button>
                                             <button
                                                 className="admin-events-management-btn employees-btn"
@@ -919,9 +924,9 @@ function AdminEvents() {
                                             <button
                                                 className={`admin-events-status-btn ${currentData.isMain ? 'active' : ''}`}
                                                 onClick={() => toggleMainStatus(event.id)}
-                                                title={currentData.isMain ? 'Unmark as main' : 'Mark as main'}
+                                                title={currentData.isMain ? 'Əsasdan çıxar' : 'Əsas et'}
                                             >
-                                                {currentData.isMain ? 'Main Event' : 'Mark as Main'}
+                                                {currentData.isMain ? 'Əsas Tədbir' : 'Əsas et'}
                                             </button>
                                         </div>
                                     </div>
@@ -929,31 +934,31 @@ function AdminEvents() {
                                     <div className="admin-events-form">
                                         <div className="form-fields-left">
                                             <div className="form-group">
-                                                <label>Event Title</label>
+                                                <label>Tədbirin Başlığı</label>
                                                 <input
                                                     type="text"
                                                     className="form-input"
                                                     value={currentData.title || ''}
                                                     onChange={(e) => handleInlineInputChange(event.id, 'title', e.target.value)}
                                                     maxLength={200}
-                                                    placeholder="Event title"
+                                                    placeholder="Tədbirin başlığı"
                                                 />
                                             </div>
 
                                             <div className="form-group">
-                                                <label>Subtitle</label>
+                                                <label>Alt başlıq</label>
                                                 <input
                                                     type="text"
                                                     className="form-input"
                                                     value={currentData.subtitle || ''}
                                                     onChange={(e) => handleInlineInputChange(event.id, 'subtitle', e.target.value)}
                                                     maxLength={300}
-                                                    placeholder="Event subtitle"
+                                                    placeholder="Tədbirin alt başlığı"
                                                 />
                                             </div>
 
                                             <div className="form-group">
-                                                <label>Event Date</label>
+                                                <label>Tarix</label>
                                                 <input
                                                     type="date"
                                                     className="form-input"
@@ -979,7 +984,7 @@ function AdminEvents() {
                                             </div>
 
                                             <div className="form-group">
-                                                <label>Event Time</label>
+                                                <label>Saat</label>
                                                 <input
                                                     type="time"
                                                     className="form-input"
@@ -990,26 +995,26 @@ function AdminEvents() {
                                             </div>
 
                                             <div className="form-group">
-                                                <label>Venue</label>
+                                                <label>Məkan</label>
                                                 <input
                                                     type="text"
                                                     className="form-input"
                                                     value={currentData.venue || ''}
                                                     onChange={(e) => handleInlineInputChange(event.id, 'venue', e.target.value)}
                                                     maxLength={200}
-                                                    placeholder="Event venue"
+                                                    placeholder="Tədbir məkanı"
                                                 />
                                             </div>
 
                                             <div className="form-group">
-                                                <label>Trainer</label>
+                                                <label>Təlimçi</label>
                                                 <input
                                                     type="text"
                                                     className="form-input"
                                                     value={currentData.trainer || ''}
                                                     onChange={(e) => handleInlineInputChange(event.id, 'trainer', e.target.value)}
                                                     maxLength={100}
-                                                    placeholder="Event trainer"
+                                                    placeholder="Tədbir təlimçisi"
                                                 />
                                             </div>
 
@@ -1021,12 +1026,12 @@ function AdminEvents() {
                                                     value={currentData.region || ''}
                                                     onChange={(e) => handleInlineInputChange(event.id, 'region', e.target.value)}
                                                     maxLength={100}
-                                                    placeholder="Event region"
+                                                    placeholder="Tədbir regionu"
                                                 />
                                             </div>
 
                                             <div className="form-group">
-                                                <label>Price</label>
+                                                <label>Qiymət</label>
                                                 <div className="price-input-group">
                                                     <input
                                                         type="number"
@@ -1035,7 +1040,7 @@ function AdminEvents() {
                                                         onChange={(e) => handleInlineInputChange(event.id, 'price', parseInt(e.target.value) || 0)}
                                                         min="0"
                                                         step="1"
-                                                        placeholder="Event price"
+                                                        placeholder="Tədbirin qiyməti"
                                                     />
                                                     <select
                                                         className="currency-select"
@@ -1050,24 +1055,24 @@ function AdminEvents() {
                                             </div>
 
                                             <div className="form-group">
-                                                <label>Description</label>
+                                                <label>Təsvir</label>
                                                 <textarea
                                                     className="form-textarea"
                                                     value={currentData.description || ''}
                                                     onChange={(e) => handleInlineInputChange(event.id, 'description', e.target.value)}
                                                     maxLength={1000}
-                                                    placeholder="Event description"
+                                                    placeholder="Tədbirin təsviri"
                                                     rows={4}
                                                 />
                                             </div>
 
                                             <div className="form-group">
-                                                <label>Long Description</label>
+                                                <label>Ətraflı Təsvir</label>
                                                 <textarea
                                                     className="form-textarea"
                                                     value={currentData.longDescription || ''}
                                                     onChange={(e) => handleInlineInputChange(event.id, 'longDescription', e.target.value)}
-                                                    placeholder="Detailed event description"
+                                                    placeholder="Tədbirin ətraflı təsviri"
                                                     rows={4}
                                                 />
                                             </div>
@@ -1075,23 +1080,23 @@ function AdminEvents() {
 
                                         <div className="image-section-right">
                                             <div className="image-section">
-                                                <h3>Main Image</h3>
+                                                <h3>Əsas Şəkil</h3>
                                                 <div className="image-placeholder">
                                                     {currentData.mainImage ? (
                                                         <img
                                                             src={getImagePath(currentData.mainImage)}
-                                                            alt="Main image"
+                                                            alt="Əsas şəkil"
                                                             className="current-image"
                                                         />
                                                     ) : (
-                                                        <div className="image-placeholder-text">No main image</div>
+                                                        <div className="image-placeholder-text">Əsas şəkil yoxdur</div>
                                                     )}
                                                     <div className="image-actions">
                                                         <button
                                                             type="button"
                                                             onClick={() => handleInlineImageDelete(event.id, 'mainImage')}
                                                             className="action-btn delete-btn"
-                                                            title="Delete main image"
+                                                            title="Əsas şəkli sil"
                                                         >
                                                             <img src={adminDeleteIcon} alt="Delete" className="action-icon" />
                                                         </button>
@@ -1099,7 +1104,7 @@ function AdminEvents() {
                                                             type="button"
                                                             onClick={() => handleInlineImageBrowse(event.id, 'mainImage')}
                                                             className="action-btn refresh-btn"
-                                                            title="Browse main image"
+                                                            title="Əsas şəkli seç"
                                                         >
                                                             <img src={adminBrowseIcon} alt="Browse" className="action-icon" />
                                                         </button>
@@ -1108,26 +1113,26 @@ function AdminEvents() {
                                             </div>
 
                                             <div className="image-section">
-                                                <h3>Detail Images</h3>
+                                                <h3>Detallı Şəkillər</h3>
                                                 <div className="detail-images-grid">
                                                     <div className="detail-image-item">
-                                                        <label>Left Image</label>
+                                                        <label>Sol Şəkil</label>
                                                         <div className="image-placeholder small">
                                                             {currentData.detailImageLeft ? (
                                                                 <img
                                                                     src={getImagePath(currentData.detailImageLeft)}
-                                                                    alt="Left detail image"
+                                                                    alt="Sol detal şəkli"
                                                                     className="current-image"
                                                                 />
                                                             ) : (
-                                                                <div className="image-placeholder-text">No image</div>
+                                                                <div className="image-placeholder-text">Şəkil yoxdur</div>
                                                             )}
                                                             <div className="image-actions">
                                                                 <button
                                                                     type="button"
                                                                     onClick={() => handleInlineImageDelete(event.id, 'detailImageLeft')}
                                                                     className="action-btn delete-btn small"
-                                                                    title="Delete left image"
+                                                                    title="Sol şəkli sil"
                                                                 >
                                                                     <img src={adminDeleteIcon} alt="Delete" className="action-icon" />
                                                                 </button>
@@ -1135,7 +1140,7 @@ function AdminEvents() {
                                                                     type="button"
                                                                     onClick={() => handleInlineImageBrowse(event.id, 'detailImageLeft')}
                                                                     className="action-btn refresh-btn small"
-                                                                    title="Browse left image"
+                                                                    title="Sol şəkli seç"
                                                                 >
                                                                     <img src={adminBrowseIcon} alt="Browse" className="action-icon" />
                                                                 </button>
@@ -1144,23 +1149,23 @@ function AdminEvents() {
                                                     </div>
 
                                                     <div className="detail-image-item">
-                                                        <label>Main Detail Image</label>
+                                                        <label>Əsas Detal Şəkli</label>
                                                         <div className="image-placeholder small">
                                                             {currentData.detailImageMain ? (
                                                                 <img
                                                                     src={getImagePath(currentData.detailImageMain)}
-                                                                    alt="Main detail image"
+                                                                    alt="Əsas detal şəkli"
                                                                     className="current-image"
                                                                 />
                                                             ) : (
-                                                                <div className="image-placeholder-text">No image</div>
+                                                                <div className="image-placeholder-text">Şəkil yoxdur</div>
                                                             )}
                                                             <div className="image-actions">
                                                                 <button
                                                                     type="button"
                                                                     onClick={() => handleInlineImageDelete(event.id, 'detailImageMain')}
                                                                     className="action-btn delete-btn small"
-                                                                    title="Delete main detail image"
+                                                                    title="Əsas detal şəkli sil"
                                                                 >
                                                                     <img src={adminDeleteIcon} alt="Delete" className="action-icon" />
                                                                 </button>
@@ -1168,7 +1173,7 @@ function AdminEvents() {
                                                                     type="button"
                                                                     onClick={() => handleInlineImageBrowse(event.id, 'detailImageMain')}
                                                                     className="action-btn refresh-btn small"
-                                                                    title="Browse main detail image"
+                                                                    title="Əsas detal şəkli seç"
                                                                 >
                                                                     <img src={adminBrowseIcon} alt="Browse" className="action-icon" />
                                                                 </button>
@@ -1405,7 +1410,7 @@ function AdminEvents() {
                                     </div>
 
                                     <div className="admin-events-form-group">
-                                        <label htmlFor="isMain">Main Event</label>
+                                        <label htmlFor="isMain">Əsas tədbir </label>
                                         <div className="checkbox-group">
                                             <input
                                                 type="checkbox"
@@ -1414,7 +1419,7 @@ function AdminEvents() {
                                                 checked={eventData.isMain}
                                                 onChange={(e) => setEventData(prev => ({ ...prev, isMain: e.target.checked }))}
                                             />
-                                            <label htmlFor="isMain">Mark as main event</label>
+                                            <label htmlFor="isMain">Əsas tədbir et</label>
                                         </div>
                                     </div>
                                 </div>
