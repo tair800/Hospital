@@ -386,7 +386,7 @@
 .home-circle-right {
     position: absolute;
     top: 17%;
-    right: 1%;
+    right: -4%;
     z-index: 1;
     pointer-events: none;
 }
@@ -394,15 +394,26 @@
 .home-circle-right-image {
     width: auto;
     height: auto;
-    max-width: 383px;
+    max-width: 430px;
     object-fit: contain;
+}
+
+/* Rotation animation */
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Home Circle Left Decorative Element */
 .home-circle-left {
     position: absolute;
-    top: 15%;
-    left: 0%;
+    top: 19%;
+    left: -5%;
     z-index: 1;
     pointer-events: none;
 }
@@ -410,7 +421,7 @@
 .home-circle-left-image {
     width: auto;
     height: auto;
-    max-width: 353px;
+    max-width: 400px;
     object-fit: contain;
 }
 
@@ -418,8 +429,8 @@
 .home-circle-left2 {
     position: absolute;
     position: absolute;
-    top: 26%;
-    left: 0%;
+    top: 25%;
+    left: -8%;
     z-index: 1;
     pointer-events: none;
 }
@@ -427,26 +438,19 @@
 .home-circle-left2-image {
     width: auto;
     height: auto;
-    max-width: 270px;
+    max-width: 320px;
     object-fit: contain;
 }
 
-/* Home Circle Left 3 Decorative Element */
-.home-circle-left3 {
-    position: absolute;
-    top: 30%;
-    left: 0%;
-    z-index: 1;
-    pointer-events: none;
-
+/* Apply rotate to decorative elements */
+.home-circle-left .home-circle-left-image,
+.home-circle-left2 .home-circle-left2-image,
+.home-circle-right .home-circle-right-image {
+    animation: spin-slow 20s linear infinite;
+    will-change: transform;
 }
 
-.home-circle-left3-image {
-    width: auto;
-    height: auto;
-    max-width: 350px;
-    object-fit: contain;
-}
+/* Removed .home-circle-left3 and image styles */
 
 /* Four Sections Grid */
 .four-sections-grid {
@@ -1643,7 +1647,13 @@
     }
 
     .home-employee-card {
-        height: 240px;
+        background: #1B1B3F;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        position: relative;
+        height: 273px;
+        flex: 1;
+        min-width: 0;
         width: calc(50% - 0.5rem);
         margin-bottom: 1rem;
         flex: 0 0 auto;
@@ -1691,10 +1701,7 @@
         left: 0%;
     }
 
-    .home-circle-left3 {
-        top: 14%;
-        left: 0%;
-    }
+    /* removed .home-circle-left3 positioning */
 
     .home-circle-right-image {
         max-width: 120px;
@@ -1708,9 +1715,7 @@
         max-width: 80px;
     }
 
-    .home-circle-left3-image {
-        max-width: 100px;
-    }
+    /* removed .home-circle-left3-image size */
 
     /* General Mobile Adjustments */
     .home-page {
@@ -1987,9 +1992,7 @@
         max-width: 60px;
     }
 
-    .home-circle-left3-image {
-        max-width: 80px;
-    }
+    /* removed .home-circle-left3-image size */
 
     /* Info Card Row Extra Small Mobile */
     .info-card {
@@ -2244,9 +2247,7 @@
         max-width: 50px;
     }
 
-    .home-circle-left3-image {
-        max-width: 60px;
-    }
+    /* removed .home-circle-left3-image size */
 
     /* Event Cards Very Small Mobile */
     .home-event-day {
@@ -2339,6 +2340,25 @@
 /* Home Events Container */
 .home-events-container {
     margin-bottom: 40px;
+}
+
+/* 430 x 932 viewport tweak */
+@media (max-width: 430px) and (max-height: 932px) {
+    .home-employee-card {
+        background: #1B1B3F;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        position: relative;
+        height: 500px;
+        flex: 1;
+        min-width: 0;
+        margin-top: 54px;
+    }
+
+    .home-employee-photo {
+        height: 110% !important;
+        max-height: 110% !important;
+    }
 }
 
 
@@ -3021,6 +3041,17 @@
 
 /* 1920x1080 Resolution */
 @media (min-width: 1920px) {
+    .home-employee-photo {
+        position: absolute;
+        top: 36.7%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 49vh;
+        object-fit: cover;
+        z-index: 2;
+    }
+
     .info-card-row {
         display: flex !important;
         flex-direction: row !important;
@@ -3137,5 +3168,72 @@
 
     .slider-nav-btn:focus-visible {
         outline: none;
+    }
+
+    /* Enlarge section images on very large screens */
+    .section-2-main-image {
+        width: 520px;
+        height: 520px;
+        max-width: 520px;
+        max-height: 520px;
+        border-radius: 0px 520px 0px 0px;
+    }
+
+    .section-3-main-image {
+        width: 520px;
+        height: 520px;
+        max-width: 520px;
+        max-height: 520px;
+        border-radius: 0px 0px 0px 520px;
+    }
+
+    /* Position tweaks for section containers on 1920px */
+    .section-3-image {
+        position: absolute;
+        right: -1px;
+        top: 41%;
+        transform: translateY(-50%);
+        z-index: 2;
+    }
+
+    .section-2-image {
+        position: absolute;
+        left: 1px;
+        top: 61%;
+        transform: translateY(-50%);
+        z-index: 2;
+    }
+
+    /* Home employee card adjustments for 1920x1080 */
+    .home-employee-fullname {
+        position: absolute;
+        top: 21rem;
+        right: 12px;
+        background: linear-gradient(90deg, #4A90E2 0%, #1B1B3F 100%);
+        border-radius: 4px;
+        padding: 2px 6px;
+        color: #FFFFFF;
+        font-weight: bold;
+        font-size: 12px;
+        font-family: Arial, sans-serif;
+        text-align: right;
+        text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+        z-index: 4;
+        max-width: calc(70% - 12px);
+        white-space: nowrap;
+        min-width: fit-content;
+        width: auto;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .home-employee-card {
+        background: #1B1B3F;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        position: relative;
+        height: 418px;
+        flex: 1;
+        min-width: 0;
+        margin-top: 46px;
     }
 }

@@ -19,6 +19,7 @@ import {
   ContactPage,
   Error404
 } from './pages'
+import { TestPage } from './pages'
 import Dashboard from './pages/admin/Dashboard'
 import AdminHome from './pages/admin/AdminHome'
 import AdminAbout from './pages/admin/AdminAbout'
@@ -48,6 +49,7 @@ function App() {
               <Footer />
             </>
           } />
+          <Route path="/test" element={<TestPage />} />
           <Route path="/about" element={
             <>
               <Header showTopImage={true} />

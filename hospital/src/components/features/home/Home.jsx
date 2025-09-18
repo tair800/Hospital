@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import circle1 from '../../../assets/circle1.png'
+import circle2 from '../../../assets/circle2.png'
+import circle3 from '../../../assets/circle3.png'
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import iconNext from '../../../assets/icon-next.svg';
@@ -365,41 +368,34 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* Home Circle Right Decorative Element */}
+            {/* Decorative Circle 3 */}
             <div className="home-circle-right">
                 <img
-                    src="/assets/home-circle-right.png"
-                    alt="Decorative Circle"
+                    src={circle3}
+                    alt="Dekorativ Dairə 3"
                     className="home-circle-right-image"
                 />
             </div>
 
-            {/* Home Circle Left Decorative Element */}
+            {/* Decorative Circle 1 */}
             <div className="home-circle-left">
                 <img
-                    src="/assets/home-circle-left1.png"
-                    alt="Decorative Circle Left"
+                    src={circle1}
+                    alt="Dekorativ Dairə 1"
                     className="home-circle-left-image"
                 />
             </div>
 
-            {/* Home Circle Left 2 Decorative Element */}
+            {/* Decorative Circle 2 */}
             <div className="home-circle-left2">
                 <img
-                    src="/assets/home-circle-left2.png"
-                    alt="Decorative Circle Left 2"
+                    src={circle2}
+                    alt="Dekorativ Dairə 2"
                     className="home-circle-left2-image"
                 />
             </div>
 
-            {/* Home Circle Left 3 Decorative Element */}
-            <div className="home-circle-left3">
-                <img
-                    src="/assets/home-circle-left3.png"
-                    alt="Decorative Circle Left 3"
-                    className="home-circle-left3-image"
-                />
-            </div>
+            {/* Removed extra circle: left3 */}
 
             {/* Four Sections Grid */}
             <div className="four-sections-grid">

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 const searchIcon = '/assets/search-icon.png';
 const cardIcon = '/assets/card-icon.png';
 const eventImg = '/assets/event-img.png';
 import iconNext from '../../../assets/icon-next.svg';
+import iconPrev from '../../../assets/icon-prev.svg';
 import LogoCarousel from '../../ui/LogoCarousel';
 import { RequestModal } from '../../ui';
 import './Events.css';
@@ -31,8 +32,9 @@ const Events = () => {
 
     // Search state
     const [searchTerm, setSearchTerm] = useState('');
+    const [inputValue, setInputValue] = useState('');
     const [isSearching, setIsSearching] = useState(false);
-    const [searchTimeout, setSearchTimeout] = useState(null);
+    const searchTimeoutRef = useRef(null);
 
     // Get current date for calendar
     const today = new Date();
@@ -54,6 +56,32 @@ const Events = () => {
 
     // Request modal state
     const [showRequestModal, setShowRequestModal] = useState(false);
+
+    // Track large viewport (1920px+)
+    const [isLargeViewport, setIsLargeViewport] = useState(() => {
+        if (typeof window !== 'undefined' && window.matchMedia) {
+            return window.matchMedia('(min-width: 1920px)').matches;
+        }
+        return false;
+    });
+
+    useEffect(() => {
+        if (typeof window === 'undefined' || !window.matchMedia) return;
+        const mq = window.matchMedia('(min-width: 1920px)');
+        const handler = (e) => setIsLargeViewport(e.matches);
+        if (mq.addEventListener) {
+            mq.addEventListener('change', handler);
+        } else if (mq.addListener) {
+            mq.addListener(handler);
+        }
+        return () => {
+            if (mq.removeEventListener) {
+                mq.removeEventListener('change', handler);
+            } else if (mq.removeListener) {
+                mq.removeListener(handler);
+            }
+        };
+    }, []);
 
     // Get month name
     const monthNames = [
@@ -149,11 +177,11 @@ const Events = () => {
     // Cleanup search timeout on unmount
     useEffect(() => {
         return () => {
-            if (searchTimeout) {
-                clearTimeout(searchTimeout);
+            if (searchTimeoutRef.current) {
+                clearTimeout(searchTimeoutRef.current);
             }
         };
-    }, [searchTimeout]);
+    }, []);
 
     // Countdown timer effect
     useEffect(() => {
@@ -218,44 +246,35 @@ const Events = () => {
     // Handle search input change
     const handleSearchChange = (e) => {
         const value = e.target.value;
+        setInputValue(value); // update input immediately so user can type freely
 
         // Clear previous timeout
-        if (searchTimeout) {
-            clearTimeout(searchTimeout);
+        if (searchTimeoutRef.current) {
+            clearTimeout(searchTimeoutRef.current);
         }
 
-        // Trigger search animation immediately
         setIsSearching(true);
-
-        // Wait for exit animation, then change search term
-        setTimeout(() => {
+        // Debounce applying the filter term
+        searchTimeoutRef.current = setTimeout(() => {
             setSearchTerm(value);
-            setCurrentPage(1); // Reset to first page when searching
-
-            // Reset animation state after new cards have time to render
-            setTimeout(() => {
-                setIsSearching(false);
-            }, 50);
+            setCurrentPage(1);
+            setIsSearching(false);
         }, 200);
     };
 
     // Clear search
     const clearSearch = () => {
         // Clear any existing timeout
-        if (searchTimeout) {
-            clearTimeout(searchTimeout);
+        if (searchTimeoutRef.current) {
+            clearTimeout(searchTimeoutRef.current);
         }
 
         setIsSearching(true);
 
-        setTimeout(() => {
-            setSearchTerm('');
-            setCurrentPage(1);
-
-            setTimeout(() => {
-                setIsSearching(false);
-            }, 50);
-        }, 200);
+        setSearchTerm('');
+        setInputValue('');
+        setCurrentPage(1);
+        setIsSearching(false);
     };
 
     // Handle calendar navigation
@@ -433,7 +452,7 @@ const Events = () => {
             {/* Slider Navigation */}
             <div className="featured-slider-navigation">
                 <img
-                    src={iconNext}
+                    src={iconPrev}
                     alt="Previous"
                     className="slider-nav-btn prev-btn"
                     onClick={() => {
@@ -522,7 +541,7 @@ const Events = () => {
                             type="text"
                             placeholder="Tədbir axtar..."
                             className="search-input"
-                            value={searchTerm}
+                            value={inputValue}
                             onChange={handleSearchChange}
                         />
                         {searchTerm && (

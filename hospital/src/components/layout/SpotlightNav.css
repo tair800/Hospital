@@ -1,0 +1,114 @@
+.spotlight-nav-root nav::before,
+.spotlight-nav-root nav::after,
+.spotlight-nav-root nav ul.lit {
+    filter: url('#spotlight');
+}
+
+.spotlight-nav-root ul.content::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 100px;
+    pointer-events: none;
+    border: 1px solid white;
+    filter: url('#ambience') brightness(2);
+}
+
+.spotlight-nav-root nav {
+    height: 44px;
+    border-radius: 100px;
+    border: 1px solid color-mix(in hsl, canvasText, #0000 75%);
+    position: relative;
+}
+
+.spotlight-nav-root nav::before,
+.spotlight-nav-root nav::after {
+    pointer-events: none;
+}
+
+.spotlight-nav-root nav::after {
+    background: color-mix(in hsl, canvas, canvasText 10%);
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid color-mix(in hsl, canvasText, #0000);
+    z-index: -1;
+    border-radius: 100px;
+    opacity: 0.15;
+}
+
+.spotlight-nav-root nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid color-mix(in hsl, canvasText, #0000);
+    z-index: 2;
+    border-radius: 100px;
+}
+
+.spotlight-nav-root nav ul {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    height: 100%;
+    font-size: 0.875rem;
+}
+
+.spotlight-nav-root ul.lit {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    mix-blend-mode: lighten;
+    opacity: 0.35;
+    color: transparent;
+    user-select: none;
+}
+
+.spotlight-nav-root ul.content {
+    position: relative;
+    z-index: 1;
+}
+
+.spotlight-nav-root nav ul.lit li {
+    padding: 0.5rem 1.25rem;
+}
+
+.spotlight-nav-root nav ul li {
+    height: 100%;
+    display: grid;
+    place-items: center;
+}
+
+.spotlight-nav-root nav ul li a {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    padding: 0.5rem 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.4;
+    transition: opacity 0.25s ease-out;
+}
+
+.spotlight-nav-root nav ul li a:is(:hover, :focus-visible) {
+    opacity: 1;
+}
+
+.spotlight-nav-root nav ul li a[data-active="true"] {
+    opacity: 1;
+}
+
+.spotlight-nav-root .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

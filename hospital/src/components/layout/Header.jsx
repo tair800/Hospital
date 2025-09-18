@@ -5,6 +5,7 @@ import topImage from '../../assets/top.png'
 import homeBgImage from '../../assets/home-bg.png'
 import RequestModal from '../ui/RequestModal'
 import './Header.css'
+import SpotlightNav from './SpotlightNav'
 
 function Header({ showTopImage = false, customTopImage = null, hidePageName = false }) {
     const [activePage, setActivePage] = useState('home');
@@ -23,6 +24,9 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
 
     // Check if we're on the blog detail page
     const isBlogDetailPage = location.pathname.startsWith('/blog/') && location.pathname !== '/blog';
+
+    // Check if we're on the gallery page
+    const isGalleryPage = location.pathname === '/gallery';
 
     const languageOptions = [
         { code: 'aze', name: 'Aze', flag: 'https://flagcdn.com/w20/az.png' },
@@ -97,7 +101,7 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
     }, [location.pathname]);
 
     return (
-        <header className={isHomePage ? 'home-page-header' : isEmployeeDetailPage ? 'employee-detail-page-header' : isBlogDetailPage ? 'blog-detail-page-header' : ''}>
+        <header className={isHomePage ? 'home-page-header' : isEmployeeDetailPage ? 'employee-detail-page-header' : isBlogDetailPage ? 'blog-detail-page-header' : isGalleryPage ? 'gallery-page-header' : ''}>
             {showTopImage && (
                 <div className="header-top-image">
                     <img src={customTopImage || topImage} alt="Top Background" />
@@ -114,17 +118,14 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
                 </div>
 
                 <nav className="nav-center desktop-nav">
-                    <div className="navigation-container">
-                        {navigationItems.map((item) => (
-                            <button
-                                key={item.id}
-                                className={`navigation-item ${activePage === item.id ? 'active' : ''}`}
-                                onClick={() => handleItemClick(item)}
-                            >
-                                {item.label}
-                            </button>
-                        ))}
-                    </div>
+                    <SpotlightNav
+                        items={navigationItems}
+                        activeId={activePage}
+                        onActivate={(href) => {
+                            const item = navigationItems.find(n => n.href === href)
+                            if (item) handleItemClick(item)
+                        }}
+                    />
                 </nav>
 
                 <div className="login-section">
