@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './About.css'
+import { getContextualImagePath } from '../../../utils/imageUtils'
 const aboutMainImage = '/assets/about-main.png'
 const aboutTop1Image = '/assets/about-dot1.png'
 const aboutTop2Image = '/assets/about-dot2.png'
@@ -21,7 +22,7 @@ function About() {
         const fetchAboutData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('https://ahpbca-api.webonly.io/api/about');
+                const response = await fetch('https://localhost:5000/api/about');
                 if (!response.ok) {
                     throw new Error('Failed to fetch about data');
                 }
@@ -99,13 +100,6 @@ function About() {
         );
     }
 
-    // Helper: normalize image path coming from API or fallback
-    const getImagePath = (imageName) => {
-        if (!imageName) return aboutMainImage;
-        if (imageName.startsWith('/assets/')) return imageName;
-        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
-        return `/assets/${imageName}`;
-    };
 
     return (
         <div className="about-page">
@@ -143,7 +137,7 @@ function About() {
                     </div>
                     <div className="main-image-container">
                         <img
-                            src={getImagePath(aboutData?.img)}
+                            src={aboutData?.img ? getContextualImagePath(aboutData.img, 'admin') : aboutMainImage}
                             alt="About Main Image"
                         />
                     </div>

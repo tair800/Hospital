@@ -155,6 +155,148 @@ namespace HospitalAPI.Controllers
             return NoContent();
         }
 
+        // POST: api/employees/{id}/upload-image
+        [HttpPost("{id}/upload-image")]
+        public async Task<IActionResult> UploadEmployeeImage(int id, IFormFile file)
+        {
+            try
+            {
+                var employee = await _context.Employees.FindAsync(id);
+                if (employee == null)
+                {
+                    return NotFound("Employee not found.");
+                }
+
+                if (file == null || file.Length == 0)
+                {
+                    return BadRequest("No file uploaded.");
+                }
+
+                // Validate file type
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+                var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+                
+                if (!allowedExtensions.Contains(fileExtension))
+                {
+                    return BadRequest("Invalid file type. Only JPG, JPEG, PNG, GIF, and WebP files are allowed.");
+                }
+
+                // Validate file size (max 10MB)
+                if (file.Length > 10 * 1024 * 1024)
+                {
+                    return BadRequest("File size too large. Maximum size is 10MB.");
+                }
+
+                // Create uploads directory if it doesn't exist
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+
+                // Generate unique filename
+                var fileName = $"employee_{id}_{Guid.NewGuid()}{fileExtension}";
+                var filePath = Path.Combine(uploadPath, fileName);
+
+                // Save file
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // Update employee image path
+                employee.Image = $"uploads/{fileName}";
+                employee.UpdatedAt = DateTime.UtcNow;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { 
+                    success = true, 
+                    message = "Image uploaded successfully.",
+                    imagePath = employee.Image
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { 
+                    success = false, 
+                    message = "An error occurred while uploading the image.",
+                    error = ex.Message 
+                });
+            }
+        }
+
+        // POST: api/employees/{id}/upload-detail-image
+        [HttpPost("{id}/upload-detail-image")]
+        public async Task<IActionResult> UploadEmployeeDetailImage(int id, IFormFile file)
+        {
+            try
+            {
+                var employee = await _context.Employees.FindAsync(id);
+                if (employee == null)
+                {
+                    return NotFound("Employee not found.");
+                }
+
+                if (file == null || file.Length == 0)
+                {
+                    return BadRequest("No file uploaded.");
+                }
+
+                // Validate file type
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+                var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+                
+                if (!allowedExtensions.Contains(fileExtension))
+                {
+                    return BadRequest("Invalid file type. Only JPG, JPEG, PNG, GIF, and WebP files are allowed.");
+                }
+
+                // Validate file size (max 10MB)
+                if (file.Length > 10 * 1024 * 1024)
+                {
+                    return BadRequest("File size too large. Maximum size is 10MB.");
+                }
+
+                // Create uploads directory if it doesn't exist
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+
+                // Generate unique filename
+                var fileName = $"employee_detail_{id}_{Guid.NewGuid()}{fileExtension}";
+                var filePath = Path.Combine(uploadPath, fileName);
+
+                // Save file
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // Update employee detail image path
+                employee.DetailImage = $"uploads/{fileName}";
+                employee.UpdatedAt = DateTime.UtcNow;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new { 
+                    success = true, 
+                    message = "Detail image uploaded successfully.",
+                    imagePath = employee.DetailImage
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { 
+                    success = false, 
+                    message = "An error occurred while uploading the detail image.",
+                    error = ex.Message 
+                });
+            }
+        }
+
         private bool EmployeeExists(int id)
         {
             return _context.Employees.Any(e => e.Id == id);

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Application } from '@splinetool/runtime';
+import Swal from 'sweetalert2';
+import { mailService } from '../../../services/mailService';
 import './Contact.css';
 import phoneIcon from '../../../assets/phone-icon.png';
 import whatsappIcon from '../../../assets/whatsapp-icon.png';
@@ -13,7 +15,7 @@ import telegram from '../../../assets/telegram.png';
 import LogoCarousel from '../../ui/LogoCarousel';
 
 // API configuration
-const API_BASE_URL = 'https://ahpbca-api.webonly.io';
+const API_BASE_URL = 'https://localhost:5000';
 
 const Contact = () => {
     const canvasRef = useRef(null);
@@ -25,6 +27,17 @@ const Contact = () => {
     const [error, setError] = useState(null);
     const [splineLoading, setSplineLoading] = useState(true);
     const [splineError, setSplineError] = useState(false);
+
+    // Contact form state
+    const [formData, setFormData] = useState({
+        name: '',
+        surname: '',
+        email: '',
+        phone: '',
+        message: ''
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formErrors, setFormErrors] = useState({});
 
     // Fetch contact data from API
     useEffect(() => {
@@ -269,6 +282,107 @@ const Contact = () => {
         }
     };
 
+    // Form handling functions
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+
+        // Clear error when user starts typing
+        if (formErrors[name]) {
+            setFormErrors(prev => ({
+                ...prev,
+                [name]: ''
+            }));
+        }
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!formData.name.trim()) {
+            newErrors.name = 'Ad tələb olunur';
+        }
+
+        if (!formData.surname.trim()) {
+            newErrors.surname = 'Soyad tələb olunur';
+        }
+
+        if (!formData.email.trim()) {
+            newErrors.email = 'E-poçt tələb olunur';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Düzgün e-poçt ünvanı daxil edin';
+        }
+
+        if (!formData.phone.trim()) {
+            newErrors.phone = 'Telefon nömrəsi tələb olunur';
+        }
+
+        if (!formData.message.trim()) {
+            newErrors.message = 'Mesaj tələb olunur';
+        }
+
+        setFormErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            // Create contact form data
+            const contactFormData = {
+                name: formData.name,
+                surname: formData.surname,
+                email: formData.email,
+                phone: formData.phone,
+                message: formData.message
+            };
+
+            console.log('Submitting contact form:', contactFormData);
+            const response = await mailService.submitContactForm(contactFormData);
+            console.log('Contact form response:', response);
+
+            // Reset form
+            setFormData({
+                name: '',
+                surname: '',
+                email: '',
+                phone: '',
+                message: ''
+            });
+
+            // Show success message
+            Swal.fire({
+                icon: 'success',
+                title: 'Mesajınız uğurla göndərildi!',
+                text: 'Mesajınız qeydə alındı. Tezliklə sizinlə əlaqə saxlayacağıq.',
+                confirmButtonColor: '#1B1B3F',
+                confirmButtonText: 'Tamam'
+            });
+
+        } catch (error) {
+            console.error('Error submitting contact form:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Xəta!',
+                text: 'Mesaj göndərilmədi. Zəhmət olmasa yenidən cəhd edin.',
+                confirmButtonColor: '#ef4444',
+                confirmButtonText: 'Tamam'
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     // Show loading state
     if (loading) {
         return (
@@ -411,47 +525,102 @@ const Contact = () => {
                 </div>
                 <div className="right-content-section">
                     <div className="contact-form-container">
-                        <div className="contact-form">
+                        <form className="contact-form" onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <label htmlFor="name">Ad</label>
+                                <label htmlFor="name">Ad *</label>
                                 <input
                                     type="text"
                                     id="name"
+                                    name="name"
                                     placeholder="Adınızı daxil edin"
-                                    className="form-input"
+                                    className={`form-input ${formErrors.name ? 'error' : ''}`}
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                    maxLength={100}
+                                    required
+                                    disabled={isSubmitting}
                                 />
+                                {formErrors.name && <span className="error-message">{formErrors.name}</span>}
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="surname">Soyad</label>
+                                <label htmlFor="surname">Soyad *</label>
                                 <input
                                     type="text"
                                     id="surname"
+                                    name="surname"
                                     placeholder="Soyadınızı daxil edin"
-                                    className="form-input"
+                                    className={`form-input ${formErrors.surname ? 'error' : ''}`}
+                                    value={formData.surname}
+                                    onChange={handleInputChange}
+                                    maxLength={100}
+                                    required
+                                    disabled={isSubmitting}
                                 />
+                                {formErrors.surname && <span className="error-message">{formErrors.surname}</span>}
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="email">E-poçt</label>
+                                <label htmlFor="email">E-poçt *</label>
                                 <input
                                     type="email"
                                     id="email"
+                                    name="email"
                                     placeholder="Elektron poçtunuzu daxil edin"
-                                    className="form-input"
+                                    className={`form-input ${formErrors.email ? 'error' : ''}`}
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    maxLength={255}
+                                    required
+                                    disabled={isSubmitting}
                                 />
+                                {formErrors.email && <span className="error-message">{formErrors.email}</span>}
                             </div>
 
                             <div className="form-group">
-                                <label htmlFor="message">Mesajınızı daxil edin</label>
+                                <label htmlFor="phone">Telefon *</label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="Telefon nömrənizi daxil edin"
+                                    className={`form-input ${formErrors.phone ? 'error' : ''}`}
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
+                                    maxLength={20}
+                                    required
+                                    disabled={isSubmitting}
+                                />
+                                {formErrors.phone && <span className="error-message">{formErrors.phone}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="message">Mesajınız *</label>
                                 <textarea
                                     id="message"
+                                    name="message"
                                     placeholder="Mesajınızı daxil edin"
-                                    className="form-textarea"
+                                    className={`form-textarea ${formErrors.message ? 'error' : ''}`}
                                     rows="4"
+                                    value={formData.message}
+                                    onChange={handleInputChange}
+                                    maxLength={1000}
+                                    required
+                                    disabled={isSubmitting}
                                 ></textarea>
+                                {formErrors.message && <span className="error-message">{formErrors.message}</span>}
                             </div>
-                        </div>
+
+                            <div className="form-actions">
+                                <button
+                                    type="submit"
+                                    className="contact-submit-btn"
+                                    disabled={isSubmitting}
+                                >
+                                    {isSubmitting ? 'Göndərilir...' : 'Mesaj Göndər'}
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

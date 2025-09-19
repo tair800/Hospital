@@ -30,6 +30,8 @@ function AdminLayout() {
                 return 'Gallery';
             case '/admin/requests':
                 return 'Requests';
+            case '/admin/mail':
+                return 'Mail';
             default:
                 return 'Dashboard';
         }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
-import { getImagePath } from '../../utils/imageUtils'
+import { getContextualImagePath } from '../../utils/imageUtils'
 const adminDeleteIcon = '/assets/admin-delete.png'
 const adminBrowseIcon = '/assets/admin-browse.png'
 const employee1Image = '/assets/employee1.png'
@@ -111,7 +111,7 @@ function AdminEmployee() {
     const fetchEmployees = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://ahpbca-api.webonly.io/api/employees');
+            const response = await fetch('https://localhost:5000/api/employees');
             if (response.ok) {
                 const employees = await response.json();
 
@@ -122,7 +122,7 @@ function AdminEmployee() {
                     employees.map(async (employee) => {
                         try {
                             // Fetch full employee data with certificates and degrees
-                            const employeeResponse = await fetch(`https://ahpbca-api.webonly.io/api/employees/${employee.id}`);
+                            const employeeResponse = await fetch(`https://localhost:5000/api/employees/${employee.id}`);
                             if (employeeResponse.ok) {
                                 const fullEmployeeData = await employeeResponse.json();
 
@@ -180,7 +180,7 @@ function AdminEmployee() {
 
 
 
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/employees/${employeeId}`, {
+            const response = await fetch(`https://localhost:5000/api/employees/${employeeId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -257,17 +257,40 @@ function AdminEmployee() {
     };
 
     // Handle image browse
-    const handleImageBrowse = (imageType) => {
+    const handleImageBrowse = async (imageType) => {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = (e) => {
+        fileInput.onchange = async (e) => {
             const file = e.target.files[0];
             if (file) {
-                setEmployeeData(prev => ({ ...prev, [imageType]: file.name }));
-                showAlert('success', 'Image Selected!', `Image "${file.name}" selected. Don't forget to save changes!`);
+                try {
+                    // Create FormData for file upload
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    // Upload the file
+                    const response = await fetch(`https://localhost:5000/api/ImageUpload/employee${imageType === 'detailImage' ? '/detail' : ''}`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            setEmployeeData(prev => ({ ...prev, [imageType]: result.filePath }));
+                            showAlert('success', 'Image Uploaded!', `Image "${file.name}" uploaded successfully!`);
+                        } else {
+                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload image.');
+                        }
+                    } else {
+                        showAlert('error', 'Upload Failed!', 'Failed to upload image to server.');
+                    }
+                } catch (error) {
+                    showAlert('error', 'Upload Failed!', 'Failed to upload image. Please try again.');
+                }
             }
         };
 
@@ -277,17 +300,40 @@ function AdminEmployee() {
     };
 
     // Handle certificate image browse in modal
-    const handleCertificateModalImageBrowse = () => {
+    const handleCertificateModalImageBrowse = async () => {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = (e) => {
+        fileInput.onchange = async (e) => {
             const file = e.target.files[0];
             if (file) {
-                setCertificateData(prev => ({ ...prev, certificateImage: file.name }));
-                showAlert('success', 'Image Selected!', `Certificate image "${file.name}" selected.`);
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/employee/certificate', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            // Add timestamp to force image reload
+                            const imagePathWithTimestamp = `${result.filePath}?t=${Date.now()}`;
+                            setCertificateData(prev => ({ ...prev, certificateImage: imagePathWithTimestamp }));
+                            showAlert('success', 'Image Uploaded!', `Certificate image "${file.name}" uploaded successfully!`);
+                        } else {
+                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload certificate image.');
+                        }
+                    } else {
+                        showAlert('error', 'Upload Failed!', 'Failed to upload certificate image to server.');
+                    }
+                } catch (error) {
+                    showAlert('error', 'Upload Failed!', 'Failed to upload certificate image. Please try again.');
+                }
             }
         };
 
@@ -315,23 +361,46 @@ function AdminEmployee() {
     };
 
     // Handle inline image browse for existing employees
-    const handleInlineImageBrowse = (employeeId, imageType) => {
+    const handleInlineImageBrowse = async (employeeId, imageType) => {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = (e) => {
+        fileInput.onchange = async (e) => {
             const file = e.target.files[0];
             if (file) {
-                // Create a preview URL for the selected file
-                const previewUrl = URL.createObjectURL(file);
+                try {
+                    // Create FormData for file upload
+                    const formData = new FormData();
+                    formData.append('file', file);
 
-                // Update both the filename and preview URL
-                handleInlineInputChange(employeeId, imageType, file.name);
-                handleInlineInputChange(employeeId, `${imageType}Preview`, previewUrl);
+                    // Upload the file
+                    const response = await fetch(`https://localhost:5000/api/ImageUpload/employee${imageType === 'detailImage' ? '/detail' : ''}`, {
+                        method: 'POST',
+                        body: formData
+                    });
 
-                showAlert('success', 'Image Selected!', `Image "${file.name}" selected. Don't forget to save changes!`);
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            // Create a preview URL for the selected file
+                            const previewUrl = URL.createObjectURL(file);
+
+                            // Update both the file path and preview URL
+                            handleInlineInputChange(employeeId, imageType, result.filePath);
+                            handleInlineInputChange(employeeId, `${imageType}Preview`, previewUrl);
+
+                            showAlert('success', 'Image Uploaded!', `Image "${file.name}" uploaded successfully!`);
+                        } else {
+                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload image.');
+                        }
+                    } else {
+                        showAlert('error', 'Upload Failed!', 'Failed to upload image to server.');
+                    }
+                } catch (error) {
+                    showAlert('error', 'Upload Failed!', 'Failed to upload image. Please try again.');
+                }
             }
         };
 
@@ -347,35 +416,54 @@ function AdminEmployee() {
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = (e) => {
+        fileInput.onchange = async (e) => {
             const file = e.target.files[0];
             if (file) {
-                // Initialize edit data if it doesn't exist
-                if (!certificateEditData[certificateId]) {
-                    const certificate = employees
-                        .flatMap(emp => emp.certificates || [])
-                        .find(cert => cert.id === certificateId);
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
 
-                    if (certificate) {
-                        setCertificateEditData(prev => ({
-                            ...prev,
-                            [certificateId]: {
-                                certificateName: certificate.certificateName,
-                                certificateImage: certificate.certificateImage,
-                                previewImage: null
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/employee/certificate', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            // Add timestamp to force image reload
+                            const imagePathWithTimestamp = `${result.filePath}?t=${Date.now()}`;
+
+                            // Initialize edit data if it doesn't exist
+                            if (!certificateEditData[certificateId]) {
+                                const certificate = employees
+                                    .flatMap(emp => emp.certificates || [])
+                                    .find(cert => cert.id === certificateId);
+
+                                if (certificate) {
+                                    setCertificateEditData(prev => ({
+                                        ...prev,
+                                        [certificateId]: {
+                                            certificateName: certificate.certificateName,
+                                            certificateImage: imagePathWithTimestamp
+                                        }
+                                    }));
+                                }
+                            } else {
+                                // Update existing edit data
+                                handleCertificateEditChange(certificateId, 'certificateImage', imagePathWithTimestamp);
                             }
-                        }));
+
+                            showAlert('success', 'Image Uploaded!', `Certificate image "${file.name}" uploaded successfully!`);
+                        } else {
+                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload certificate image.');
+                        }
+                    } else {
+                        showAlert('error', 'Upload Failed!', 'Failed to upload certificate image to server.');
                     }
+                } catch (error) {
+                    showAlert('error', 'Upload Failed!', 'Failed to upload certificate image. Please try again.');
                 }
-
-                // Create a preview URL for the selected file
-                const previewUrl = URL.createObjectURL(file);
-
-                // Update the image data with both filename and preview URL
-                handleCertificateEditChange(certificateId, 'certificateImage', file.name);
-                handleCertificateEditChange(certificateId, 'previewImage', previewUrl);
-
-                showAlert('success', 'Image Selected!', `Certificate image "${file.name}" selected. Use main Save button to save all changes.`);
             }
         };
 
@@ -422,7 +510,7 @@ function AdminEmployee() {
 
 
 
-            const response = await fetch('https://ahpbca-api.webonly.io/api/employees', {
+            const response = await fetch('https://localhost:5000/api/employees', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -459,7 +547,7 @@ function AdminEmployee() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://ahpbca-api.webonly.io/api/employees/${employeeId}`, {
+                    const response = await fetch(`https://localhost:5000/api/employees/${employeeId}`, {
                         method: 'DELETE',
                     });
 
@@ -493,7 +581,7 @@ function AdminEmployee() {
         e.preventDefault();
         try {
             setLoading(true);
-            const response = await fetch('https://ahpbca-api.webonly.io/api/employee-certificates', {
+            const response = await fetch('https://localhost:5000/api/employee-certificates', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -530,7 +618,7 @@ function AdminEmployee() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-certificates/${certificateId}`, {
+                    const response = await fetch(`https://localhost:5000/api/employee-certificates/${certificateId}`, {
                         method: 'DELETE',
                     });
 
@@ -591,7 +679,7 @@ function AdminEmployee() {
 
         try {
             setLoading(true);
-            const response = await fetch('https://ahpbca-api.webonly.io/api/employee-degrees', {
+            const response = await fetch('https://localhost:5000/api/employee-degrees', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -630,7 +718,7 @@ function AdminEmployee() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-degrees/${degreeId}`, {
+                    const response = await fetch(`https://localhost:5000/api/employee-degrees/${degreeId}`, {
                         method: 'DELETE',
                     });
 
@@ -681,12 +769,8 @@ function AdminEmployee() {
     // Cleanup preview URLs to prevent memory leaks
     useEffect(() => {
         return () => {
-            // Cleanup all preview URLs when component unmounts
-            Object.values(certificateEditData).forEach(editData => {
-                if (editData?.previewImage) {
-                    URL.revokeObjectURL(editData.previewImage);
-                }
-            });
+            // Cleanup any remaining preview URLs when component unmounts
+            // (Note: Certificate images are now uploaded directly to server)
         };
     }, [certificateEditData]);
 
@@ -735,7 +819,7 @@ function AdminEmployee() {
 
 
 
-                const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-certificates/${certificateId}`, {
+                const response = await fetch(`https://localhost:5000/api/employee-certificates/${certificateId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -753,12 +837,7 @@ function AdminEmployee() {
             }
         }
 
-        // Cleanup preview URLs before clearing edit data
-        Object.values(certificateEditData).forEach(editData => {
-            if (editData?.previewImage) {
-                URL.revokeObjectURL(editData.previewImage);
-            }
-        });
+        // Clear certificate edit data
 
         // Clear all certificate edit data after saving
         setCertificateEditData({});
@@ -819,7 +898,7 @@ function AdminEmployee() {
 
 
 
-                const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-degrees/${degreeId}`, {
+                const response = await fetch(`https://localhost:5000/api/employee-degrees/${degreeId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload),
@@ -873,7 +952,7 @@ function AdminEmployee() {
                 return;
             }
 
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-certificates/${certificateId}`, {
+            const response = await fetch(`https://localhost:5000/api/employee-certificates/${certificateId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -959,7 +1038,7 @@ function AdminEmployee() {
                 return;
             }
 
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-degrees/${degreeId}`, {
+            const response = await fetch(`https://localhost:5000/api/employee-degrees/${degreeId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1174,49 +1253,18 @@ function AdminEmployee() {
                                             <div className="image-section">
                                                 <h4>Profile Image</h4>
                                                 <div className="image-placeholder">
-                                                    {(() => {
-                                                        // Use preview image if available (newly selected), otherwise use original data
-                                                        const previewImage = currentData.imagePreview;
-                                                        const currentImage = currentData.image;
-
-                                                        // If we have a preview image (newly selected file), use it
-                                                        if (previewImage) {
-                                                            return (
-                                                                <img
-                                                                    src={previewImage}
-                                                                    alt="Employee profile"
-                                                                    className="current-image"
-                                                                />
-                                                            );
-                                                        }
-
-                                                        // Otherwise, use the original image logic
-                                                        return currentImage ? (
-                                                            <img
-                                                                src={
-                                                                    currentImage === 'employee1.png'
-                                                                        ? employee1Image
-                                                                        : getImagePath(currentImage)
-                                                                }
-                                                                alt="Employee profile"
-                                                                className="current-image"
-                                                                onError={(e) => {
-                                                                    const file = currentImage || '';
-                                                                    const triedUploads = e.target.dataset.triedUploads === 'true';
-                                                                    if (!triedUploads && file && !file.startsWith('http') && !file.startsWith('/')) {
-                                                                        e.target.dataset.triedUploads = 'true';
-                                                                        e.target.src = `/src/assets/${file}`;
-                                                                    } else {
-                                                                        e.target.style.display = 'none';
-                                                                    }
-                                                                }}
-                                                            />
-                                                        ) : (
-                                                            <div className="image-placeholder-text">
-                                                                No profile image
-                                                            </div>
-                                                        );
-                                                    })()}
+                                                    {currentData.image ? (
+                                                        <img
+                                                            src={getContextualImagePath(currentData.image, 'admin')}
+                                                            alt="Employee profile"
+                                                            className="current-image"
+                                                            key={currentData.image}
+                                                        />
+                                                    ) : (
+                                                        <div className="image-placeholder-text">
+                                                            No profile image
+                                                        </div>
+                                                    )}
 
                                                     <div className="admin-employee-image-bottom-left-content">
                                                         <div className="image-actions">
@@ -1244,45 +1292,18 @@ function AdminEmployee() {
                                             <div className="image-section">
                                                 <h4>Detail Image</h4>
                                                 <div className="image-placeholder">
-                                                    {(() => {
-                                                        // Use preview image if available (newly selected), otherwise use original data
-                                                        const previewImage = currentData.detailImagePreview;
-                                                        const currentImage = currentData.detailImage;
-
-                                                        // If we have a preview image (newly selected file), use it
-                                                        if (previewImage) {
-                                                            return (
-                                                                <img
-                                                                    src={previewImage}
-                                                                    alt="Employee detail"
-                                                                    className="current-image"
-                                                                />
-                                                            );
-                                                        }
-
-                                                        // Otherwise, use the original image logic
-                                                        return currentImage ? (
-                                                            <img
-                                                                src={getImagePath(currentImage)}
-                                                                alt="Employee detail"
-                                                                className="current-image"
-                                                                onError={(e) => {
-                                                                    const file = currentImage || '';
-                                                                    const triedUploads = e.target.dataset.triedUploads === 'true';
-                                                                    if (!triedUploads && file && !file.startsWith('http') && !file.startsWith('/')) {
-                                                                        e.target.dataset.triedUploads = 'true';
-                                                                        e.target.src = `/src/assets/${file}`;
-                                                                    } else {
-                                                                        e.target.style.display = 'none';
-                                                                    }
-                                                                }}
-                                                            />
-                                                        ) : (
-                                                            <div className="image-placeholder-text">
-                                                                No detail image
-                                                            </div>
-                                                        );
-                                                    })()}
+                                                    {currentData.detailImage ? (
+                                                        <img
+                                                            src={getContextualImagePath(currentData.detailImage, 'admin')}
+                                                            alt="Employee detail"
+                                                            className="current-image"
+                                                            key={currentData.detailImage}
+                                                        />
+                                                    ) : (
+                                                        <div className="image-placeholder-text">
+                                                            No detail image
+                                                        </div>
+                                                    )}
 
                                                     <div className="admin-employee-image-bottom-left-content">
                                                         <div className="image-actions">
@@ -1345,55 +1366,30 @@ function AdminEmployee() {
                                                 <div className="employee-certificates-grid">
                                                     {currentData.certificates && currentData.certificates.length > 0 ? (
                                                         currentData.certificates.map((certificate, index) => {
-                                                            const hasUnsavedChanges = certificateEditData[certificate.id] &&
-                                                                (certificateEditData[certificate.id].certificateName !== certificate.certificateName ||
-                                                                    certificateEditData[certificate.id].certificateImage !== certificate.certificateImage);
-
                                                             return (
-                                                                <div key={certificate.id} className={`employee-certificate-tile ${hasUnsavedChanges ? 'has-unsaved-changes' : ''}`}>
+                                                                <div key={certificate.id} className="employee-certificate-tile">
                                                                     <div className="employee-certificate-number">#{String(index + 1).padStart(2, '0')}</div>
                                                                     {(() => {
-                                                                        // Use preview image if available (newly selected), otherwise use original data
                                                                         const editData = certificateEditData[certificate.id];
-                                                                        const previewImage = editData?.previewImage;
                                                                         const currentImage = editData?.certificateImage || certificate.certificateImage;
 
-                                                                        // If we have a preview image (newly selected file), use it
-                                                                        if (previewImage) {
-                                                                            return (
-                                                                                <img
-                                                                                    src={previewImage}
-                                                                                    alt={certificate.certificateName}
-                                                                                    className="employee-certificate-image"
-                                                                                />
-                                                                            );
-                                                                        }
-
-                                                                        // Otherwise, use the original image logic
                                                                         return currentImage ? (
                                                                             <img
-                                                                                src={getImagePath(currentImage)}
+                                                                                src={getContextualImagePath(currentImage, 'admin')}
                                                                                 alt={certificate.certificateName}
                                                                                 className="employee-certificate-image"
+                                                                                key={currentImage}
                                                                                 onError={(e) => {
-                                                                                    const file = currentImage || '';
-                                                                                    const triedUploads = e.target.dataset.triedUploads === 'true';
-                                                                                    if (!triedUploads && file && !file.startsWith('/src/') && !file.startsWith('http')) {
-                                                                                        e.target.dataset.triedUploads = 'true';
-                                                                                        e.target.src = `/assets/${file}`;
-                                                                                    } else {
-                                                                                        e.target.style.display = 'none';
-                                                                                        e.target.nextSibling && (e.target.nextSibling.style.display = 'block');
-                                                                                    }
+                                                                                    e.target.style.display = 'none';
+                                                                                    e.target.nextSibling && (e.target.nextSibling.style.display = 'block');
                                                                                 }}
                                                                             />
                                                                         ) : null;
                                                                     })()}
                                                                     {(() => {
                                                                         const editData = certificateEditData[certificate.id];
-                                                                        const previewImage = editData?.previewImage;
                                                                         const currentImage = editData?.certificateImage || certificate.certificateImage;
-                                                                        return !previewImage && !currentImage && (
+                                                                        return !currentImage && (
                                                                             <div className="employee-certificate-fallback">No Image</div>
                                                                         );
                                                                     })()}
@@ -1682,7 +1678,7 @@ function AdminEmployee() {
                                             <div className="admin-employee-image-placeholder">
                                                 {employeeData.image ? (
                                                     <img
-                                                        src={employeeData.image === 'employee1.png' ? employee1Image : getImagePath(employeeData.image)}
+                                                        src={employeeData.image === 'employee1.png' ? employee1Image : getContextualImagePath(employeeData.image, 'employee')}
                                                         alt="Employee profile"
                                                         className="admin-employee-current-image"
                                                         onError={(e) => {
@@ -1724,7 +1720,7 @@ function AdminEmployee() {
                                             <div className="admin-employee-image-placeholder">
                                                 {employeeData.detailImage ? (
                                                     <img
-                                                        src={getImagePath(employeeData.detailImage)}
+                                                        src={getContextualImagePath(employeeData.detailImage, 'employee')}
                                                         alt="Employee detail"
                                                         className="admin-employee-current-image"
                                                         onError={(e) => {
@@ -1844,7 +1840,7 @@ function AdminEmployee() {
                                 {certificateData.certificateImage && (
                                     <div className="certificate-preview">
                                         <img
-                                            src={getImagePath(certificateData.certificateImage)}
+                                            src={getContextualImagePath(certificateData.certificateImage, 'admin')}
                                             alt="Certificate preview"
                                             className="certificate-preview-image"
                                             onClick={() => setShowCertificateImagePreview(true)}
@@ -1882,7 +1878,7 @@ function AdminEmployee() {
                 <div className="admin-employee-modal-overlay" onClick={() => setShowCertificateImagePreview(false)}>
                     <div className="image-preview-modal" onClick={(e) => e.stopPropagation()}>
                         <img
-                            src={getImagePath(certificateData.certificateImage)}
+                            src={getContextualImagePath(certificateData.certificateImage, 'admin')}
                             alt="Certificate full preview"
                             className="image-preview-modal-img"
                         />

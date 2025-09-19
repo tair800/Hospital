@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getImagePath } from '../../utils/imageUtils'
+import { getContextualImagePath } from '../../utils/imageUtils'
 import './Dashboard.css'
 
 function Dashboard() {
@@ -13,7 +13,7 @@ function Dashboard() {
     useEffect(() => {
         const fetchUpcomingEventsCount = async () => {
             try {
-                const response = await fetch('https://ahpbca-api.webonly.io/api/events/upcoming/count');
+                const response = await fetch('https://localhost:5000/api/events/upcoming/count');
                 if (response.ok) {
                     const count = await response.json();
                     setUpcomingEventsCount(count);
@@ -33,7 +33,7 @@ function Dashboard() {
 
         const fetchUpcomingEventsFallback = async () => {
             try {
-                const response = await fetch('https://ahpbca-api.webonly.io/api/events');
+                const response = await fetch('https://localhost:5000/api/events');
                 if (response.ok) {
                     const events = await response.json();
                     const now = new Date();
@@ -51,7 +51,7 @@ function Dashboard() {
 
         const fetchUpcomingEvents = async () => {
             try {
-                const response = await fetch('https://ahpbca-api.webonly.io/api/events/upcoming');
+                const response = await fetch('https://localhost:5000/api/events/upcoming');
                 if (response.ok) {
                     const events = await response.json();
                     // Take only the first 5 upcoming events
@@ -69,14 +69,14 @@ function Dashboard() {
         const fetchRecentEmployees = async () => {
             try {
                 // First try the recent endpoint
-                let response = await fetch('https://ahpbca-api.webonly.io/api/employees/recent');
+                let response = await fetch('https://localhost:5000/api/employees/recent');
                 if (response.ok) {
                     const employees = await response.json();
                     setRecentEmployees(employees);
                 } else {
                     // Fallback to regular employees endpoint and filter recent ones
                     console.log('Recent endpoint failed, trying regular employees endpoint');
-                    response = await fetch('https://ahpbca-api.webonly.io/api/employees');
+                    response = await fetch('https://localhost:5000/api/employees');
                     if (response.ok) {
                         const allEmployees = await response.json();
                         // Sort by createdAt and take the first 5
@@ -276,7 +276,7 @@ function Dashboard() {
                                 <div key={employee.id || index} className="member-item">
                                     <div className="member-avatar">
                                         <img
-                                            src={getImagePath(employee.image) || "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=60&h=60&fit=crop&crop=face"}
+                                            src={getContextualImagePath(employee.image, 'admin') || "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=60&h=60&fit=crop&crop=face"}
                                             alt={employee.fullname}
                                             onError={(e) => {
                                                 // Fallback to Unsplash if the image fails to load

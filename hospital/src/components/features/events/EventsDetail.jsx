@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { getContextualImagePath } from '../../../utils/imageUtils';
 import LogoCarousel from '../../ui/LogoCarousel';
 import { RequestModal, EmployeeSlider } from '../../ui';
 // Removed timelineData import - now fetching from API
@@ -24,7 +25,7 @@ const EventsDetail = () => {
         const fetchTimelineData = async () => {
             try {
                 setTimelineLoading(true);
-                const response = await fetch(`https://ahpbca-api.webonly.io/api/eventtimeline/event/${eventId}`);
+                const response = await fetch(`https://localhost:5000/api/eventtimeline/event/${eventId}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch timeline data');
                 }
@@ -64,7 +65,7 @@ const EventsDetail = () => {
         const fetchEvent = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`https://ahpbca-api.webonly.io/api/events/${eventId}`);
+                const response = await fetch(`https://localhost:5000/api/events/${eventId}`);
                 if (!response.ok) {
                     throw new Error('Event not found');
                 }
@@ -112,14 +113,6 @@ const EventsDetail = () => {
         return () => clearInterval(timer);
     }, [event]);
 
-    // Helper function to get correct image path
-    const getImagePath = (imageName) => {
-        if (!imageName) return '';
-        if (imageName === 'event-img.png') return '/assets/event-img.png';
-        if (imageName.startsWith('/assets/')) return imageName;
-        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
-        return `/assets/${imageName}`;
-    };
 
     // Handle request modal success
     const handleRequestSuccess = () => {
@@ -256,9 +249,9 @@ const EventsDetail = () => {
                     </div>
 
                 </div>
-                <img src={getImagePath(event.detailImageLeft)} alt="Event Detail Left" className="left-event-image" />
-                <img src={getImagePath(event.detailImageMain)} alt="Event Detail Main" className="main-event-image" />
-                <img src={getImagePath(event.detailImageRight)} alt="Event Detail Right" className="right-event-image" />
+                <img src={getContextualImagePath(event.detailImageLeft, 'admin')} alt="Event Detail Left" className="left-event-image" />
+                <img src={getContextualImagePath(event.detailImageMain, 'admin')} alt="Event Detail Main" className="main-event-image" />
+                <img src={getContextualImagePath(event.detailImageRight, 'admin')} alt="Event Detail Right" className="right-event-image" />
                 <button className="muraciet-btn" onClick={() => setShowRequestModal(true)}>Müraciət et</button>
             </div>
 

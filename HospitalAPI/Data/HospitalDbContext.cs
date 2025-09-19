@@ -22,6 +22,7 @@ namespace HospitalAPI.Data
         public DbSet<HomeSection> HomeSections { get; set; }
         public DbSet<Gallery> Gallery { get; set; }
         public DbSet<Request> Requests { get; set; }
+        public DbSet<Mail> Mails { get; set; }
         public DbSet<EventEmployee> EventEmployees { get; set; }
         public DbSet<EventSpeaker> EventSpeakers { get; set; }
         public DbSet<EventTimeline> EventTimeline { get; set; }
@@ -195,6 +196,21 @@ namespace HospitalAPI.Data
                 entity.Property(r => r.Status).IsRequired().HasMaxLength(20).HasDefaultValue("pending");
                 entity.Property(r => r.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
                 entity.Property(r => r.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            });
+
+            // Configure Mail table for SQLite
+            modelBuilder.Entity<Mail>(entity =>
+            {
+                entity.HasKey(m => m.Id);
+                entity.Property(m => m.Name).IsRequired().HasMaxLength(100);
+                entity.Property(m => m.Surname).IsRequired().HasMaxLength(100);
+                entity.Property(m => m.Email).IsRequired().HasMaxLength(255);
+                entity.Property(m => m.Phone).IsRequired().HasMaxLength(20);
+                entity.Property(m => m.Message).IsRequired().HasMaxLength(1000);
+                entity.Property(m => m.Status).IsRequired().HasMaxLength(20).HasDefaultValue("unread");
+                entity.Property(m => m.ReplyMessage).HasMaxLength(1000);
+                entity.Property(m => m.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(m => m.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
             });
 
             // Configure EventEmployee table for SQLite

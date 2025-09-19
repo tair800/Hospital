@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HospitalAPI.Data;
 using HospitalAPI.Models;
+using HospitalAPI.Services;
 
 namespace HospitalAPI.Controllers
 {
@@ -25,6 +26,15 @@ namespace HospitalAPI.Controllers
                 var events = await _context.Events
                     .OrderByDescending(e => e.EventDate)
                     .ToListAsync();
+                
+                // Format image paths for frontend
+                foreach (var eventItem in events)
+                {
+                    eventItem.MainImage = ImagePathService.FormatContextualImagePath(eventItem.MainImage, "admin");
+                    eventItem.DetailImageLeft = ImagePathService.FormatContextualImagePath(eventItem.DetailImageLeft, "admin");
+                    eventItem.DetailImageMain = ImagePathService.FormatContextualImagePath(eventItem.DetailImageMain, "admin");
+                    eventItem.DetailImageRight = ImagePathService.FormatContextualImagePath(eventItem.DetailImageRight, "admin");
+                }
                 
                 return Ok(events);
             }

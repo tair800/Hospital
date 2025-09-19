@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
-import { getImagePath } from '../../utils/imageUtils'
+import { getContextualImagePath } from '../../utils/imageUtils'
 const adminDeleteIcon = '/assets/admin-delete.png'
 const adminBrowseIcon = '/assets/admin-browse.png'
 import Pagination from '../../components/ui/Pagination'
@@ -89,7 +89,7 @@ function AdminBlog() {
     const fetchBlogs = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://ahpbca-api.webonly.io/api/blogs');
+            const response = await fetch('https://localhost:5000/api/blogs');
             if (response.ok) {
                 const data = await response.json();
 
@@ -142,7 +142,7 @@ function AdminBlog() {
 
 
 
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/blogs/${blogId}`, {
+            const response = await fetch(`https://localhost:5000/api/blogs/${blogId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -219,17 +219,39 @@ function AdminBlog() {
     };
 
     // Handle image browse
-    const handleImageBrowse = () => {
+    const handleImageBrowse = async () => {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = (e) => {
+        fileInput.onchange = async (e) => {
             const file = e.target.files[0];
             if (file) {
-                setBlogData(prev => ({ ...prev, image: file.name }));
-                showAlert('success', 'Image Selected!', `Image "${file.name}" selected. Don't forget to save changes!`);
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/blog', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            const imagePathWithTimestamp = `${result.filePath}?t=${Date.now()}`;
+                            setBlogData(prev => ({ ...prev, image: imagePathWithTimestamp }));
+                            showAlert('success', 'Image Uploaded!', `Image "${file.name}" uploaded successfully!`);
+                        } else {
+                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload image.');
+                        }
+                    } else {
+                        showAlert('error', 'Upload Failed!', 'Failed to upload image to server.');
+                    }
+                } catch (error) {
+                    showAlert('error', 'Upload Failed!', 'Failed to upload image. Please try again.');
+                }
             }
         };
 
@@ -263,13 +285,33 @@ function AdminBlog() {
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = (e) => {
+        fileInput.onchange = async (e) => {
             const file = e.target.files[0];
             if (file) {
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
 
-                handleInlineInputChange(blogId, 'image', file.name);
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/blog', {
+                        method: 'POST',
+                        body: formData
+                    });
 
-                showAlert('success', 'Image Selected!', `Image "${file.name}" selected. Don't forget to save changes!`);
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            const imagePathWithTimestamp = `${result.filePath}?t=${Date.now()}`;
+                            handleInlineInputChange(blogId, 'image', imagePathWithTimestamp);
+                            showAlert('success', 'Image Uploaded!', `Image "${file.name}" uploaded successfully!`);
+                        } else {
+                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload image.');
+                        }
+                    } else {
+                        showAlert('error', 'Upload Failed!', 'Failed to upload image to server.');
+                    }
+                } catch (error) {
+                    showAlert('error', 'Upload Failed!', 'Failed to upload image. Please try again.');
+                }
             }
         };
 
@@ -331,7 +373,7 @@ function AdminBlog() {
 
 
 
-            const response = await fetch('https://ahpbca-api.webonly.io/api/blogs', {
+            const response = await fetch('https://localhost:5000/api/blogs', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -368,7 +410,7 @@ function AdminBlog() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://ahpbca-api.webonly.io/api/blogs/${blogId}`, {
+                    const response = await fetch(`https://localhost:5000/api/blogs/${blogId}`, {
                         method: 'DELETE',
                     });
 
@@ -556,16 +598,17 @@ function AdminBlog() {
                                             <div className="image-placeholder">
                                                 {currentData.image ? (
                                                     <img
-                                                        src={getImagePath(currentData.image)}
+                                                        src={getContextualImagePath(currentData.image, 'admin')}
                                                         alt="Blog image"
                                                         className="current-image"
+                                                        key={currentData.image}
                                                         onError={(e) => {
                                                             e.target.style.display = 'none';
                                                         }}
                                                     />
                                                 ) : (
                                                     <div className="image-placeholder-text">
-                                                        No image (API: {currentData.image || 'null'})
+                                                        No image
                                                     </div>
                                                 )}
 
@@ -777,16 +820,17 @@ function AdminBlog() {
                                         <div className="admin-blog-image-placeholder">
                                             {blogData.image ? (
                                                 <img
-                                                    src={getImagePath(blogData.image)}
+                                                    src={getContextualImagePath(blogData.image, 'admin')}
                                                     alt="Blog image"
                                                     className="admin-blog-current-image"
+                                                    key={blogData.image}
                                                     onError={(e) => {
                                                         e.target.style.display = 'none';
                                                     }}
                                                 />
                                             ) : (
                                                 <div className="admin-blog-image-placeholder-text">
-                                                    No image (Form: {blogData.image || 'null'})
+                                                    No image
                                                 </div>
                                             )}
 

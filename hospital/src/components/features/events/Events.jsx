@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getContextualImagePath } from '../../../utils/imageUtils';
 const searchIcon = '/assets/search-icon.png';
 const cardIcon = '/assets/card-icon.png';
 const eventImg = '/assets/event-img.png';
@@ -92,14 +93,6 @@ const Events = () => {
     // Get days in month for display month
     const daysInMonth = new Date(displayYear, displayMonth + 1, 0).getDate();
 
-    // Helper function to get correct image path
-    const getImagePath = (imageName) => {
-        if (!imageName) return '';
-        if (imageName === 'event-img.png') return '/assets/event-img.png';
-        if (imageName.startsWith('/assets/')) return imageName;
-        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
-        return `/assets/${imageName}`;
-    };
 
     // Get unique regions from events
     const uniqueRegions = [...new Set(events.map(event => event.region).filter(region => region))].sort();
@@ -136,8 +129,8 @@ const Events = () => {
             try {
                 setLoading(true);
                 const [eventsResponse, mainEventsResponse] = await Promise.all([
-                    fetch('https://ahpbca-api.webonly.io/api/events'),
-                    fetch('https://ahpbca-api.webonly.io/api/events/featured')
+                    fetch('https://localhost:5000/api/events'),
+                    fetch('https://localhost:5000/api/events/featured')
                 ]);
 
                 if (!eventsResponse.ok || !mainEventsResponse.ok) {
@@ -649,7 +642,7 @@ const Events = () => {
                                                     <span className="event-month">{month}</span>
                                                     <span className="event-venue">{event.venue}</span>
                                                 </div>
-                                                <img src={getImagePath(event.mainImage)} alt="Event" className="event-image" />
+                                                <img src={getContextualImagePath(event.mainImage, 'admin')} alt="Event" className="event-image" />
                                                 <img
                                                     src={cardIcon}
                                                     alt="Card Icon"

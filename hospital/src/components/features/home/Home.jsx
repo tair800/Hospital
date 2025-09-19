@@ -10,6 +10,7 @@ import InfoCard from '../../ui/InfoCard';
 import EmployeeSlider from '../employee/EmployeeSlider';
 import LogoCarousel from '../../ui/LogoCarousel';
 import { RequestModal } from '../../ui';
+import { getContextualImagePath } from '../../../utils/imageUtils';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -37,7 +38,7 @@ const Home = () => {
     useEffect(() => {
         const fetchHomeData = async () => {
             try {
-                const response = await fetch('https://ahpbca-api.webonly.io/api/HomeSection/first');
+                const response = await fetch('https://localhost:5000/api/HomeSection/first');
                 if (response.ok) {
                     const data = await response.json();
                     setHomeData({
@@ -63,7 +64,7 @@ const Home = () => {
         const fetchEvents = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('https://ahpbca-api.webonly.io/api/events');
+                const response = await fetch('https://localhost:5000/api/events');
                 if (!response.ok) {
                     throw new Error('Failed to fetch events');
                 }
@@ -105,12 +106,11 @@ const Home = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const response = await fetch('https://ahpbca-api.webonly.io/api/employees');
+                const response = await fetch('https://localhost:5000/api/employees');
                 if (!response.ok) {
                     throw new Error('Failed to fetch employees');
                 }
                 const data = await response.json();
-                console.log('Fetched employees:', data);
                 // Fetch all employees - let the slider handle pagination
                 setEmployees(data);
             } catch (err) {
@@ -196,14 +196,6 @@ const Home = () => {
         return `${price} ${currency}`;
     };
 
-    // Helper function to get correct image path
-    const getImagePath = (imageName) => {
-        if (!imageName) return '';
-        if (imageName === 'event-img.png') return '/assets/event-img.png';
-        if (imageName.startsWith('/assets/')) return imageName;
-        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
-        return `/assets/${imageName}`;
-    };
 
     // Slider navigation functions
     const nextSlide = () => {
@@ -316,7 +308,7 @@ const Home = () => {
                                             <div className="home-hero-card-right-section">
                                                 <div className="home-hero-event-image-container">
                                                     <img
-                                                        src={getImagePath(event.detailImageMain)}
+                                                        src={getContextualImagePath(event.detailImageMain, 'admin')}
                                                         alt="Event Main Image"
                                                         className="home-hero-event-image"
                                                     />
@@ -418,7 +410,7 @@ const Home = () => {
                         <div className="section-2-image">
                             {homeData.section2Image && (
                                 <img
-                                    src={`/assets/${homeData.section2Image}`}
+                                    src={getContextualImagePath(homeData.section2Image, 'admin')}
                                     alt="Hospital Services"
                                     className="section-2-main-image"
                                 />
@@ -438,7 +430,7 @@ const Home = () => {
                         <div className="section-3-image">
                             {homeData.section3Image && (
                                 <img
-                                    src={`/assets/${homeData.section3Image}`}
+                                    src={getContextualImagePath(homeData.section3Image, 'admin')}
                                     alt="Hospital Services"
                                     className="section-3-main-image"
                                 />
@@ -496,7 +488,7 @@ const Home = () => {
                                     className={`info-card-slide ${index === 0 ? 'active' : ''}`}
                                 >
                                     <InfoCard
-                                        imageSrc={getImagePath(event.mainImage)}
+                                        imageSrc={getContextualImagePath(event.mainImage, 'admin')}
                                         title={event.title}
                                         description={truncatedDescription}
                                         date={day.toString()}
@@ -608,7 +600,7 @@ const Home = () => {
                                         className="home-event-shadow"
                                     />
                                     <img
-                                        src={getImagePath(event.mainImage)}
+                                        src={getContextualImagePath(event.mainImage, 'admin')}
                                         alt="Event Image"
                                         className="home-event-image"
                                     />
@@ -651,7 +643,6 @@ const Home = () => {
                 isOpen={showRequestModal}
                 onClose={() => setShowRequestModal(false)}
                 onSuccess={() => {
-                    console.log('Request submitted successfully');
                 }}
             />
         </div>

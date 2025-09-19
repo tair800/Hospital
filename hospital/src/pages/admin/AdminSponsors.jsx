@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
-import { getImagePath } from '../../utils/imageUtils'
+import { getContextualImagePath } from '../../utils/imageUtils'
 const adminDeleteIcon = '/assets/admin-delete.png'
 const adminBrowseIcon = '/assets/admin-browse.png'
 import Pagination from '../../components/ui/Pagination'
@@ -62,7 +62,7 @@ function AdminSponsors() {
     const fetchLogos = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://ahpbca-api.webonly.io/api/logos');
+            const response = await fetch('https://localhost:5000/api/logos');
             if (response.ok) {
                 const data = await response.json();
 
@@ -111,7 +111,7 @@ function AdminSponsors() {
 
 
 
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/logos/${logoId}`, {
+            const response = await fetch(`https://localhost:5000/api/logos/${logoId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -157,17 +157,41 @@ function AdminSponsors() {
     };
 
     // Handle image browse
-    const handleImageBrowse = (field) => {
+    const handleImageBrowse = async (field) => {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = (e) => {
+        fileInput.onchange = async (e) => {
             const file = e.target.files[0];
             if (file) {
-                setLogoData(prev => ({ ...prev, [field]: file.name }));
-                showAlert('success', 'Image Selected!', `Image "${file.name}" selected for ${field}. Don't forget to save changes!`);
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/logo', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            // Add timestamp to force image reload
+                            const imagePathWithTimestamp = `${result.filePath}?t=${Date.now()}`;
+                            setLogoData(prev => ({ ...prev, [field]: imagePathWithTimestamp }));
+                            showAlert('success', 'Image Uploaded!', `Image "${file.name}" uploaded successfully!`);
+                        } else {
+                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload image.');
+                        }
+                    } else {
+                        showAlert('error', 'Upload Failed!', 'Failed to upload image to server.');
+                    }
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    showAlert('error', 'Upload Failed!', 'Failed to upload image. Please try again.');
+                }
             }
         };
 
@@ -201,11 +225,35 @@ function AdminSponsors() {
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = (e) => {
+        fileInput.onchange = async (e) => {
             const file = e.target.files[0];
             if (file) {
-                handleInlineInputChange(logoId, field, file.name);
-                showAlert('success', 'Image Selected!', `Image "${file.name}" selected for ${field}. Don't forget to save changes!`);
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/logo', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            // Add timestamp to force image reload
+                            const imagePathWithTimestamp = `${result.filePath}?t=${Date.now()}`;
+                            handleInlineInputChange(logoId, field, imagePathWithTimestamp);
+                            showAlert('success', 'Image Uploaded!', `Image "${file.name}" uploaded successfully!`);
+                        } else {
+                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload image.');
+                        }
+                    } else {
+                        showAlert('error', 'Upload Failed!', 'Failed to upload image to server.');
+                    }
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    showAlert('error', 'Upload Failed!', 'Failed to upload image. Please try again.');
+                }
             }
         };
 
@@ -245,7 +293,7 @@ function AdminSponsors() {
 
 
 
-            const response = await fetch('https://ahpbca-api.webonly.io/api/logos', {
+            const response = await fetch('https://localhost:5000/api/logos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -285,7 +333,7 @@ function AdminSponsors() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://ahpbca-api.webonly.io/api/logos/${logoId}`, {
+                    const response = await fetch(`https://localhost:5000/api/logos/${logoId}`, {
                         method: 'DELETE',
                     });
 
@@ -374,9 +422,10 @@ function AdminSponsors() {
                                                 <div className="admin-sponsors-image-placeholder">
                                                     {currentData.image ? (
                                                         <img
-                                                            src={getImagePath(currentData.image)}
+                                                            src={getContextualImagePath(currentData.image, 'admin')}
                                                             alt="Logo image"
                                                             className="admin-sponsors-current-image"
+                                                            key={currentData.image}
                                                         />
                                                     ) : (
                                                         <div className="admin-sponsors-image-placeholder-text">No logo image</div>
@@ -492,9 +541,10 @@ function AdminSponsors() {
                                             <div className="admin-sponsors-image-placeholder">
                                                 {logoData.image ? (
                                                     <img
-                                                        src={getImagePath(logoData.image)}
+                                                        src={getContextualImagePath(logoData.image, 'admin')}
                                                         alt="Logo image"
                                                         className="admin-sponsors-current-image"
+                                                        key={logoData.image}
                                                     />
                                                 ) : (
                                                     <div className="admin-sponsors-image-placeholder-text">No logo image</div>

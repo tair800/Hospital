@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { getContextualImagePath } from '../../../utils/imageUtils';
 import './Gallery.css';
 import LogoCarousel from '../../ui/LogoCarousel';
 
@@ -16,7 +17,7 @@ const Gallery = () => {
         const fetchGalleryData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('https://ahpbca-api.webonly.io/api/gallery');
+                const response = await fetch('https://localhost:5000/api/gallery');
                 if (!response.ok) {
                     throw new Error('Failed to fetch gallery data');
                 }
@@ -31,19 +32,13 @@ const Gallery = () => {
         fetchGalleryData();
     }, []);
 
-    const getImagePath = (imageName) => {
-        if (!imageName) return '';
-        if (imageName.startsWith('/assets/')) return imageName;
-        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
-        return `/assets/${imageName}`;
-    };
 
     const baseCards = useMemo(() => {
         const color = '#00e1ff';
         return galleryData.map((img) => ({
             id: img.id,
             title: img.title,
-            src: getImagePath(img.image),
+            src: getContextualImagePath(img.image, 'admin'),
             color,
             glowDuration: 3 + Math.random() * 4,
             glowDelay: Math.random() * -5

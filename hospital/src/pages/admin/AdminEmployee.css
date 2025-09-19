@@ -5,6 +5,27 @@
     min-height: 100vh;
 }
 
+/* Unsaved changes indicator */
+.admin-employee-card.has-unsaved-changes {
+    border: 2px solid #ff9800;
+    box-shadow: 0 0 10px rgba(255, 152, 0, 0.3);
+    position: relative;
+}
+
+.admin-employee-card.has-unsaved-changes::before {
+    content: "Unsaved Changes";
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: #ff9800;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 10;
+}
+
 .admin-employee-container {
     max-width: 1000px;
     margin: 2rem 0 2rem 2rem;

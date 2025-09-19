@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HospitalAPI.Data;
 using HospitalAPI.Models;
+using HospitalAPI.Services;
 
 namespace HospitalAPI.Controllers
 {
@@ -23,6 +24,12 @@ namespace HospitalAPI.Controllers
             var carouselItems = await _context.AboutCarousel
                 .OrderBy(c => c.CreatedAt)
                 .ToListAsync();
+
+            // Format image paths for frontend
+            foreach (var item in carouselItems)
+            {
+                item.Image = ImagePathService.FormatContextualImagePath(item.Image, "admin");
+            }
 
             return Ok(carouselItems);
         }

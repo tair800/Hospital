@@ -1,5 +1,5 @@
 // Base API configuration
-const API_BASE_URL = 'https://ahpbca-api.webonly.io/api'
+const API_BASE_URL = 'https://localhost:5000/api'
 
 // Generic API request function
 export const apiRequest = async (endpoint, options = {}) => {

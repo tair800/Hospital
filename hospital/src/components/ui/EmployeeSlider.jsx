@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getContextualImagePath } from '../../utils/imageUtils';
 import employeeBg from '../../assets/employee-bg.png';
 import iconNext from '../../assets/icon-next.svg';
 import iconPrev from '../../assets/icon-prev.svg';
@@ -24,7 +25,7 @@ const EmployeeSlider = ({ eventId = 1 }) => {
                 setLoading(true);
 
                 // Fetch event-specific employees from API
-                const employeeResponse = await fetch(`https://ahpbca-api.webonly.io/api/eventemployees/event/${eventId}`);
+                const employeeResponse = await fetch(`https://localhost:5000/api/eventemployees/event/${eventId}`);
                 if (!employeeResponse.ok) {
                     throw new Error('Failed to fetch event employees');
                 }
@@ -32,7 +33,7 @@ const EmployeeSlider = ({ eventId = 1 }) => {
                 setEmployees(employeeData);
 
                 // Fetch speakers for the specific event
-                const speakerResponse = await fetch(`https://ahpbca-api.webonly.io/api/eventspeakers/event/${eventId}`);
+                const speakerResponse = await fetch(`https://localhost:5000/api/eventspeakers/event/${eventId}`);
                 let speakerData = [];
                 if (speakerResponse.ok) {
                     speakerData = await speakerResponse.json();
@@ -133,9 +134,10 @@ const EmployeeSlider = ({ eventId = 1 }) => {
                                 className="employee-slider-bg-image"
                             />
                             <img
-                                src={item.image ? (item.image.startsWith('/assets/') ? item.image : item.image.startsWith('/src/assets/') ? item.image.replace('/src/assets/', '/assets/') : `/assets/${item.image}`) : "/assets/employee1.png"}
+                                src={item.image ? getContextualImagePath(item.image, 'admin') : "/assets/employee1.png"}
                                 alt={item.type === 'speaker' ? 'Speaker' : 'Employee'}
                                 className="employee-slider-photo"
+                                key={item.image}
                             />
                             <div className="employee-slider-fullname">
                                 {item.type === 'speaker' ? item.name : item.fullname}

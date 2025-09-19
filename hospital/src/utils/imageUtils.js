@@ -91,6 +91,28 @@ export const isLocalAsset = (imageName) => {
 };
 
 /**
+ * Check if an image path is an uploaded file
+ * @param {string} imageName - The image name to check
+ * @returns {boolean} - True if it's an uploaded file
+ */
+export const isUploadedFile = (imageName) => {
+    if (!imageName) return false;
+
+    // Check for common upload file patterns
+    const uploadPatterns = [
+        'about_',
+        'employee_',
+        'home_',
+        'event_',
+        'about_carousel_',
+        'gallery_',
+        'blog_'
+    ];
+
+    return uploadPatterns.some(pattern => imageName.startsWith(pattern));
+};
+
+/**
  * Get the correct image path based on context
  * @param {string} imageName - The image name from the API
  * @param {string} context - The context: 'admin', 'gallery', 'blog', 'employee', 'event'
@@ -108,9 +130,18 @@ export const getContextualImagePath = (imageName, context = 'admin') => {
         return imageName;
     }
 
-    // Check if it's a local asset
-    if (isLocalAsset(imageName)) {
+    // Handle paths with query parameters (like timestamps)
+    const basePath = imageName.split('?')[0];
+    const queryString = imageName.includes('?') ? imageName.substring(imageName.indexOf('?')) : '';
+
+    // Check if it's a local asset (using base path without query params)
+    if (isLocalAsset(basePath)) {
         return `/assets/${imageName}`;
+    }
+
+    // Check if it's an uploaded file (using base path without query params)
+    if (isUploadedFile(basePath)) {
+        return `/uploads/${imageName}`;
     }
 
     // For different contexts, use appropriate paths
@@ -119,11 +150,13 @@ export const getContextualImagePath = (imageName, context = 'admin') => {
         case 'blog':
         case 'employee':
         case 'event':
-            // These might be uploads or local assets
-            return imageName.includes('upload') ? `/uploads/${imageName}` : `/assets/${imageName}`;
         case 'admin':
         default:
-            // Default to local assets for admin
+            // Check if it's an upload path first (contains uploads/ or starts with uploads/)
+            if (basePath.startsWith('uploads/') || basePath.includes('uploads/')) {
+                return `/${imageName}`;
+            }
+            // Default to local assets
             return `/assets/${imageName}`;
     }
 };

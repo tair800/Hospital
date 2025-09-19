@@ -30,6 +30,7 @@ import AdminSponsors from './pages/admin/AdminSponsors'
 import AdminGallery from './pages/admin/AdminGallery'
 import AdminEmployee from './pages/admin/AdminEmployee'
 import AdminRequests from './pages/admin/AdminRequests'
+import AdminMail from './pages/admin/AdminMail'
 import AdminLayout from './pages/admin/AdminLayout'
 import AdminLogin from './pages/admin/AdminLogin'
 
@@ -115,6 +116,7 @@ function App() {
             <Route path="gallery" element={<AdminGallery />} />
             <Route path="employee" element={<AdminEmployee />} />
             <Route path="requests" element={<AdminRequests />} />
+            <Route path="mail" element={<AdminMail />} />
           </Route>
           <Route path="/blog" element={
             <>
