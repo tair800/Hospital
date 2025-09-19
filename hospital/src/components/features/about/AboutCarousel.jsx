@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AboutCarousel.css';
+import { getContextualImagePath } from '../../../utils/imageUtils';
 
 function AboutCarousel() {
     const [carouselData, setCarouselData] = useState([]);
@@ -7,20 +8,13 @@ function AboutCarousel() {
     const [loading, setLoading] = useState(true);
     const [imagesPerScreen, setImagesPerScreen] = useState(5);
 
-    // Helper function to get correct image path
-    const getImagePath = (imageName) => {
-        if (!imageName) return '';
-        if (imageName.startsWith('/assets/')) return imageName;
-        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
-        return `/assets/${imageName}`;
-    };
 
     // Fetch carousel data from API
     useEffect(() => {
         const fetchCarouselData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('https://ahpbca-api.webonly.io/api/aboutcarousel');
+                const response = await fetch('https://localhost:5000/api/aboutcarousel');
                 if (!response.ok) {
                     throw new Error('Failed to fetch carousel data');
                 }
@@ -109,7 +103,7 @@ function AboutCarousel() {
                     {carouselData.map((item, index) => (
                         <div key={item.id} className="about-carousel-slide">
                             <img
-                                src={getImagePath(item.image)}
+                                src={getContextualImagePath(item.image, 'admin')}
                                 alt={item.name}
                                 className="about-carousel-image"
                             />

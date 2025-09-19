@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { getContextualImagePath } from '../../../utils/imageUtils';
 import './EmployeeDetail.css';
 import iconNext from '../../../assets/icon-next.svg';
 import iconPrev from '../../../assets/icon-prev.svg';
@@ -15,13 +16,6 @@ const EmployeeDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Helper function to get correct image path
-    const getImagePath = (imageName) => {
-        if (!imageName) return '';
-        if (imageName.startsWith('/assets/')) return imageName;
-        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
-        return `/assets/${imageName}`;
-    };
 
     // Carousel state
     const [currentPage, setCurrentPage] = useState(0);
@@ -35,7 +29,7 @@ const EmployeeDetail = () => {
         const fetchEmployee = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`https://ahpbca-api.webonly.io/api/employees/${employeeId}`);
+                const response = await fetch(`https://localhost:5000/api/employees/${employeeId}`);
                 if (!response.ok) {
                     throw new Error('Employee not found');
                 }
@@ -221,7 +215,7 @@ const EmployeeDetail = () => {
                     {/* Right Side - Employee Image */}
                     <div className="employee-detail-right">
                         <img
-                            src={getImagePath(employee.image) || "/assets/employee1.png"}
+                            src={getContextualImagePath(employee.image, 'admin') || "/assets/employee1.png"}
                             alt={employee.fullname}
                             className="employee-detail-image"
                         />
@@ -291,12 +285,12 @@ const EmployeeDetail = () => {
                     <div className={`cards-container ${isSliding ? 'sliding' : ''} ${slideDirection}`}>
                         {getCurrentPageCards().map((card, index) => (
                             <div key={card.id} className={`card card-${index + 1}`} onClick={() => {
-                                const src = card.image && (card.image.startsWith('/assets/') ? card.image : card.image.startsWith('/src/assets/') ? card.image.replace('/src/assets/', '/assets/') : `/assets/${card.image}`);
+                                const src = card.image && getContextualImagePath(card.image, 'admin');
                                 setActiveImageSrc(src);
                                 setShowImageModal(true);
                             }}>
                                 <div className="inner-card"></div>
-                                <img src={card.image.startsWith('/assets/') ? card.image : card.image.startsWith('/src/assets/') ? card.image.replace('/src/assets/', '/assets/') : `/assets/${card.image}`} alt="Employee Certificate" className="card-image" />
+                                <img src={getContextualImagePath(card.image, 'admin')} alt="Employee Certificate" className="card-image" />
                             </div>
                         ))}
                     </div>

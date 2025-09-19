@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
+import { getContextualImagePath } from '../../utils/imageUtils';
 const adminDeleteIcon = '/assets/admin-delete.png';
 const adminBrowseIcon = '/assets/admin-browse.png';
 import './AdminAbout.css';
@@ -9,13 +10,6 @@ function AdminAbout() {
     const [carouselData, setCarouselData] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Helper function to get correct image path
-    const getImagePath = (imageName) => {
-        if (!imageName) return '';
-        if (imageName.startsWith('/assets/')) return imageName;
-        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
-        return `/assets/${imageName}`;
-    };
 
     // Configuration for form fields
     const formConfig = {
@@ -38,7 +32,7 @@ function AdminAbout() {
     const fetchAboutData = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://ahpbca-api.webonly.io/api/about');
+            const response = await fetch('https://localhost:5000/api/about');
             if (response.ok) {
                 const data = await response.json();
                 if (data.length > 0) setAboutData(data[0]);
@@ -52,7 +46,7 @@ function AdminAbout() {
 
     const fetchCarouselData = async () => {
         try {
-            const response = await fetch('https://ahpbca-api.webonly.io/api/aboutcarousel');
+            const response = await fetch('https://localhost:5000/api/aboutcarousel');
             if (response.ok) {
                 const data = await response.json();
                 setCarouselData(data);
@@ -75,7 +69,7 @@ function AdminAbout() {
         e.preventDefault();
         try {
             setLoading(true);
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/about/${aboutData.id}`, {
+            const response = await fetch(`https://localhost:5000/api/about/${aboutData.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(aboutData),
@@ -110,17 +104,41 @@ function AdminAbout() {
         }
     };
 
-    const handleImageBrowse = () => {
+    const handleImageBrowse = async () => {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = (e) => {
+        fileInput.onchange = async (e) => {
             const file = e.target.files[0];
             if (file) {
-                setAboutData(prev => ({ ...prev, img: file.name }));
-                showAlert('success', 'Image Selected!', `Image "${file.name}" has been selected. Don't forget to save changes!`);
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/about', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            // Add timestamp to force image reload
+                            const imagePathWithTimestamp = `${result.filePath}?t=${Date.now()}`;
+                            setAboutData(prev => ({ ...prev, img: imagePathWithTimestamp }));
+                            showAlert('success', 'Image Uploaded!', `Image "${file.name}" uploaded successfully!`);
+                        } else {
+                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload image.');
+                        }
+                    } else {
+                        showAlert('error', 'Upload Failed!', 'Failed to upload image to server.');
+                    }
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    showAlert('error', 'Upload Failed!', 'Failed to upload image. Please try again.');
+                }
             }
         };
 
@@ -157,12 +175,33 @@ function AdminAbout() {
 
     const addCarouselItem = async (itemData) => {
         try {
+            // First upload the image
+            const formData = new FormData();
+            formData.append('file', itemData.imageFile);
+
+            const uploadResponse = await fetch('https://localhost:5000/api/ImageUpload/about/carousel', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!uploadResponse.ok) {
+                showAlert('error', 'Upload Failed!', 'Failed to upload image.');
+                return;
+            }
+
+            const uploadResult = await uploadResponse.json();
+            if (!uploadResult.success) {
+                showAlert('error', 'Upload Failed!', uploadResult.message || 'Failed to upload image.');
+                return;
+            }
+
+            // Then create the carousel item with the uploaded image path
             const carouselData = {
                 name: itemData.name,
-                image: `/src/assets/${itemData.imageFile.name}`
+                image: uploadResult.filePath
             };
 
-            const response = await fetch('https://ahpbca-api.webonly.io/api/aboutcarousel', {
+            const response = await fetch('https://localhost:5000/api/aboutcarousel', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(carouselData),
@@ -175,6 +214,7 @@ function AdminAbout() {
                 showAlert('error', 'Error!', 'Failed to add carousel item.');
             }
         } catch (error) {
+            console.error('Add carousel item error:', error);
             showAlert('error', 'Error!', 'Failed to add carousel item.');
         }
     };
@@ -212,7 +252,7 @@ function AdminAbout() {
                 carouselData.image = `/src/assets/${itemData.imageFile.name}`;
             }
 
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/aboutcarousel/${id}`, {
+            const response = await fetch(`https://localhost:5000/api/aboutcarousel/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(carouselData),
@@ -242,7 +282,7 @@ function AdminAbout() {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`https://ahpbca-api.webonly.io/api/aboutcarousel/${id}`, { method: 'DELETE' });
+                const response = await fetch(`https://localhost:5000/api/aboutcarousel/${id}`, { method: 'DELETE' });
                 if (response.ok) {
                     showAlert('success', 'Deleted!', 'Carousel item has been deleted.');
                     fetchCarouselData();
@@ -296,9 +336,10 @@ function AdminAbout() {
             <div className="placeholder-number">#{index + 1}</div>
             <div className="carousel-image-container">
                 <img
-                    src={getImagePath(item.image)}
+                    src={getContextualImagePath(item.image, 'admin')}
                     alt={item.name}
                     className="carousel-image"
+                    key={item.image}
                     onError={(e) => {
                         e.target.style.display = 'none';
                         e.target.nextSibling.style.display = 'block';
@@ -355,9 +396,10 @@ function AdminAbout() {
                             <div className="admin-about-image-placeholder">
                                 {aboutData.img ? (
                                     <img
-                                        src={`/assets/${aboutData.img}`}
+                                        src={getContextualImagePath(aboutData.img, 'admin')}
                                         alt="About page image"
                                         className="admin-about-current-image"
+                                        key={aboutData.img}
                                     />
                                 ) : (
                                     <div className="admin-about-image-placeholder-text">No image uploaded</div>

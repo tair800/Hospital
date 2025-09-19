@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import iconNext from '../../../assets/icon-next.svg';
+import { getContextualImagePath } from '../../../utils/imageUtils';
 
 const EmployeeSlider = ({ employees }) => {
     const [currentPage, setCurrentPage] = useState(0);
@@ -23,13 +24,6 @@ const EmployeeSlider = ({ employees }) => {
 
     const totalPages = Math.ceil(employees.length / cardsPerPage);
 
-    // Debug: Log the slider state
-    console.log('EmployeeSlider Debug:', {
-        totalEmployees: employees.length,
-        totalPages,
-        currentPage,
-        cardsPerPage
-    });
 
     // Use all employees for the slider
     const displayEmployees = employees;
@@ -80,9 +74,10 @@ const EmployeeSlider = ({ employees }) => {
                                             className="home-employee-bg-image"
                                         />
                                         <img
-                                            src={employee.image ? (employee.image.startsWith('/assets/') ? employee.image : employee.image.startsWith('/src/assets/') ? employee.image.replace('/src/assets/', '/assets/') : `/assets/${employee.image}`) : "/assets/employee1.png"}
+                                            src={employee.image ? getContextualImagePath(employee.image, 'admin') : "/assets/employee1.png"}
                                             alt="Employee"
                                             className="home-employee-photo"
+                                            key={employee.image}
                                         />
                                         <div className="home-employee-fullname">
                                             {employee.fullname}

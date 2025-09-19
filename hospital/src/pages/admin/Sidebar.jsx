@@ -12,6 +12,7 @@ const adminContact = '/assets/admin-contact.png'
 const adminBlog = '/assets/admin-blog.png'
 const adminGallery = '/assets/admin-gallery.png'
 const adminRequests = '/assets/admin-contact.png'
+const adminMail = '/assets/admin-contact.png'
 
 function Sidebar() {
     const location = useLocation();
@@ -87,6 +88,12 @@ function Sidebar() {
                         <Link to="/admin/requests" className={`admin-nav-link ${location.pathname === '/admin/requests' ? 'active' : ''}`}>
                             <img src={adminRequests} alt="Requests" className="admin-nav-icon" />
                             Requests
+                        </Link>
+                    </li>
+                    <li className="admin-nav-item">
+                        <Link to="/admin/mail" className={`admin-nav-link ${location.pathname === '/admin/mail' ? 'active' : ''}`}>
+                            <img src={adminMail} alt="Mail" className="admin-nav-icon" />
+                            Mail
                         </Link>
                     </li>
                 </ul>

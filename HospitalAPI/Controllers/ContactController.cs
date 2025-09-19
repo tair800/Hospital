@@ -95,6 +95,7 @@ namespace HospitalAPI.Controllers
             return CreatedAtAction("GetContact", new { id = contact.Id }, contact);
         }
 
+
         // DELETE: api/Contact/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteContact(int id)

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import { getImagePath } from '../../utils/imageUtils'
+import { getContextualImagePath } from '../../utils/imageUtils'
 const adminDeleteIcon = '/assets/admin-delete.png'
 const adminBrowseIcon = '/assets/admin-browse.png'
 import Pagination from '../../components/ui/Pagination'
@@ -125,7 +125,7 @@ function AdminEvents() {
     const fetchEvents = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://ahpbca-api.webonly.io/api/events');
+            const response = await fetch('https://localhost:5000/api/events');
             if (response.ok) {
                 const data = await response.json();
 
@@ -158,9 +158,9 @@ function AdminEvents() {
             // Create promises for all related data
             const promises = events.map(async (event) => {
                 const [speakersResponse, timelineResponse, employeesResponse] = await Promise.all([
-                    fetch(`https://ahpbca-api.webonly.io/api/eventspeakers/event/${event.id}`),
-                    fetch(`https://ahpbca-api.webonly.io/api/eventtimeline/event/${event.id}`),
-                    fetch(`https://ahpbca-api.webonly.io/api/eventemployees/event/${event.id}`)
+                    fetch(`https://localhost:5000/api/eventspeakers/event/${event.id}`),
+                    fetch(`https://localhost:5000/api/eventtimeline/event/${event.id}`),
+                    fetch(`https://localhost:5000/api/eventemployees/event/${event.id}`)
                 ]);
 
                 const speakersData = speakersResponse.ok ? await speakersResponse.json() : [];
@@ -200,7 +200,7 @@ function AdminEvents() {
     // Fetch all employees
     const fetchAllEmployees = async () => {
         try {
-            const response = await fetch('https://ahpbca-api.webonly.io/api/employees');
+            const response = await fetch('https://localhost:5000/api/employees');
             if (response.ok) {
                 const data = await response.json();
                 setAllEmployees(data);
@@ -213,7 +213,7 @@ function AdminEvents() {
     // Fetch event speakers
     const fetchEventSpeakers = async (eventId) => {
         try {
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventspeakers/event/${eventId}`);
+            const response = await fetch(`https://localhost:5000/api/eventspeakers/event/${eventId}`);
             if (response.ok) {
                 const data = await response.json();
                 setEventSpeakers(prev => ({ ...prev, [eventId]: data }));
@@ -226,7 +226,7 @@ function AdminEvents() {
     // Fetch event timeline
     const fetchEventTimeline = async (eventId) => {
         try {
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventtimeline/event/${eventId}`);
+            const response = await fetch(`https://localhost:5000/api/eventtimeline/event/${eventId}`);
             if (response.ok) {
                 const data = await response.json();
                 setEventTimeline(prev => ({ ...prev, [eventId]: data }));
@@ -239,7 +239,7 @@ function AdminEvents() {
     // Fetch event employees
     const fetchEventEmployees = async (eventId) => {
         try {
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventemployees/event/${eventId}`);
+            const response = await fetch(`https://localhost:5000/api/eventemployees/event/${eventId}`);
             if (response.ok) {
                 const data = await response.json();
                 setEventEmployees(prev => ({ ...prev, [eventId]: data }));
@@ -252,10 +252,37 @@ function AdminEvents() {
     // Add new speaker
     const addSpeaker = async (eventId) => {
         try {
-            const response = await fetch('https://ahpbca-api.webonly.io/api/eventspeakers', {
+            let speakerData = { ...newSpeaker, eventId };
+
+            // If there's an image file, upload it first
+            if (newSpeaker.image && typeof newSpeaker.image === 'object') {
+                const formData = new FormData();
+                formData.append('file', newSpeaker.image);
+
+                const uploadResponse = await fetch('https://localhost:5000/api/ImageUpload/event/speaker', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!uploadResponse.ok) {
+                    showAlert('error', 'Upload Failed!', 'Failed to upload speaker image.');
+                    return;
+                }
+
+                const uploadResult = await uploadResponse.json();
+                if (!uploadResult.success) {
+                    showAlert('error', 'Upload Failed!', uploadResult.message || 'Failed to upload speaker image.');
+                    return;
+                }
+
+                // Add timestamp to force image reload
+                speakerData.image = `${uploadResult.filePath}?t=${Date.now()}`;
+            }
+
+            const response = await fetch('https://localhost:5000/api/eventspeakers', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...newSpeaker, eventId })
+                body: JSON.stringify(speakerData)
             });
 
             if (response.ok) {
@@ -266,6 +293,7 @@ function AdminEvents() {
                 showAlert('error', 'Error!', 'Failed to add speaker.');
             }
         } catch (error) {
+            console.error('Add speaker error:', error);
             showAlert('error', 'Error!', 'Failed to add speaker.');
         }
     };
@@ -292,7 +320,7 @@ function AdminEvents() {
                 return;
             }
 
-            const response = await fetch('https://ahpbca-api.webonly.io/api/eventtimeline', {
+            const response = await fetch('https://localhost:5000/api/eventtimeline', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...newTimelineSlot, eventId })
@@ -319,7 +347,7 @@ function AdminEvents() {
     // Add employee to event
     const addEmployeeToEvent = async (eventId, employeeId) => {
         try {
-            const response = await fetch('https://ahpbca-api.webonly.io/api/eventemployees', {
+            const response = await fetch('https://localhost:5000/api/eventemployees', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ eventId, employeeId })
@@ -339,10 +367,37 @@ function AdminEvents() {
     // Update speaker
     const updateSpeaker = async (speakerId, eventId) => {
         try {
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventspeakers/${speakerId}`, {
+            let speakerData = { ...editingSpeaker };
+
+            // If there's a new image file, upload it first
+            if (editingSpeaker.image && typeof editingSpeaker.image === 'object') {
+                const formData = new FormData();
+                formData.append('file', editingSpeaker.image);
+
+                const uploadResponse = await fetch('https://localhost:5000/api/ImageUpload/event/speaker', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!uploadResponse.ok) {
+                    showAlert('error', 'Upload Failed!', 'Failed to upload speaker image.');
+                    return;
+                }
+
+                const uploadResult = await uploadResponse.json();
+                if (!uploadResult.success) {
+                    showAlert('error', 'Upload Failed!', uploadResult.message || 'Failed to upload speaker image.');
+                    return;
+                }
+
+                // Add timestamp to force image reload
+                speakerData.image = `${uploadResult.filePath}?t=${Date.now()}`;
+            }
+
+            const response = await fetch(`https://localhost:5000/api/eventspeakers/${speakerId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(editingSpeaker)
+                body: JSON.stringify(speakerData)
             });
 
             if (response.ok) {
@@ -354,6 +409,7 @@ function AdminEvents() {
                 showAlert('error', 'Xəta!', 'Speaker yenilənə bilmədi.');
             }
         } catch (error) {
+            console.error('Update speaker error:', error);
             showAlert('error', 'Xəta!', 'Speaker yenilənə bilmədi.');
         }
     };
@@ -361,7 +417,7 @@ function AdminEvents() {
     // Remove speaker
     const removeSpeaker = async (speakerId, eventId) => {
         try {
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventspeakers/${speakerId}`, {
+            const response = await fetch(`https://localhost:5000/api/eventspeakers/${speakerId}`, {
                 method: 'DELETE'
             });
 
@@ -380,7 +436,7 @@ function AdminEvents() {
     const updateTimelineSlot = async (timelineId, eventId) => {
         try {
             // Get fresh timeline data from API
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventtimeline/event/${eventId}`);
+            const response = await fetch(`https://localhost:5000/api/eventtimeline/event/${eventId}`);
             const freshTimelineData = response.ok ? await response.json() : [];
 
             // Only check for time conflicts if the time has actually changed
@@ -412,7 +468,7 @@ function AdminEvents() {
                 return;
             }
 
-            const updateResponse = await fetch(`https://ahpbca-api.webonly.io/api/eventtimeline/${timelineId}`, {
+            const updateResponse = await fetch(`https://localhost:5000/api/eventtimeline/${timelineId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editingTimelineSlot)
@@ -434,7 +490,7 @@ function AdminEvents() {
     // Remove timeline slot
     const removeTimelineSlot = async (timelineId, eventId) => {
         try {
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventtimeline/${timelineId}`, {
+            const response = await fetch(`https://localhost:5000/api/eventtimeline/${timelineId}`, {
                 method: 'DELETE'
             });
 
@@ -452,7 +508,7 @@ function AdminEvents() {
     // Remove employee from event
     const removeEmployeeFromEvent = async (eventEmployeeId, eventId) => {
         try {
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventemployees/${eventEmployeeId}`, {
+            const response = await fetch(`https://localhost:5000/api/eventemployees/${eventEmployeeId}`, {
                 method: 'DELETE'
             });
 
@@ -515,7 +571,7 @@ function AdminEvents() {
 
 
 
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/events/${eventId}`, {
+            const response = await fetch(`https://localhost:5000/api/events/${eventId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -569,17 +625,41 @@ function AdminEvents() {
     };
 
     // Handle image browse
-    const handleImageBrowse = (field) => {
+    const handleImageBrowse = async (field) => {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = (e) => {
+        fileInput.onchange = async (e) => {
             const file = e.target.files[0];
             if (file) {
-                setEventData(prev => ({ ...prev, [field]: file.name }));
-                showAlert('success', 'Image Selected!', `Image "${file.name}" selected for ${field}. Don't forget to save changes!`);
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/event', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            // Add timestamp to force image reload
+                            const imagePathWithTimestamp = `${result.filePath}?t=${Date.now()}`;
+                            setEventData(prev => ({ ...prev, [field]: imagePathWithTimestamp }));
+                            showAlert('success', 'Image Uploaded!', `Image "${file.name}" uploaded successfully!`);
+                        } else {
+                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload image.');
+                        }
+                    } else {
+                        showAlert('error', 'Upload Failed!', 'Failed to upload image to server.');
+                    }
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    showAlert('error', 'Upload Failed!', 'Failed to upload image. Please try again.');
+                }
             }
         };
 
@@ -613,11 +693,35 @@ function AdminEvents() {
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = (e) => {
+        fileInput.onchange = async (e) => {
             const file = e.target.files[0];
             if (file) {
-                handleInlineInputChange(eventId, field, file.name);
-                showAlert('success', 'Image Selected!', `Image "${file.name}" selected for ${field}. Don't forget to save changes!`);
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/event', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            // Add timestamp to force image reload
+                            const imagePathWithTimestamp = `${result.filePath}?t=${Date.now()}`;
+                            handleInlineInputChange(eventId, field, imagePathWithTimestamp);
+                            showAlert('success', 'Image Uploaded!', `Image "${file.name}" uploaded successfully!`);
+                        } else {
+                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload image.');
+                        }
+                    } else {
+                        showAlert('error', 'Upload Failed!', 'Failed to upload image to server.');
+                    }
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    showAlert('error', 'Upload Failed!', 'Failed to upload image. Please try again.');
+                }
             }
         };
 
@@ -676,7 +780,7 @@ function AdminEvents() {
 
 
 
-            const response = await fetch('https://ahpbca-api.webonly.io/api/events', {
+            const response = await fetch('https://localhost:5000/api/events', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -713,7 +817,7 @@ function AdminEvents() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://ahpbca-api.webonly.io/api/events/${eventId}`, {
+                    const response = await fetch(`https://localhost:5000/api/events/${eventId}`, {
                         method: 'DELETE',
                     });
 
@@ -733,7 +837,7 @@ function AdminEvents() {
     // Toggle main status
     const toggleMainStatus = async (eventId) => {
         try {
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/events/${eventId}/toggle-main`, {
+            const response = await fetch(`https://localhost:5000/api/events/${eventId}/toggle-main`, {
                 method: 'PATCH',
             });
 
@@ -1084,9 +1188,10 @@ function AdminEvents() {
                                                 <div className="image-placeholder">
                                                     {currentData.mainImage ? (
                                                         <img
-                                                            src={getImagePath(currentData.mainImage)}
+                                                            src={getContextualImagePath(currentData.mainImage, 'admin')}
                                                             alt="Əsas şəkil"
                                                             className="current-image"
+                                                            key={currentData.mainImage}
                                                         />
                                                     ) : (
                                                         <div className="image-placeholder-text">Əsas şəkil yoxdur</div>
@@ -1120,9 +1225,10 @@ function AdminEvents() {
                                                         <div className="image-placeholder small">
                                                             {currentData.detailImageLeft ? (
                                                                 <img
-                                                                    src={getImagePath(currentData.detailImageLeft)}
+                                                                    src={getContextualImagePath(currentData.detailImageLeft, 'admin')}
                                                                     alt="Sol detal şəkli"
                                                                     className="current-image"
+                                                                    key={currentData.detailImageLeft}
                                                                 />
                                                             ) : (
                                                                 <div className="image-placeholder-text">Şəkil yoxdur</div>
@@ -1153,9 +1259,10 @@ function AdminEvents() {
                                                         <div className="image-placeholder small">
                                                             {currentData.detailImageMain ? (
                                                                 <img
-                                                                    src={getImagePath(currentData.detailImageMain)}
+                                                                    src={getContextualImagePath(currentData.detailImageMain, 'admin')}
                                                                     alt="Əsas detal şəkli"
                                                                     className="current-image"
+                                                                    key={currentData.detailImageMain}
                                                                 />
                                                             ) : (
                                                                 <div className="image-placeholder-text">Şəkil yoxdur</div>
@@ -1186,9 +1293,10 @@ function AdminEvents() {
                                                         <div className="image-placeholder small">
                                                             {currentData.detailImageRight ? (
                                                                 <img
-                                                                    src={getImagePath(currentData.detailImageRight)}
+                                                                    src={getContextualImagePath(currentData.detailImageRight, 'admin')}
                                                                     alt="Right detail image"
                                                                     className="current-image"
+                                                                    key={currentData.detailImageRight}
                                                                 />
                                                             ) : (
                                                                 <div className="image-placeholder-text">No image</div>
@@ -1461,9 +1569,10 @@ function AdminEvents() {
                                             <div className="admin-events-image-placeholder">
                                                 {eventData.mainImage ? (
                                                     <img
-                                                        src={getImagePath(eventData.mainImage)}
+                                                        src={getContextualImagePath(eventData.mainImage, 'admin')}
                                                         alt="Main image"
                                                         className="admin-events-current-image"
+                                                        key={eventData.mainImage}
                                                     />
                                                 ) : (
                                                     <div className="admin-events-image-placeholder-text">No main image</div>
@@ -1491,6 +1600,117 @@ function AdminEvents() {
 
                                         <div className="admin-events-image-info">
                                             *Yüklənən şəkillər 318 x 387 ölçüsündə olmalıdır
+                                        </div>
+
+                                        {/* Detail Images Section */}
+                                        <div className="admin-events-detail-images-section">
+                                            <h4>Detallı Şəkillər</h4>
+                                            <div className="admin-events-detail-images-grid">
+                                                <div className="admin-events-detail-image-item">
+                                                    <label>Sol Şəkil</label>
+                                                    <div className="admin-events-image-placeholder small">
+                                                        {eventData.detailImageLeft ? (
+                                                            <img
+                                                                src={getContextualImagePath(eventData.detailImageLeft, 'admin')}
+                                                                alt="Sol detal şəkli"
+                                                                className="admin-events-current-image"
+                                                                key={eventData.detailImageLeft}
+                                                            />
+                                                        ) : (
+                                                            <div className="admin-events-image-placeholder-text">Şəkil yoxdur</div>
+                                                        )}
+                                                        <div className="admin-events-image-actions">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleImageDelete('detailImageLeft')}
+                                                                className="admin-events-action-btn admin-events-delete-btn small"
+                                                                title="Sol şəkli sil"
+                                                            >
+                                                                <img src={adminDeleteIcon} alt="Delete" className="admin-events-action-icon" />
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleImageBrowse('detailImageLeft')}
+                                                                className="admin-events-action-btn admin-events-refresh-btn small"
+                                                                title="Sol şəkli seç"
+                                                            >
+                                                                <img src={adminBrowseIcon} alt="Browse" className="admin-events-action-icon" />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="admin-events-detail-image-item">
+                                                    <label>Əsas Detal Şəkli</label>
+                                                    <div className="admin-events-image-placeholder small">
+                                                        {eventData.detailImageMain ? (
+                                                            <img
+                                                                src={getContextualImagePath(eventData.detailImageMain, 'admin')}
+                                                                alt="Əsas detal şəkli"
+                                                                className="admin-events-current-image"
+                                                                key={eventData.detailImageMain}
+                                                            />
+                                                        ) : (
+                                                            <div className="admin-events-image-placeholder-text">Şəkil yoxdur</div>
+                                                        )}
+                                                        <div className="admin-events-image-actions">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleImageDelete('detailImageMain')}
+                                                                className="admin-events-action-btn admin-events-delete-btn small"
+                                                                title="Əsas detal şəkli sil"
+                                                            >
+                                                                <img src={adminDeleteIcon} alt="Delete" className="admin-events-action-icon" />
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleImageBrowse('detailImageMain')}
+                                                                className="admin-events-action-btn admin-events-refresh-btn small"
+                                                                title="Əsas detal şəkli seç"
+                                                            >
+                                                                <img src={adminBrowseIcon} alt="Browse" className="admin-events-action-icon" />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="admin-events-detail-image-item">
+                                                    <label>Sağ Şəkil</label>
+                                                    <div className="admin-events-image-placeholder small">
+                                                        {eventData.detailImageRight ? (
+                                                            <img
+                                                                src={getContextualImagePath(eventData.detailImageRight, 'admin')}
+                                                                alt="Sağ detal şəkli"
+                                                                className="admin-events-current-image"
+                                                                key={eventData.detailImageRight}
+                                                            />
+                                                        ) : (
+                                                            <div className="admin-events-image-placeholder-text">Şəkil yoxdur</div>
+                                                        )}
+                                                        <div className="admin-events-image-actions">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleImageDelete('detailImageRight')}
+                                                                className="admin-events-action-btn admin-events-delete-btn small"
+                                                                title="Sağ şəkli sil"
+                                                            >
+                                                                <img src={adminDeleteIcon} alt="Delete" className="admin-events-action-icon" />
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleImageBrowse('detailImageRight')}
+                                                                className="admin-events-action-btn admin-events-refresh-btn small"
+                                                                title="Sağ şəkli seç"
+                                                            >
+                                                                <img src={adminBrowseIcon} alt="Browse" className="admin-events-action-icon" />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="admin-events-image-info">
+                                                *Detal şəkillər 347 x 224 ölçüsündə olmalıdır
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1570,22 +1790,27 @@ function AdminEvents() {
                                                     onChange={(e) => {
                                                         const file = e.target.files[0];
                                                         if (file) {
-                                                            setNewSpeaker(prev => ({ ...prev, image: file.name }));
+                                                            setNewSpeaker(prev => ({ ...prev, image: file }));
                                                         }
                                                     }}
                                                     className="file-input"
                                                     id="speaker-image-upload"
+                                                    key={`new-speaker-${newSpeaker.name || 'default'}`}
                                                 />
                                                 <label htmlFor="speaker-image-upload" className="file-input-label">
                                                     <span className="file-input-icon">📁</span>
                                                     <span className="file-input-text">
-                                                        {newSpeaker.image ? 'Şəkil seçildi' : 'Şəkil faylını seçin'}
+                                                        {newSpeaker.image ? (typeof newSpeaker.image === 'string' ? 'Şəkil seçildi' : newSpeaker.image.name) : 'Şəkil faylını seçin'}
                                                     </span>
                                                 </label>
                                             </div>
                                             {newSpeaker.image && (
                                                 <div className="image-preview">
-                                                    <img src={getImagePath(newSpeaker.image)} alt="Speaker preview" className="preview-image" />
+                                                    <img
+                                                        src={typeof newSpeaker.image === 'string' ? getContextualImagePath(newSpeaker.image, 'admin') : URL.createObjectURL(newSpeaker.image)}
+                                                        alt="Speaker preview"
+                                                        className="preview-image"
+                                                    />
                                                     <button
                                                         type="button"
                                                         className="remove-image-btn"
@@ -1620,7 +1845,7 @@ function AdminEvents() {
                                             <div className="speaker-image-container">
                                                 {speaker.image ? (
                                                     <img
-                                                        src={getImagePath(speaker.image)}
+                                                        src={getContextualImagePath(speaker.image, 'admin')}
                                                         alt={speaker.name}
                                                         className="speaker-thumbnail"
                                                     />
@@ -2086,22 +2311,27 @@ function AdminEvents() {
                                                 onChange={(e) => {
                                                     const file = e.target.files[0];
                                                     if (file) {
-                                                        setEditingSpeaker(prev => ({ ...prev, image: file.name }));
+                                                        setEditingSpeaker(prev => ({ ...prev, image: file }));
                                                     }
                                                 }}
                                                 className="file-input"
                                                 id="edit-speaker-image-upload-modal"
+                                                key={`edit-speaker-${editingSpeaker?.id || 'default'}`}
                                             />
                                             <label htmlFor="edit-speaker-image-upload-modal" className="file-input-label">
                                                 <span className="file-input-icon">📁</span>
                                                 <span className="file-input-text">
-                                                    {editingSpeaker.image ? 'Şəkil seçildi' : 'Şəkil faylını seçin'}
+                                                    {editingSpeaker.image ? (typeof editingSpeaker.image === 'string' ? 'Şəkil seçildi' : editingSpeaker.image.name) : 'Şəkil faylını seçin'}
                                                 </span>
                                             </label>
                                         </div>
                                         {editingSpeaker.image && (
                                             <div className="image-preview">
-                                                <img src={getImagePath(editingSpeaker.image)} alt="Speaker preview" className="preview-image" />
+                                                <img
+                                                    src={typeof editingSpeaker.image === 'string' ? getContextualImagePath(editingSpeaker.image, 'admin') : URL.createObjectURL(editingSpeaker.image)}
+                                                    alt="Speaker preview"
+                                                    className="preview-image"
+                                                />
                                                 <button
                                                     type="button"
                                                     className="remove-image-btn"

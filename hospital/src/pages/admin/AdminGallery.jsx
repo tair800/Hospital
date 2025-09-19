@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
-import { getImagePath } from '../../utils/imageUtils'
+import { getContextualImagePath } from '../../utils/imageUtils'
 const adminDeleteIcon = '/assets/admin-delete.png'
 const adminBrowseIcon = '/assets/admin-browse.png'
 import './AdminGallery.css'
@@ -25,7 +25,7 @@ function AdminGallery() {
     const fetchGalleryData = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://ahpbca-api.webonly.io/api/gallery');
+            const response = await fetch('https://localhost:5000/api/gallery');
             if (response.ok) {
                 const data = await response.json();
 
@@ -51,7 +51,7 @@ function AdminGallery() {
     };
 
     // Import the centralized image utility
-    // getImagePath is now imported from utils/imageUtils
+    // getContextualImagePath is now imported from utils/imageUtils
 
 
 
@@ -76,7 +76,7 @@ function AdminGallery() {
 
 
 
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/gallery/${itemId}`, {
+            const response = await fetch(`https://localhost:5000/api/gallery/${itemId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -119,17 +119,39 @@ function AdminGallery() {
     };
 
     // Handle image browse
-    const handleImageBrowse = (field) => {
+    const handleImageBrowse = async (field) => {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = (e) => {
+        fileInput.onchange = async (e) => {
             const file = e.target.files[0];
             if (file) {
-                setFormData(prev => ({ ...prev, [field]: file.name }));
-                showAlert('success', 'Image Selected!', `Image "${file.name}" selected for ${field}. Don't forget to save changes!`);
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/gallery', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            const imagePathWithTimestamp = `${result.filePath}?t=${Date.now()}`;
+                            setFormData(prev => ({ ...prev, [field]: imagePathWithTimestamp }));
+                            showAlert('success', 'Image Uploaded!', `Image "${file.name}" uploaded successfully!`);
+                        } else {
+                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload image.');
+                        }
+                    } else {
+                        showAlert('error', 'Upload Failed!', 'Failed to upload image to server.');
+                    }
+                } catch (error) {
+                    showAlert('error', 'Upload Failed!', 'Failed to upload image. Please try again.');
+                }
             }
         };
 
@@ -163,11 +185,33 @@ function AdminGallery() {
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = (e) => {
+        fileInput.onchange = async (e) => {
             const file = e.target.files[0];
             if (file) {
-                handleInlineInputChange(itemId, field, file.name);
-                showAlert('success', 'Image Selected!', `Image "${file.name}" selected for ${field}. Don't forget to save changes!`);
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/gallery', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            const imagePathWithTimestamp = `${result.filePath}?t=${Date.now()}`;
+                            handleInlineInputChange(itemId, field, imagePathWithTimestamp);
+                            showAlert('success', 'Image Uploaded!', `Image "${file.name}" uploaded successfully!`);
+                        } else {
+                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload image.');
+                        }
+                    } else {
+                        showAlert('error', 'Upload Failed!', 'Failed to upload image to server.');
+                    }
+                } catch (error) {
+                    showAlert('error', 'Upload Failed!', 'Failed to upload image. Please try again.');
+                }
             }
         };
 
@@ -208,7 +252,7 @@ function AdminGallery() {
 
 
 
-            const response = await fetch('https://ahpbca-api.webonly.io/api/gallery', {
+            const response = await fetch('https://localhost:5000/api/gallery', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -245,7 +289,7 @@ function AdminGallery() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://ahpbca-api.webonly.io/api/gallery/${itemId}`, {
+                    const response = await fetch(`https://localhost:5000/api/gallery/${itemId}`, {
                         method: 'DELETE',
                     });
 
@@ -341,9 +385,10 @@ function AdminGallery() {
                                                 <div className="admin-gallery-image-placeholder">
                                                     {currentData.image ? (
                                                         <img
-                                                            src={getImagePath(currentData.image)}
+                                                            src={getContextualImagePath(currentData.image, 'admin')}
                                                             alt="Gallery image"
                                                             className="admin-gallery-current-image"
+                                                            key={currentData.image}
                                                         />
                                                     ) : (
                                                         <div className="admin-gallery-image-placeholder-text">No gallery image</div>
@@ -460,9 +505,10 @@ function AdminGallery() {
                                             <div className="admin-gallery-image-placeholder">
                                                 {formData.image ? (
                                                     <img
-                                                        src={getImagePath(formData.image)}
+                                                        src={getContextualImagePath(formData.image, 'admin')}
                                                         alt="Gallery image"
                                                         className="admin-gallery-current-image"
+                                                        key={formData.image}
                                                     />
                                                 ) : (
                                                     <div className="admin-gallery-image-placeholder-text">No gallery image</div>

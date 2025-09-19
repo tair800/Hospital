@@ -9,6 +9,89 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Contact Form Submit Button */
+.contact-submit-btn {
+    background: white;
+    border: 2px solid #4A90E2;
+    border-radius: 8px;
+    color: #1B1B3F;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 32px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    min-width: 120px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 0 0 1px #4A90E2,
+        0 0 0 2px #357ABD,
+        0 2px 4px rgba(74, 144, 226, 0.1);
+}
+
+.contact-submit-btn:hover {
+    background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.contact-submit-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(74, 144, 226, 0.2);
+}
+
+.contact-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.contact-submit-btn:disabled:hover {
+    background: white;
+    color: #1B1B3F;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Form Actions Container */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+    padding: 0 16px;
+}
+
+/* Form Error Messages */
+.error-message {
+    color: #ef4444;
+    font-size: 14px;
+    margin-top: 4px;
+    display: block;
+    font-weight: 500;
+}
+
+/* Form Input Error State */
+.form-input.error,
+.form-textarea.error {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+}
+
+.form-input.error:focus,
+.form-textarea.error:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
 /* Loading Animation */
 @keyframes spin {
     0% {

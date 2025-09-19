@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { getContextualImagePath } from '../../utils/imageUtils';
 import './LogoCarousel.css';
 
 const LogoCarousel = () => {
@@ -8,20 +9,13 @@ const LogoCarousel = () => {
     const [error, setError] = useState(null);
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-    // Helper function to get correct image path
-    const getImagePath = (imageName) => {
-        if (!imageName) return '';
-        if (imageName.startsWith('/assets/')) return imageName;
-        if (imageName.startsWith('/src/assets/')) return imageName.replace('/src/assets/', '/assets/');
-        return `/assets/${imageName}`;
-    };
 
     // Fetch logo data from API
     useEffect(() => {
         const fetchLogoData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('https://ahpbca-api.webonly.io/api/logos');
+                const response = await fetch('https://localhost:5000/api/logos');
                 if (!response.ok) {
                     throw new Error('Failed to fetch logo data');
                 }
@@ -163,9 +157,10 @@ const LogoCarousel = () => {
                                 <div className="logo-card">
                                     <div className="logo-card-image">
                                         <img
-                                            src={getImagePath(logo.image)}
+                                            src={getContextualImagePath(logo.image, 'admin')}
                                             alt={logo.name}
                                             draggable={false}
+                                            key={logo.image}
                                         />
                                     </div>
                                     <div className="logo-card-text" title={logo.name}>
@@ -183,9 +178,10 @@ const LogoCarousel = () => {
                                 <div className="logo-card">
                                     <div className="logo-card-image">
                                         <img
-                                            src={getImagePath(logo.image)}
+                                            src={getContextualImagePath(logo.image, 'admin')}
                                             alt={logo.name}
                                             draggable={false}
+                                            key={logo.image}
                                         />
                                     </div>
                                     <div className="logo-card-text" title={logo.name}>

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HospitalAPI.Data;
 using HospitalAPI.Models;
+using HospitalAPI.Services;
 
 namespace HospitalAPI.Controllers
 {
@@ -20,7 +21,15 @@ namespace HospitalAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<About>>> GetAbout()
         {
-            return await _context.About.ToListAsync();
+            var aboutItems = await _context.About.ToListAsync();
+            
+            // Format image paths for frontend
+            foreach (var item in aboutItems)
+            {
+                item.Img = ImagePathService.FormatContextualImagePath(item.Img, "admin");
+            }
+            
+            return aboutItems;
         }
 
         // GET: api/About/5

@@ -41,6 +41,7 @@ function Header({ showTopImage = false, customTopImage = null, hidePageName = fa
         { label: 'Üzv', href: '/employee', id: 'employee' },
         { label: 'Qalereya', href: '/gallery', id: 'gallery' },
         { label: 'Bloq', href: '/blog', id: 'blog' },
+        { label: 'Əlaqə', href: '/contact', id: 'contact' },
     ];
 
     const handleItemClick = (item) => {

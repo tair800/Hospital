@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HospitalAPI.Data;
 using HospitalAPI.Models;
+using HospitalAPI.Services;
 
 namespace HospitalAPI.Controllers
 {
@@ -47,6 +48,10 @@ namespace HospitalAPI.Controllers
             {
                 return NotFound();
             }
+
+            // Format image paths for frontend
+            homeSection.Section2Image = ImagePathService.FormatContextualImagePath(homeSection.Section2Image, "admin");
+            homeSection.Section3Image = ImagePathService.FormatContextualImagePath(homeSection.Section3Image, "admin");
 
             return homeSection;
         }
@@ -143,6 +148,7 @@ namespace HospitalAPI.Controllers
 
             return NoContent();
         }
+
 
         private bool HomeSectionExists(int id)
         {

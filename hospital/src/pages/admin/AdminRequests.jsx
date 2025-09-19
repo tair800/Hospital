@@ -66,7 +66,7 @@ function AdminRequests() {
             setRequests(sortedData);
         } catch (error) {
             console.error('Fetch requests error:', error);
-            showAlert('error', 'Error!', 'Failed to fetch requests.');
+            showAlert('error', 'Xəta!', 'Sorğuları yükləmək mümkün olmadı.');
         } finally {
             setLoading(false);
         }
@@ -88,13 +88,13 @@ function AdminRequests() {
     const handleMarkAsDone = async (requestId) => {
         try {
             const result = await Swal.fire({
-                title: 'Mark as Done?',
-                text: "This will mark the request as completed.",
+                title: 'Tamamlandı Olaraq İşarələ?',
+                text: "Bu sorğunu tamamlanmış olaraq işarələyəcək.",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#10b981',
                 cancelButtonColor: '#6b7280',
-                confirmButtonText: 'Yes, mark as done!'
+                confirmButtonText: 'Bəli, tamamlandı olaraq işarələ!'
             });
 
             if (result.isConfirmed) {
@@ -111,11 +111,11 @@ function AdminRequests() {
                 );
 
                 setRequests(updatedRequests);
-                showAlert('success', 'Marked as Done!', 'Request has been marked as completed.');
+                showAlert('success', 'Tamamlandı Olaraq İşarələndi!', 'Sorğu tamamlanmış olaraq işarələndi.');
             }
         } catch (error) {
             console.error('Mark as done error:', error);
-            showAlert('error', 'Error!', 'Failed to mark request as done.');
+            showAlert('error', 'Xəta!', 'Sorğunu tamamlandı olaraq işarələmək mümkün olmadı.');
         } finally {
             setLoading(false);
         }
@@ -148,11 +148,11 @@ function AdminRequests() {
                 );
 
                 setRequests(updatedRequests);
-                showAlert('success', 'Marked as Pending!', 'Request has been moved back to pending.');
+                showAlert('success', 'Gözləyən Olaraq İşarələndi!', 'Sorğu yenidən gözləyən statusuna keçirildi.');
             }
         } catch (error) {
             console.error('Mark as pending error:', error);
-            showAlert('error', 'Error!', 'Failed to mark request as pending.');
+            showAlert('error', 'Xəta!', 'Sorğunu gözləyən olaraq işarələmək mümkün olmadı.');
         } finally {
             setLoading(false);
         }
@@ -162,13 +162,13 @@ function AdminRequests() {
     const handleDeleteRequest = async (requestId) => {
         try {
             const result = await Swal.fire({
-                title: 'Delete Request?',
-                text: "This will permanently delete the request. This action cannot be undone.",
+                title: 'Sorğunu Sil?',
+                text: "Bu sorğunu həmişəlik siləcək. Bu əməliyyat geri qaytarıla bilməz.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#ef4444',
                 cancelButtonColor: '#6b7280',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Bəli, sil!'
             });
 
             if (result.isConfirmed) {
@@ -181,11 +181,11 @@ function AdminRequests() {
                 const updatedRequests = requests.filter(request => request.id !== requestId);
                 setRequests(updatedRequests);
 
-                showAlert('success', 'Deleted!', 'Request has been permanently deleted.');
+                showAlert('success', 'Silindi!', 'Sorğu həmişəlik silindi.');
             }
         } catch (error) {
             console.error('Delete request error:', error);
-            showAlert('error', 'Error!', 'Failed to delete request.');
+            showAlert('error', 'Xəta!', 'Sorğunu silmək mümkün olmadı.');
         } finally {
             setLoading(false);
         }
@@ -212,19 +212,19 @@ function AdminRequests() {
         <div className="admin-requests">
             <div className="admin-requests-header">
                 <div className="admin-requests-title-section">
-                    <h1>Call Center - Requests Management</h1>
+                    <h1>Zəng Mərkəzi - Sorğuların İdarə Edilməsi</h1>
                     <div className="admin-requests-stats">
                         <div className="stat-item pending">
                             <span className="stat-number">{stats.pending}</span>
-                            <span className="stat-label">Pending</span>
+                            <span className="stat-label">Gözləyən</span>
                         </div>
                         <div className="stat-item completed">
                             <span className="stat-number">{stats.completed}</span>
-                            <span className="stat-label">Completed</span>
+                            <span className="stat-label">Tamamlanan</span>
                         </div>
                         <div className="stat-item total">
                             <span className="stat-number">{stats.total}</span>
-                            <span className="stat-label">Total</span>
+                            <span className="stat-label">Ümumi</span>
                         </div>
                     </div>
                 </div>
@@ -235,32 +235,32 @@ function AdminRequests() {
                         onClick={() => setActiveTab('pending')}
                     >
                         <span className="tab-icon">⏳</span>
-                        Pending ({stats.pending})
+                        Gözləyən ({stats.pending})
                     </button>
                     <button
                         className={`tab-button ${activeTab === 'completed' ? 'active' : ''}`}
                         onClick={() => setActiveTab('completed')}
                     >
                         <span className="tab-icon">✅</span>
-                        Completed ({stats.completed})
+                        Tamamlanan ({stats.completed})
                     </button>
                 </div>
             </div>
 
             <div className="admin-requests-content">
                 {loading ? (
-                    <div className="admin-requests-loading">Loading...</div>
+                    <div className="admin-requests-loading">Yüklənir...</div>
                 ) : currentRequests.length === 0 ? (
-                    <div className="admin-requests-empty">No requests found</div>
+                    <div className="admin-requests-empty">Sorğu tapılmadı</div>
                 ) : (
                     currentRequests.map((request, index) => {
                         return (
                             <div key={request.id} className="admin-requests-card">
                                 <div className="admin-requests-card-header">
                                     <div className="request-header-left">
-                                        <h2>Request #{startIndex + index + 1}</h2>
+                                        <h2>Sorğu #{startIndex + index + 1}</h2>
                                         <div className={`request-status-badge ${request.status}`}>
-                                            {request.status === 'pending' ? '⏳ Pending' : '✅ Completed'}
+                                            {request.status === 'pending' ? '⏳ Gözləyən' : '✅ Tamamlanan'}
                                         </div>
                                     </div>
                                     <div className="admin-requests-card-actions">
@@ -270,7 +270,7 @@ function AdminRequests() {
                                                 onClick={() => handleMarkAsDone(request.id)}
                                                 disabled={loading}
                                             >
-                                                Mark as Done
+                                                Tamamlandı Olaraq İşarələ
                                             </button>
                                         ) : (
                                             <div className="admin-requests-completed-actions">
@@ -279,14 +279,14 @@ function AdminRequests() {
                                                     onClick={() => handleMarkAsPending(request.id)}
                                                     disabled={loading}
                                                 >
-                                                    Mark as Pending
+                                                    Gözləyən Olaraq İşarələ
                                                 </button>
                                                 <button
                                                     className="admin-requests-delete-btn"
                                                     onClick={() => handleDeleteRequest(request.id)}
                                                     disabled={loading}
                                                 >
-                                                    Delete
+                                                    Sil
                                                 </button>
                                             </div>
                                         )}
@@ -296,37 +296,37 @@ function AdminRequests() {
                                 <div className="admin-requests-info">
                                     <div className="request-info-left">
                                         <div className="request-info-item">
-                                            <label>Name:</label>
+                                            <label>Ad:</label>
                                             <span>{request.name}</span>
                                         </div>
                                         <div className="request-info-item">
-                                            <label>Surname:</label>
+                                            <label>Soyad:</label>
                                             <span>{request.surname}</span>
                                         </div>
                                         <div className="request-info-item">
-                                            <label>Email:</label>
+                                            <label>E-poçt:</label>
                                             <span>{request.email}</span>
                                         </div>
                                         <div className="request-info-item">
-                                            <label>Phone:</label>
+                                            <label>Telefon:</label>
                                             <span>{request.phone}</span>
                                         </div>
                                     </div>
 
                                     <div className="request-info-right">
                                         <div className="request-info-item">
-                                            <label>Fin Code:</label>
+                                            <label>Fin Kod:</label>
                                             <span>{request.finCode}</span>
                                         </div>
                                         <div className="request-info-item">
-                                            <label>Vezife:</label>
+                                            <label>Vəzifə:</label>
                                             <span>{request.vezife}</span>
                                         </div>
                                         <div className="request-info-item">
-                                            <label>Created At:</label>
+                                            <label>Yaradılma Tarixi:</label>
                                             <span>{formatDate(request.createdAt)}</span>
                                         </div>
-                                       
+
                                     </div>
                                 </div>
                             </div>

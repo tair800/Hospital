@@ -90,13 +90,47 @@ namespace HospitalAPI.Services
             if (IsLocalAsset(imagePath))
                 return $"/src/assets/{imagePath}";
 
+            // Check if it's an upload path (contains uploads/ or starts with uploads/)
+            if (imagePath.StartsWith("uploads/") || imagePath.Contains("uploads/"))
+                return $"/{imagePath}";
+
+            // Check if it's an uploaded file by looking for GUID patterns or upload prefixes
+            if (IsUploadedFile(imagePath))
+                return $"/uploads/{imagePath}";
+
             // For different contexts, use appropriate paths
             return context switch
             {
                 "gallery" or "blog" or "employee" or "event" => 
-                    imagePath.Contains("upload") ? $"/uploads/{imagePath}" : $"/src/assets/{imagePath}",
-                "admin" or _ => $"/src/assets/{imagePath}"
+                    $"/src/assets/{imagePath}",
+                "admin" or _ => 
+                    $"/src/assets/{imagePath}"
             };
+        }
+
+        /// <summary>
+        /// Check if an image path is an uploaded file
+        /// </summary>
+        /// <param name="imagePath">The image path to check</param>
+        /// <returns>True if it's an uploaded file</returns>
+        public static bool IsUploadedFile(string? imagePath)
+        {
+            if (string.IsNullOrEmpty(imagePath))
+                return false;
+
+            // Check for common upload file patterns
+            var uploadPatterns = new[]
+            {
+                "about_",
+                "employee_",
+                "home_",
+                "event_",
+                "about_carousel_",
+                "gallery_",
+                "blog_"
+            };
+
+            return uploadPatterns.Any(pattern => imagePath.StartsWith(pattern));
         }
 
         /// <summary>
