@@ -89,7 +89,7 @@ function AdminBlog() {
     const fetchBlogs = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://localhost:5000/api/blogs');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/blogs');
             if (response.ok) {
                 const data = await response.json();
 
@@ -142,7 +142,7 @@ function AdminBlog() {
 
 
 
-            const response = await fetch(`https://localhost:5000/api/blogs/${blogId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/blogs/${blogId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -232,7 +232,7 @@ function AdminBlog() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://localhost:5000/api/ImageUpload/blog', {
+                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/blog', {
                         method: 'POST',
                         body: formData
                     });
@@ -292,7 +292,7 @@ function AdminBlog() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://localhost:5000/api/ImageUpload/blog', {
+                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/blog', {
                         method: 'POST',
                         body: formData
                     });
@@ -373,7 +373,7 @@ function AdminBlog() {
 
 
 
-            const response = await fetch('https://localhost:5000/api/blogs', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/blogs', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -410,7 +410,7 @@ function AdminBlog() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://localhost:5000/api/blogs/${blogId}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/blogs/${blogId}`, {
                         method: 'DELETE',
                     });
 

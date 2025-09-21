@@ -125,7 +125,7 @@ function AdminEvents() {
     const fetchEvents = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://localhost:5000/api/events');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/events');
             if (response.ok) {
                 const data = await response.json();
 
@@ -158,9 +158,9 @@ function AdminEvents() {
             // Create promises for all related data
             const promises = events.map(async (event) => {
                 const [speakersResponse, timelineResponse, employeesResponse] = await Promise.all([
-                    fetch(`https://localhost:5000/api/eventspeakers/event/${event.id}`),
-                    fetch(`https://localhost:5000/api/eventtimeline/event/${event.id}`),
-                    fetch(`https://localhost:5000/api/eventemployees/event/${event.id}`)
+                    fetch(`https://ahpbca-api.webonly.io/api/eventspeakers/event/${event.id}`),
+                    fetch(`https://ahpbca-api.webonly.io/api/eventtimeline/event/${event.id}`),
+                    fetch(`https://ahpbca-api.webonly.io/api/eventemployees/event/${event.id}`)
                 ]);
 
                 const speakersData = speakersResponse.ok ? await speakersResponse.json() : [];
@@ -200,7 +200,7 @@ function AdminEvents() {
     // Fetch all employees
     const fetchAllEmployees = async () => {
         try {
-            const response = await fetch('https://localhost:5000/api/employees');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/employees');
             if (response.ok) {
                 const data = await response.json();
                 setAllEmployees(data);
@@ -213,7 +213,7 @@ function AdminEvents() {
     // Fetch event speakers
     const fetchEventSpeakers = async (eventId) => {
         try {
-            const response = await fetch(`https://localhost:5000/api/eventspeakers/event/${eventId}`);
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventspeakers/event/${eventId}`);
             if (response.ok) {
                 const data = await response.json();
                 setEventSpeakers(prev => ({ ...prev, [eventId]: data }));
@@ -226,7 +226,7 @@ function AdminEvents() {
     // Fetch event timeline
     const fetchEventTimeline = async (eventId) => {
         try {
-            const response = await fetch(`https://localhost:5000/api/eventtimeline/event/${eventId}`);
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventtimeline/event/${eventId}`);
             if (response.ok) {
                 const data = await response.json();
                 setEventTimeline(prev => ({ ...prev, [eventId]: data }));
@@ -239,7 +239,7 @@ function AdminEvents() {
     // Fetch event employees
     const fetchEventEmployees = async (eventId) => {
         try {
-            const response = await fetch(`https://localhost:5000/api/eventemployees/event/${eventId}`);
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventemployees/event/${eventId}`);
             if (response.ok) {
                 const data = await response.json();
                 setEventEmployees(prev => ({ ...prev, [eventId]: data }));
@@ -259,7 +259,7 @@ function AdminEvents() {
                 const formData = new FormData();
                 formData.append('file', newSpeaker.image);
 
-                const uploadResponse = await fetch('https://localhost:5000/api/ImageUpload/event/speaker', {
+                const uploadResponse = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/event/speaker', {
                     method: 'POST',
                     body: formData
                 });
@@ -279,7 +279,7 @@ function AdminEvents() {
                 speakerData.image = `${uploadResult.filePath}?t=${Date.now()}`;
             }
 
-            const response = await fetch('https://localhost:5000/api/eventspeakers', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/eventspeakers', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(speakerData)
@@ -320,7 +320,7 @@ function AdminEvents() {
                 return;
             }
 
-            const response = await fetch('https://localhost:5000/api/eventtimeline', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/eventtimeline', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...newTimelineSlot, eventId })
@@ -347,7 +347,7 @@ function AdminEvents() {
     // Add employee to event
     const addEmployeeToEvent = async (eventId, employeeId) => {
         try {
-            const response = await fetch('https://localhost:5000/api/eventemployees', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/eventemployees', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ eventId, employeeId })
@@ -374,7 +374,7 @@ function AdminEvents() {
                 const formData = new FormData();
                 formData.append('file', editingSpeaker.image);
 
-                const uploadResponse = await fetch('https://localhost:5000/api/ImageUpload/event/speaker', {
+                const uploadResponse = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/event/speaker', {
                     method: 'POST',
                     body: formData
                 });
@@ -394,7 +394,7 @@ function AdminEvents() {
                 speakerData.image = `${uploadResult.filePath}?t=${Date.now()}`;
             }
 
-            const response = await fetch(`https://localhost:5000/api/eventspeakers/${speakerId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventspeakers/${speakerId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(speakerData)
@@ -417,7 +417,7 @@ function AdminEvents() {
     // Remove speaker
     const removeSpeaker = async (speakerId, eventId) => {
         try {
-            const response = await fetch(`https://localhost:5000/api/eventspeakers/${speakerId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventspeakers/${speakerId}`, {
                 method: 'DELETE'
             });
 
@@ -436,7 +436,7 @@ function AdminEvents() {
     const updateTimelineSlot = async (timelineId, eventId) => {
         try {
             // Get fresh timeline data from API
-            const response = await fetch(`https://localhost:5000/api/eventtimeline/event/${eventId}`);
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventtimeline/event/${eventId}`);
             const freshTimelineData = response.ok ? await response.json() : [];
 
             // Only check for time conflicts if the time has actually changed
@@ -468,7 +468,7 @@ function AdminEvents() {
                 return;
             }
 
-            const updateResponse = await fetch(`https://localhost:5000/api/eventtimeline/${timelineId}`, {
+            const updateResponse = await fetch(`https://ahpbca-api.webonly.io/api/eventtimeline/${timelineId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editingTimelineSlot)
@@ -490,7 +490,7 @@ function AdminEvents() {
     // Remove timeline slot
     const removeTimelineSlot = async (timelineId, eventId) => {
         try {
-            const response = await fetch(`https://localhost:5000/api/eventtimeline/${timelineId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventtimeline/${timelineId}`, {
                 method: 'DELETE'
             });
 
@@ -508,7 +508,7 @@ function AdminEvents() {
     // Remove employee from event
     const removeEmployeeFromEvent = async (eventEmployeeId, eventId) => {
         try {
-            const response = await fetch(`https://localhost:5000/api/eventemployees/${eventEmployeeId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/eventemployees/${eventEmployeeId}`, {
                 method: 'DELETE'
             });
 
@@ -571,7 +571,7 @@ function AdminEvents() {
 
 
 
-            const response = await fetch(`https://localhost:5000/api/events/${eventId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/events/${eventId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -638,7 +638,7 @@ function AdminEvents() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://localhost:5000/api/ImageUpload/event', {
+                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/event', {
                         method: 'POST',
                         body: formData
                     });
@@ -700,7 +700,7 @@ function AdminEvents() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://localhost:5000/api/ImageUpload/event', {
+                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/event', {
                         method: 'POST',
                         body: formData
                     });
@@ -780,7 +780,7 @@ function AdminEvents() {
 
 
 
-            const response = await fetch('https://localhost:5000/api/events', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/events', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -817,7 +817,7 @@ function AdminEvents() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://localhost:5000/api/events/${eventId}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/events/${eventId}`, {
                         method: 'DELETE',
                     });
 
@@ -837,7 +837,7 @@ function AdminEvents() {
     // Toggle main status
     const toggleMainStatus = async (eventId) => {
         try {
-            const response = await fetch(`https://localhost:5000/api/events/${eventId}/toggle-main`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/events/${eventId}/toggle-main`, {
                 method: 'PATCH',
             });
 

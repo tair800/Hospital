@@ -28,7 +28,7 @@ const Employee = () => {
         const fetchEmployees = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('https://localhost:5000/api/employees');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/employees');
                 if (!response.ok) {
                     throw new Error('Failed to fetch employees');
                 }

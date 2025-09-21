@@ -17,7 +17,7 @@ const Gallery = () => {
         const fetchGalleryData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('https://localhost:5000/api/gallery');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/gallery');
                 if (!response.ok) {
                     throw new Error('Failed to fetch gallery data');
                 }

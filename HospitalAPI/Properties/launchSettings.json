@@ -4,7 +4,7 @@
         "windowsAuthentication": false,
         "anonymousAuthentication": true,
         "iisExpress": {
-            "applicationUrl": "https://localhost:5000",
+            "applicationUrl": "https://ahpbca-api.webonly.io",
             "sslPort": 5000
         }
     },
@@ -14,7 +14,7 @@
             "dotnetRunMessages": true,
             "launchBrowser": true,
             "launchUrl": "swagger/index.html",
-            "applicationUrl": "https://localhost:5000",
+            "applicationUrl": "https://ahpbca-api.webonly.io",
             "environmentVariables": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             }
@@ -24,7 +24,7 @@
             "dotnetRunMessages": true,
             "launchBrowser": true,
             "launchUrl": "swagger/index.html",
-            "applicationUrl": "https://localhost:5000",
+            "applicationUrl": "https://ahpbca-api.webonly.io",
             "environmentVariables": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             }

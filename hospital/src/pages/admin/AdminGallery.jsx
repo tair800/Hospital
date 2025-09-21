@@ -25,7 +25,7 @@ function AdminGallery() {
     const fetchGalleryData = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://localhost:5000/api/gallery');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/gallery');
             if (response.ok) {
                 const data = await response.json();
 
@@ -76,7 +76,7 @@ function AdminGallery() {
 
 
 
-            const response = await fetch(`https://localhost:5000/api/gallery/${itemId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/gallery/${itemId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ function AdminGallery() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://localhost:5000/api/ImageUpload/gallery', {
+                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/gallery', {
                         method: 'POST',
                         body: formData
                     });
@@ -192,7 +192,7 @@ function AdminGallery() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://localhost:5000/api/ImageUpload/gallery', {
+                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/gallery', {
                         method: 'POST',
                         body: formData
                     });
@@ -252,7 +252,7 @@ function AdminGallery() {
 
 
 
-            const response = await fetch('https://localhost:5000/api/gallery', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/gallery', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -289,7 +289,7 @@ function AdminGallery() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://localhost:5000/api/gallery/${itemId}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/gallery/${itemId}`, {
                         method: 'DELETE',
                     });
 

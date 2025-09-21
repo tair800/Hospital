@@ -4,7 +4,7 @@ const testAPI = async () => {
         console.log('Testing API endpoints...');
 
         // Test speakers endpoint
-        const speakersResponse = await fetch('https://localhost:5000/api/speakers');
+        const speakersResponse = await fetch('https://ahpbca-api.webonly.io/api/speakers');
         console.log('Speakers status:', speakersResponse.status);
         if (speakersResponse.ok) {
             const speakers = await speakersResponse.json();
@@ -13,7 +13,7 @@ const testAPI = async () => {
         }
 
         // Test event schedules endpoint
-        const schedulesResponse = await fetch('https://localhost:5000/api/eventschedules/events/1/schedules');
+        const schedulesResponse = await fetch('https://ahpbca-api.webonly.io/api/eventschedules/events/1/schedules');
         console.log('Event schedules status:', schedulesResponse.status);
         if (schedulesResponse.ok) {
             const schedules = await schedulesResponse.json();
@@ -30,6 +30,9 @@ const testAPI = async () => {
 };
 
 testAPI();
+
+
+
 
 
 

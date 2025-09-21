@@ -129,8 +129,8 @@ const Events = () => {
             try {
                 setLoading(true);
                 const [eventsResponse, mainEventsResponse] = await Promise.all([
-                    fetch('https://localhost:5000/api/events'),
-                    fetch('https://localhost:5000/api/events/featured')
+                    fetch('https://ahpbca-api.webonly.io/api/events'),
+                    fetch('https://ahpbca-api.webonly.io/api/events/featured')
                 ]);
 
                 if (!eventsResponse.ok || !mainEventsResponse.ok) {
