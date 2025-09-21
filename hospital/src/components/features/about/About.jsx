@@ -22,7 +22,7 @@ function About() {
         const fetchAboutData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('https://localhost:5000/api/about');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/about');
                 if (!response.ok) {
                     throw new Error('Failed to fetch about data');
                 }

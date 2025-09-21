@@ -25,7 +25,7 @@ const EventsDetail = () => {
         const fetchTimelineData = async () => {
             try {
                 setTimelineLoading(true);
-                const response = await fetch(`https://localhost:5000/api/eventtimeline/event/${eventId}`);
+                const response = await fetch(`https://ahpbca-api.webonly.io/api/eventtimeline/event/${eventId}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch timeline data');
                 }
@@ -65,7 +65,7 @@ const EventsDetail = () => {
         const fetchEvent = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`https://localhost:5000/api/events/${eventId}`);
+                const response = await fetch(`https://ahpbca-api.webonly.io/api/events/${eventId}`);
                 if (!response.ok) {
                     throw new Error('Event not found');
                 }

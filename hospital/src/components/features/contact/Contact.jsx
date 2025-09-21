@@ -15,7 +15,7 @@ import telegram from '../../../assets/telegram.png';
 import LogoCarousel from '../../ui/LogoCarousel';
 
 // API configuration
-const API_BASE_URL = 'https://localhost:5000';
+const API_BASE_URL = 'https://ahpbca-api.webonly.io';
 
 const Contact = () => {
     const canvasRef = useRef(null);

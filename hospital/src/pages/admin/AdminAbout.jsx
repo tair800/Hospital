@@ -32,7 +32,7 @@ function AdminAbout() {
     const fetchAboutData = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://localhost:5000/api/about');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/about');
             if (response.ok) {
                 const data = await response.json();
                 if (data.length > 0) setAboutData(data[0]);
@@ -46,7 +46,7 @@ function AdminAbout() {
 
     const fetchCarouselData = async () => {
         try {
-            const response = await fetch('https://localhost:5000/api/aboutcarousel');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/aboutcarousel');
             if (response.ok) {
                 const data = await response.json();
                 setCarouselData(data);
@@ -69,7 +69,7 @@ function AdminAbout() {
         e.preventDefault();
         try {
             setLoading(true);
-            const response = await fetch(`https://localhost:5000/api/about/${aboutData.id}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/about/${aboutData.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(aboutData),
@@ -117,7 +117,7 @@ function AdminAbout() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://localhost:5000/api/ImageUpload/about', {
+                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/about', {
                         method: 'POST',
                         body: formData
                     });
@@ -179,7 +179,7 @@ function AdminAbout() {
             const formData = new FormData();
             formData.append('file', itemData.imageFile);
 
-            const uploadResponse = await fetch('https://localhost:5000/api/ImageUpload/about/carousel', {
+            const uploadResponse = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/about/carousel', {
                 method: 'POST',
                 body: formData
             });
@@ -201,7 +201,7 @@ function AdminAbout() {
                 image: uploadResult.filePath
             };
 
-            const response = await fetch('https://localhost:5000/api/aboutcarousel', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/aboutcarousel', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(carouselData),
@@ -252,7 +252,7 @@ function AdminAbout() {
                 carouselData.image = `/src/assets/${itemData.imageFile.name}`;
             }
 
-            const response = await fetch(`https://localhost:5000/api/aboutcarousel/${id}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/aboutcarousel/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(carouselData),
@@ -282,7 +282,7 @@ function AdminAbout() {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`https://localhost:5000/api/aboutcarousel/${id}`, { method: 'DELETE' });
+                const response = await fetch(`https://ahpbca-api.webonly.io/api/aboutcarousel/${id}`, { method: 'DELETE' });
                 if (response.ok) {
                     showAlert('success', 'Deleted!', 'Carousel item has been deleted.');
                     fetchCarouselData();

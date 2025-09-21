@@ -25,7 +25,7 @@ const EmployeeSlider = ({ eventId = 1 }) => {
                 setLoading(true);
 
                 // Fetch event-specific employees from API
-                const employeeResponse = await fetch(`https://localhost:5000/api/eventemployees/event/${eventId}`);
+                const employeeResponse = await fetch(`https://ahpbca-api.webonly.io/api/eventemployees/event/${eventId}`);
                 if (!employeeResponse.ok) {
                     throw new Error('Failed to fetch event employees');
                 }
@@ -33,7 +33,7 @@ const EmployeeSlider = ({ eventId = 1 }) => {
                 setEmployees(employeeData);
 
                 // Fetch speakers for the specific event
-                const speakerResponse = await fetch(`https://localhost:5000/api/eventspeakers/event/${eventId}`);
+                const speakerResponse = await fetch(`https://ahpbca-api.webonly.io/api/eventspeakers/event/${eventId}`);
                 let speakerData = [];
                 if (speakerResponse.ok) {
                     speakerData = await speakerResponse.json();

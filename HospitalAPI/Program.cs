@@ -1,44 +1,33 @@
 using HospitalAPI.Data;
-using HospitalAPI.Models;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Configure file upload size limits
-builder.Services.Configure<IISServerOptions>(options =>
-{
-    options.MaxRequestBodySize = 100 * 1024 * 1024; // 100MB
-});
+// Upload limit
+builder.Services.Configure<IISServerOptions>(o => o.MaxRequestBodySize = 100 * 1024 * 1024);
+builder.Services.Configure<FormOptions>(o => o.MultipartBodyLengthLimit = 100 * 1024 * 1024);
 
-builder.Services.Configure<FormOptions>(options =>
-{
-    options.MultipartBodyLengthLimit = 100 * 1024 * 1024; // 100MB
-});
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo 
-    { 
-        Title = "Hospital API", 
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Hospital API",
         Version = "v1",
         Description = "API for Hospital Management System"
     });
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
-});
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowAll", p =>
+//        p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+//});
 
 builder.Services.AddAutoMapper(typeof(Program));
 
@@ -47,32 +36,38 @@ builder.Services.AddDbContext<HospitalDbContext>(options =>
 
 var app = builder.Build();
 
-// Initialize database
+// ✅ DB init: Yalnız Migrate(); EnsureCreated() istifadə ETMƏ
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<HospitalDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("DbInit");
+    var db = scope.ServiceProvider.GetRequiredService<HospitalDbContext>();
     try
     {
-        // Ensure database is created and migrations are applied
-        context.Database.EnsureCreated();
-        
-        // Apply any pending migrations
-        if (context.Database.GetPendingMigrations().Any())
+        var pending = await db.Database.GetPendingMigrationsAsync();
+        if (pending.Any())
         {
-            context.Database.Migrate();
+            logger.LogInformation("Applying {Count} pending migrations...", pending.Count());
+            await db.Database.MigrateAsync();
         }
-        
-        // Seed event data
-        await HospitalAPI.SeedEventData.SeedAsync(context);
-        
-        Console.WriteLine("Database initialized successfully");
+
+        // Seed həmişə idempotent olsun (dublikat yaratmasın)
+        await HospitalAPI.SeedEventData.SeedAsync(db);
+
+        logger.LogInformation("Database initialized successfully");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Database initialization failed: {ex.Message}");
-        throw;
+        logger.LogError(ex, "Database initialization failed");
+        // ❗ Burada throw etməsən systemd loop-a düşməyəcək; istəsən app-i dayandırma
+        // throw;
     }
 }
+
+// Reverse proxy-dən gələn başlıqlar (Nginx arxasında tövsiyə olunur)
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 if (app.Environment.IsDevelopment())
 {
@@ -87,13 +82,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+// Nginx HTTPS terminasiya edirsə, UseHttpsRedirection zəruri deyil (qoya da bilərsən)
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
+//app.UseCors("AllowAll");
 
-// Enable static file serving for wwwroot
-app.UseStaticFiles();
-
-// Enable static file serving for uploads
+app.UseStaticFiles(); // wwwroot
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(

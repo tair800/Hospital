@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
-import { getContextualImagePath } from '../../utils/imageUtils'
+import { getImagePath } from '../../utils/imageUtils'
 const adminDeleteIcon = '/assets/admin-delete.png'
 const adminBrowseIcon = '/assets/admin-browse.png'
 import './AdminHome.css'
@@ -23,7 +23,7 @@ function AdminHome() {
 
     const fetchHomeData = async () => {
         try {
-            const response = await fetch('https://localhost:5000/api/HomeSection/first');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/HomeSection/first');
             if (response.ok) {
                 const data = await response.json();
                 setHomeData({
@@ -50,43 +50,18 @@ function AdminHome() {
         setHomeData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleImageBrowse = async (sectionName) => {
+    const handleImageBrowse = (sectionName) => {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
         fileInput.accept = 'image/*';
         fileInput.style.display = 'none';
 
-        fileInput.onchange = async (e) => {
+        fileInput.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
-                try {
-                    const formData = new FormData();
-                    formData.append('file', file);
-
-                    const endpoint = 'https://localhost:5000/api/ImageUpload/home';
-
-                    const response = await fetch(endpoint, {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if (response.ok) {
-                        const result = await response.json();
-                        if (result.success) {
-                            // Add timestamp to force image reload
-                            const imagePathWithTimestamp = `${result.filePath}?t=${Date.now()}`;
-                            setHomeData(prev => ({ ...prev, [sectionName]: imagePathWithTimestamp }));
-                            showAlert('success', 'Image Uploaded!', `Image "${file.name}" uploaded successfully!`);
-                        } else {
-                            showAlert('error', 'Upload Failed!', result.message || 'Failed to upload image.');
-                        }
-                    } else {
-                        showAlert('error', 'Upload Failed!', 'Failed to upload image to server.');
-                    }
-                } catch (error) {
-                    console.error('Upload error:', error);
-                    showAlert('error', 'Upload Failed!', 'Failed to upload image. Please try again.');
-                }
+                // Store only the filename, not the File object
+                setHomeData(prev => ({ ...prev, [sectionName]: file.name }));
+                showAlert('success', 'Image Selected!', `Image "${file.name}" selected for ${sectionName}. Don't forget to save changes!`);
             }
         };
 
@@ -117,7 +92,7 @@ function AdminHome() {
         try {
             setLoading(true);
 
-            const response = await fetch('https://localhost:5000/api/HomeSection/first', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/HomeSection/first', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -145,10 +120,9 @@ function AdminHome() {
                     {homeData[sectionName] ? (
                         // Show existing uploaded image
                         <img
-                            src={getContextualImagePath(homeData[sectionName], 'admin')}
+                            src={`/assets/${homeData[sectionName]}`}
                             alt={`${title} image`}
                             className="current-image"
-                            key={homeData[sectionName]} // Force re-render when image changes
                         />
                     ) : (
                         <div className="image-placeholder-text">No image uploaded</div>

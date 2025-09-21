@@ -62,7 +62,7 @@ function AdminSponsors() {
     const fetchLogos = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://localhost:5000/api/logos');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/logos');
             if (response.ok) {
                 const data = await response.json();
 
@@ -111,7 +111,7 @@ function AdminSponsors() {
 
 
 
-            const response = await fetch(`https://localhost:5000/api/logos/${logoId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/logos/${logoId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ function AdminSponsors() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://localhost:5000/api/ImageUpload/logo', {
+                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/logo', {
                         method: 'POST',
                         body: formData
                     });
@@ -232,7 +232,7 @@ function AdminSponsors() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://localhost:5000/api/ImageUpload/logo', {
+                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/logo', {
                         method: 'POST',
                         body: formData
                     });
@@ -293,7 +293,7 @@ function AdminSponsors() {
 
 
 
-            const response = await fetch('https://localhost:5000/api/logos', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/logos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -333,7 +333,7 @@ function AdminSponsors() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://localhost:5000/api/logos/${logoId}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/logos/${logoId}`, {
                         method: 'DELETE',
                     });
 

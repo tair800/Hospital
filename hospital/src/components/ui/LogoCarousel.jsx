@@ -15,7 +15,7 @@ const LogoCarousel = () => {
         const fetchLogoData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('https://localhost:5000/api/logos');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/logos');
                 if (!response.ok) {
                     throw new Error('Failed to fetch logo data');
                 }

@@ -38,7 +38,7 @@ const Home = () => {
     useEffect(() => {
         const fetchHomeData = async () => {
             try {
-                const response = await fetch('https://localhost:5000/api/HomeSection/first');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/HomeSection/first');
                 if (response.ok) {
                     const data = await response.json();
                     setHomeData({
@@ -64,7 +64,7 @@ const Home = () => {
         const fetchEvents = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('https://localhost:5000/api/events');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/events');
                 if (!response.ok) {
                     throw new Error('Failed to fetch events');
                 }
@@ -106,7 +106,7 @@ const Home = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const response = await fetch('https://localhost:5000/api/employees');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/employees');
                 if (!response.ok) {
                     throw new Error('Failed to fetch employees');
                 }

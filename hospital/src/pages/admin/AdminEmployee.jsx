@@ -111,7 +111,7 @@ function AdminEmployee() {
     const fetchEmployees = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://localhost:5000/api/employees');
+            const response = await fetch('https://ahpbca-api.webonly.io/api/employees');
             if (response.ok) {
                 const employees = await response.json();
 
@@ -122,7 +122,7 @@ function AdminEmployee() {
                     employees.map(async (employee) => {
                         try {
                             // Fetch full employee data with certificates and degrees
-                            const employeeResponse = await fetch(`https://localhost:5000/api/employees/${employee.id}`);
+                            const employeeResponse = await fetch(`https://ahpbca-api.webonly.io/api/employees/${employee.id}`);
                             if (employeeResponse.ok) {
                                 const fullEmployeeData = await employeeResponse.json();
 
@@ -180,7 +180,7 @@ function AdminEmployee() {
 
 
 
-            const response = await fetch(`https://localhost:5000/api/employees/${employeeId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/employees/${employeeId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -272,7 +272,7 @@ function AdminEmployee() {
                     formData.append('file', file);
 
                     // Upload the file
-                    const response = await fetch(`https://localhost:5000/api/ImageUpload/employee${imageType === 'detailImage' ? '/detail' : ''}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/ImageUpload/employee${imageType === 'detailImage' ? '/detail' : ''}`, {
                         method: 'POST',
                         body: formData
                     });
@@ -313,7 +313,7 @@ function AdminEmployee() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://localhost:5000/api/ImageUpload/employee/certificate', {
+                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/employee/certificate', {
                         method: 'POST',
                         body: formData
                     });
@@ -376,7 +376,7 @@ function AdminEmployee() {
                     formData.append('file', file);
 
                     // Upload the file
-                    const response = await fetch(`https://localhost:5000/api/ImageUpload/employee${imageType === 'detailImage' ? '/detail' : ''}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/ImageUpload/employee${imageType === 'detailImage' ? '/detail' : ''}`, {
                         method: 'POST',
                         body: formData
                     });
@@ -423,7 +423,7 @@ function AdminEmployee() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://localhost:5000/api/ImageUpload/employee/certificate', {
+                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/employee/certificate', {
                         method: 'POST',
                         body: formData
                     });
@@ -510,7 +510,7 @@ function AdminEmployee() {
 
 
 
-            const response = await fetch('https://localhost:5000/api/employees', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/employees', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -547,7 +547,7 @@ function AdminEmployee() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://localhost:5000/api/employees/${employeeId}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/employees/${employeeId}`, {
                         method: 'DELETE',
                     });
 
@@ -581,7 +581,7 @@ function AdminEmployee() {
         e.preventDefault();
         try {
             setLoading(true);
-            const response = await fetch('https://localhost:5000/api/employee-certificates', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/employee-certificates', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -618,7 +618,7 @@ function AdminEmployee() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://localhost:5000/api/employee-certificates/${certificateId}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-certificates/${certificateId}`, {
                         method: 'DELETE',
                     });
 
@@ -679,7 +679,7 @@ function AdminEmployee() {
 
         try {
             setLoading(true);
-            const response = await fetch('https://localhost:5000/api/employee-degrees', {
+            const response = await fetch('https://ahpbca-api.webonly.io/api/employee-degrees', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -718,7 +718,7 @@ function AdminEmployee() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://localhost:5000/api/employee-degrees/${degreeId}`, {
+                    const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-degrees/${degreeId}`, {
                         method: 'DELETE',
                     });
 
@@ -819,7 +819,7 @@ function AdminEmployee() {
 
 
 
-                const response = await fetch(`https://localhost:5000/api/employee-certificates/${certificateId}`, {
+                const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-certificates/${certificateId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -898,7 +898,7 @@ function AdminEmployee() {
 
 
 
-                const response = await fetch(`https://localhost:5000/api/employee-degrees/${degreeId}`, {
+                const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-degrees/${degreeId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload),
@@ -952,7 +952,7 @@ function AdminEmployee() {
                 return;
             }
 
-            const response = await fetch(`https://localhost:5000/api/employee-certificates/${certificateId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-certificates/${certificateId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1038,7 +1038,7 @@ function AdminEmployee() {
                 return;
             }
 
-            const response = await fetch(`https://localhost:5000/api/employee-degrees/${degreeId}`, {
+            const response = await fetch(`https://ahpbca-api.webonly.io/api/employee-degrees/${degreeId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

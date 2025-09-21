@@ -14,7 +14,7 @@ function AboutCarousel() {
         const fetchCarouselData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('https://localhost:5000/api/aboutcarousel');
+                const response = await fetch('https://ahpbca-api.webonly.io/api/aboutcarousel');
                 if (!response.ok) {
                     throw new Error('Failed to fetch carousel data');
                 }
