@@ -62,7 +62,7 @@ function AdminSponsors() {
     const fetchLogos = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://ahpbca-api.webonly.io/api/logos');
+            const response = await fetch('https://localhost:5000/api/logos');
             if (response.ok) {
                 const data = await response.json();
 
@@ -111,7 +111,7 @@ function AdminSponsors() {
 
 
 
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/logos/${logoId}`, {
+            const response = await fetch(`https://localhost:5000/api/logos/${logoId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ function AdminSponsors() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/logo', {
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/logo', {
                         method: 'POST',
                         body: formData
                     });
@@ -232,7 +232,7 @@ function AdminSponsors() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/logo', {
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/logo', {
                         method: 'POST',
                         body: formData
                     });
@@ -293,7 +293,7 @@ function AdminSponsors() {
 
 
 
-            const response = await fetch('https://ahpbca-api.webonly.io/api/logos', {
+            const response = await fetch('https://localhost:5000/api/logos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -333,7 +333,7 @@ function AdminSponsors() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://ahpbca-api.webonly.io/api/logos/${logoId}`, {
+                    const response = await fetch(`https://localhost:5000/api/logos/${logoId}`, {
                         method: 'DELETE',
                     });
 
@@ -394,11 +394,12 @@ function AdminSponsors() {
                     ) : (
                         currentLogos.map((logo, index) => {
                             const currentData = editingLogos[logo.id] || logo;
+                            const logoNumber = startIndex + index + 1;
 
                             return (
                                 <div key={logo.id} className="admin-sponsors-card">
                                     <div className="admin-sponsors-card-header">
-                                        <h2>Logo #{index + 1}</h2>
+                                        <h2>Logo #{logoNumber}</h2>
                                     </div>
 
                                     <div className="admin-sponsors-form">

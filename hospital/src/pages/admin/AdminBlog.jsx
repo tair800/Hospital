@@ -80,16 +80,16 @@ function AdminBlog() {
         }
     }, [blogs, searchTerm]);
 
-    // Reset pagination when filtered blogs change
+    // Reset pagination only when search term changes (not when blogs are updated)
     useEffect(() => {
         resetPagination();
-    }, [filteredBlogs, resetPagination]);
+    }, [searchTerm, resetPagination]);
 
     // Fetch all blogs from API
     const fetchBlogs = async () => {
         try {
             setLoading(true);
-            const response = await fetch('https://ahpbca-api.webonly.io/api/blogs');
+            const response = await fetch('https://localhost:5000/api/blogs');
             if (response.ok) {
                 const data = await response.json();
 
@@ -142,7 +142,7 @@ function AdminBlog() {
 
 
 
-            const response = await fetch(`https://ahpbca-api.webonly.io/api/blogs/${blogId}`, {
+            const response = await fetch(`https://localhost:5000/api/blogs/${blogId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -232,7 +232,7 @@ function AdminBlog() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/blog', {
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/blog', {
                         method: 'POST',
                         body: formData
                     });
@@ -292,7 +292,7 @@ function AdminBlog() {
                     const formData = new FormData();
                     formData.append('file', file);
 
-                    const response = await fetch('https://ahpbca-api.webonly.io/api/ImageUpload/blog', {
+                    const response = await fetch('https://localhost:5000/api/ImageUpload/blog', {
                         method: 'POST',
                         body: formData
                     });
@@ -373,7 +373,7 @@ function AdminBlog() {
 
 
 
-            const response = await fetch('https://ahpbca-api.webonly.io/api/blogs', {
+            const response = await fetch('https://localhost:5000/api/blogs', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -410,7 +410,7 @@ function AdminBlog() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`https://ahpbca-api.webonly.io/api/blogs/${blogId}`, {
+                    const response = await fetch(`https://localhost:5000/api/blogs/${blogId}`, {
                         method: 'DELETE',
                     });
 
@@ -469,13 +469,14 @@ function AdminBlog() {
                             </button>
                         </div>
                     ) : (
-                        currentBlogs.map((blog) => {
+                        currentBlogs.map((blog, index) => {
                             const currentData = editingBlogs[blog.id] || blog;
+                            const blogNumber = startIndex + index + 1;
 
                             return (
                                 <div key={blog.id} className="admin-blog-card">
                                     <div className="admin-blog-header">
-                                        <h2>Blog #{currentData.number}</h2>
+                                        <h2>Blog #{blogNumber}</h2>
                                         <input
                                             type="text"
                                             className="admin-blog-inline-input"
