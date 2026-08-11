@@ -1,1 +1,23 @@
 node_modules/
+# Build output
+[Bb]in/
+[Oo]bj/
+temp-build/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+# Dependencies
+# Env
+.env
+.env.local
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+# Logs
+*.log
